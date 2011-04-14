@@ -58,6 +58,3 @@ module MemeCaptain
   end
 
 end
-
-i = MemeCaptain::meme('luke.jpeg', 'meme test', 'meme generator test')
-i.display

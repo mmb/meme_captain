@@ -3,3 +3,10 @@ This gem will create meme images like http://memegenerator.net/, but:
 * will be more reliable
 * will have a better API
 * will be able to use your own images or any image from the web
+
+<pre>
+<code>
+i = MemeCaptain.meme('luke300.jpeg', 'meme test', 'meme generator test')
+i.display
+</code>
+</pre>
