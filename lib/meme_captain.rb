@@ -32,17 +32,22 @@ module MemeCaptain
     end * "\n"
   end
 
-  def meme(path_or_io, line1, line2)
+  def meme(path_or_io, line1, line2, draw_options={})
+    draw_options = {
+      :fill => 'white',
+      :font => 'Impact-Regular',
+      :stroke => 'black',
+      :stroke_width => 2,
+      }.merge(draw_options)
+
     line1 = word_wrap(line1.upcase)
     line2 = word_wrap(line2.upcase)
 
-    text1 = Magick::Draw.new {
-      self.fill = 'white'
-      self.font = 'Impact-Regular'
-      self.stroke = 'black'
-      self.stroke_width = 2
+    text = Magick::Draw.new {
+      draw_options.each { |k,v| self.send("#{k}=", v) }
     }
-    text1.extend(MemeCaptain::Draw)
+
+    text.extend(MemeCaptain::Draw)
 
     img = Magick::ImageList.new
     if path_or_io.respond_to?(:read)
@@ -51,23 +56,15 @@ module MemeCaptain
       img.read(path_or_io)
     end
 
-    text1.set_point_size(line1, img.columns, img.rows / 4)
+    text.set_point_size(line1, img.columns, img.rows / 4)
 
-    text1.annotate(img, 0, 0, 0, 0, line1) {
+    text.annotate(img, 0, 0, 0, 0, line1) {
       self.gravity = Magick::NorthGravity
     }
 
-    text2 = Magick::Draw.new {
-      self.fill = 'white'
-      self.font = 'Impact-Regular'
-      self.stroke = 'black'
-      self.stroke_width = 2
-    }
-    text2.extend(MemeCaptain::Draw)
+    text.set_point_size(line2, img.columns, img.rows / 4)
 
-    text2.set_point_size(line2, img.columns, img.rows / 4)
-
-    text2.annotate(img, 0, 0, 0, 0, line2) {
+    text.annotate(img, 0, 0, 0, 0, line2) {
       self.gravity = Magick::SouthGravity
     }
 
