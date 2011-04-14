@@ -6,6 +6,8 @@ This gem will create meme images like http://memegenerator.net/, but:
 
 <pre>
 <code>
+require 'meme_captain'
+
 i = MemeCaptain.meme('luke300.jpeg', 'meme test', 'meme generator test')
 i.display
 </code>
