@@ -63,13 +63,15 @@ module MemeCaptain
       img.read(path_or_io)
     end
 
-    text.set_point_size(line1, img.columns, img.rows / 4)
+    max_text_height = img.rows / 4
+
+    text.set_point_size(line1, img.columns, max_text_height)
 
     text.annotate(img, 0, 0, 0, 0, line1) {
       self.gravity = Magick::NorthGravity
     }
 
-    text.set_point_size(line2, img.columns, img.rows / 4)
+    text.set_point_size(line2, img.columns, max_text_height)
 
     text.annotate(img, 0, 0, 0, 0, line2) {
       self.gravity = Magick::SouthGravity
@@ -79,3 +81,4 @@ module MemeCaptain
   end
 
 end
+
