@@ -44,7 +44,12 @@ module MemeCaptain
     }
     text1.extend(MemeCaptain::Draw)
 
-    img = Magick::ImageList.new(path_or_io)
+    img = Magick::ImageList.new
+    if path_or_io.respond_to?(:read)
+      img.from_blob(path_or_io.read)
+    else
+      img.read(path_or_io)
+    end
 
     text1.set_point_size(line1, img.columns, img.rows / 4)
 
