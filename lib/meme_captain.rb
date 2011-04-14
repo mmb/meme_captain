@@ -23,16 +23,28 @@ module MemeCaptain
 
   module_function
 
+  # Wrap a string into len length lines.
+  def word_wrap(text, len=40)
+    # Adapted from Rails.
+    text.split("\n").map do |line|
+      line.length > len ? line.gsub(
+        /(.{1,#{len}})(\s+|$)/, "\\1\n").strip : line
+    end * "\n"
+  end
+
   def meme(path_or_io, line1, line2)
-    img = Magick::ImageList.new(path_or_io)
+    line1 = word_wrap(line1.upcase)
+    line2 = word_wrap(line2.upcase)
 
     text1 = Magick::Draw.new {
       self.fill = 'white'
-      self.font = 'Helvetica'
+      self.font = 'Impact-Regular'
       self.stroke = 'black'
       self.stroke_width = 2
     }
     text1.extend(MemeCaptain::Draw)
+
+    img = Magick::ImageList.new(path_or_io)
 
     text1.set_point_size(line1, img.columns, img.rows / 4)
 
@@ -42,7 +54,7 @@ module MemeCaptain
 
     text2 = Magick::Draw.new {
       self.fill = 'white'
-      self.font = 'Helvetica'
+      self.font = 'Impact-Regular'
       self.stroke = 'black'
       self.stroke_width = 2
     }
