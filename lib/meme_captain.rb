@@ -16,7 +16,15 @@ module MemeCaptain
         metrics = get_multiline_type_metrics(text)
       end
 
-      self.pointsize = cur_pointsize - 1
+      cur_pointsize -= 1
+
+      self.pointsize = cur_pointsize
+      set_stroke_width(cur_pointsize)
+    end
+
+    # Set stroke width based on point size.
+    def set_stroke_width(pointsize)
+      self.stroke_width = pointsize > 30 ? 2 : 1
     end
 
   end
@@ -37,7 +45,6 @@ module MemeCaptain
       :fill => 'white',
       :font => 'Impact-Regular',
       :stroke => 'black',
-      :stroke_width => 2,
       }.merge(draw_options)
 
     line1 = word_wrap(line1.upcase)
