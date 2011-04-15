@@ -4,22 +4,26 @@ module MemeCaptain
 
   module Draw
 
-    # Set the largest point size so that text will fit in max_x, max_y.
-    def set_point_size(text, max_x, max_y, min_pointsize=24)
-      cur_pointsize = min_pointsize
-      self.pointsize = cur_pointsize
-      metrics = get_multiline_type_metrics(text)
+    # Calculate the largest point size that will make text fix in max_width,
+    # max_height.
+    def calc_point_size(text, max_width, max_height, start_pointsize=24)
+      cur_pointsize = start_pointsize
+      prev = nil
 
-      while metrics.width < max_x and metrics.height < max_y
-        cur_pointsize += 1
+      loop {
         self.pointsize = cur_pointsize
         metrics = get_multiline_type_metrics(text)
-      end
 
-      cur_pointsize -= 1
-
-      self.pointsize = cur_pointsize
-      set_stroke_width(cur_pointsize)
+        if metrics.width > max_width or metrics.height > max_height
+          return prev  if prev and prev < cur_pointsize
+          prev = cur_pointsize
+          cur_pointsize -= 1
+        else
+          return prev  if prev and prev > cur_pointsize
+          prev = cur_pointsize
+          cur_pointsize += 1
+        end
+      }
     end
 
     # Set stroke width based on point size.
@@ -65,13 +69,19 @@ module MemeCaptain
 
     max_text_height = img.rows / 4
 
-    text.set_point_size(line1, img.columns, max_text_height)
+    point_size = text.calc_point_size(line1, img.columns, max_text_height)
+
+    text.pointsize = point_size
+    text.set_stroke_width(point_size)
 
     text.annotate(img, 0, 0, 0, 0, line1) {
       self.gravity = Magick::NorthGravity
     }
 
-    text.set_point_size(line2, img.columns, max_text_height)
+    point_size = text.calc_point_size(line2, img.columns, max_text_height)
+
+    text.pointsize = point_size
+    text.set_stroke_width(point_size)
 
     text.annotate(img, 0, 0, 0, 0, line2) {
       self.gravity = Magick::SouthGravity
@@ -81,4 +91,3 @@ module MemeCaptain
   end
 
 end
-
