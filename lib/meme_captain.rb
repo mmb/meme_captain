@@ -69,23 +69,27 @@ module MemeCaptain
 
     max_text_height = img.rows / 4
 
-    point_size = text.calc_point_size(line1, img.columns, max_text_height)
+    unless line1.to_s.empty?
+      point_size = text.calc_point_size(line1, img.columns, max_text_height)
 
-    text.pointsize = point_size
-    text.set_stroke_width(point_size)
+      text.pointsize = point_size
+      text.set_stroke_width(point_size)
 
-    text.annotate(img, 0, 0, 0, 0, line1) {
-      self.gravity = Magick::NorthGravity
-    }
+      text.annotate(img, 0, 0, 0, 0, line1) {
+        self.gravity = Magick::NorthGravity
+      }
+    end
 
-    point_size = text.calc_point_size(line2, img.columns, max_text_height)
+    unless line2.to_s.empty?
+      point_size = text.calc_point_size(line2, img.columns, max_text_height)
 
-    text.pointsize = point_size
-    text.set_stroke_width(point_size)
+      text.pointsize = point_size
+      text.set_stroke_width(point_size)
 
-    text.annotate(img, 0, 0, 0, 0, line2) {
-      self.gravity = Magick::SouthGravity
-    }
+      text.annotate(img, 0, 0, 0, 0, line2) {
+        self.gravity = Magick::SouthGravity
+      }
+    end
 
     img
   end
