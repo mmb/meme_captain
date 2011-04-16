@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
   %w{
     curb
     rmagick
+    sinatra
     }.each { |g| s.add_dependency g }
 
   s.files = `git ls-files`.split("\n")
