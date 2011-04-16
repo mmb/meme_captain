@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = '>= 1.3.6'
 
   %w{
+    curb
     rmagick
     }.each { |g| s.add_dependency g }
 
