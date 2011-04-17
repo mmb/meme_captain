@@ -9,6 +9,12 @@ module MemeCaptain
   class Server < Sinatra::Base
 
     get '/' do
+      img_tag = if params[:u]
+        "<img src=\"#{request.fullpath.sub(%r{^/}, '/i')}\" />"
+      else
+        ''
+      end
+
       <<-eos
 <!DOCTYPE html>
 <html lang="en">
@@ -20,11 +26,13 @@ module MemeCaptain
 
 <body>
 
-#{header}
+<p><a href="/">Meme Captain</a></p>
 
 <p>Add text to images from the internet.</p>
 
-<form action="p" method="get">
+#{img_tag}
+
+<form action="" method="get">
 
 <table>
 
@@ -35,12 +43,12 @@ module MemeCaptain
 
 <tr>
 <td><label for="tt" />Top text: </label></td>
-<td><input type="text" id="tt" name="tt" size="64" /></td>
+<td><input type="text" id="tt" name="tt" size="64" value="#{params[:tt]}" /></td>
 </tr>
 
 <tr>
 <td><label for="tb" />Bottom text: </label></td>
-<td><input type="text" id="tb" name="tb" size="64" /></td>
+<td><input type="text" id="tb" name="tb" size="64" value="#{params[:tb]}" /></td>
 </tr>
 
 <tr>
@@ -52,7 +60,7 @@ module MemeCaptain
 
 </form>
 
-#{footer}
+<p>by Matthew M. Boedicker <a href="mailto:matthewm@boedicker.org">matthewm@boedicker.org</a></p>
 
 </body>
 
@@ -72,41 +80,6 @@ eos
         }
 
       [ 200, headers, image_data ]
-    end
-
-    get '/p' do
-      img_url = request.fullpath.sub(%r{^/p}, '/i')
-      <<-eos
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-<title>Meme Captain - #{params[:tt]} / #{params[:tb]}</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-</head>
-
-<body>
-
-#{header}
-
-<img src=#{img_url} />
-
-<p>Source image URL: <a href="#{params[:u]}">#{params[:u]}</a></p>
-
-#{footer}
-
-</body>
-
-</html>
-eos
-    end
-
-    def header
-      '<p><a href="/">Meme Captain</a></p>'
-    end
-
-    def footer
-      '<p>by Matthew M. Boedicker <a href="mailto:matthewm@boedicker.org">matthewm@boedicker.org</a></p>'
     end
 
   end
