@@ -69,7 +69,7 @@ eos
     end
 
     get '/i' do
-      @fetcher ||= MemeCaptain::Fetcher.new('image_cache')
+      @fetcher ||= MemeCaptain::Fetcher.new('img_cache')
       source_image_data = @fetcher.fetch(params[:u])
       new_image = MemeCaptain.meme(source_image_data, params[:tt], params[:tb])
       image_data = new_image.to_blob
