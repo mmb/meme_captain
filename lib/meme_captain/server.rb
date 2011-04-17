@@ -27,24 +27,29 @@ module MemeCaptain
 
 <form action="p" method="get">
 
-<p>
-<label for="u" />Source image URL: </label>
-<input type="text" id="u" name="u" />
-</p>
+<table>
 
-<p>
-<label for="tt" />Top text: </label>
-<input type="text" id="tt" name="tt" />
-</p>
+<tr>
+<td><label for="u" />Source image URL: </label></td>
+<td><input type="text" id="u" name="u" size="64" value="#{params[:u]}"/></td>
+</tr>
 
-<p>
-<label for="tb" />Bottom text: </label>
-<input type="text" id="tb" name="tb" />
-</p>
+<tr>
+<td><label for="tt" />Top text: </label></td>
+<td><input type="text" id="tt" name="tt" size="64" /></td>
+</tr>
 
-<p>
-<input type="submit" value="Create Image" />
-</p>
+<tr>
+<td><label for="tb" />Bottom text: </label></td>
+<td><input type="text" id="tb" name="tb" size="64" /></td>
+</tr>
+
+<tr>
+<td></td>
+<td><input type="submit" value="Create Image" /></td>
+</tr>
+
+</table>
 
 </form>
 
@@ -97,11 +102,11 @@ eos
     end
 
     def header
-      '<h1><a href="/">Meme Captain</a></h1>'
+      '<p><a href="/">Meme Captain</a></p>'
     end
 
     def footer
-      'by Matthew M. Boedicker <a href="mailto:matthewm@boedicker.org">matthewm@boedicker.org</a>'
+      '<p>by Matthew M. Boedicker <a href="mailto:matthewm@boedicker.org">matthewm@boedicker.org</a></p>'
     end
 
   end
