@@ -1,5 +1,7 @@
 require 'cgi'
 
+require 'curb'
+
 module MemeCaptain
 
   class Fetcher
