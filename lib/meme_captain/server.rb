@@ -1,3 +1,5 @@
+require 'digest/sha1'
+
 require 'curb'
 require 'sinatra/base'
 
@@ -57,7 +59,14 @@ eos
     get '/i' do
       resp = Curl::Easy.perform(params[:u])
       new_image = MemeCaptain.meme(resp.body_str, params[:tt], params[:tb])
-      [ 200, { 'Content-type' => new_image.mime_type }, new_image.to_blob ]
+      image_data = new_image.to_blob
+
+      headers = {
+        'Content-Type' => new_image.mime_type,
+        'ETag' => "\"#{Digest::SHA1.hexdigest(image_data)}\"",
+        }
+
+      [ 200, headers, image_data ]
     end
 
     get '/p' do
