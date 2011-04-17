@@ -1,6 +1,5 @@
 require 'digest/sha1'
 
-require 'curb'
 require 'sinatra/base'
 
 require 'meme_captain'
@@ -62,8 +61,9 @@ eos
     end
 
     get '/i' do
-      resp = Curl::Easy.perform(params[:u])
-      new_image = MemeCaptain.meme(resp.body_str, params[:tt], params[:tb])
+      @fetcher ||= MemeCaptain::Fetcher.new('image_cache')
+      source_image_data = @fetcher.fetch(params[:u])
+      new_image = MemeCaptain.meme(source_image_data, params[:tt], params[:tb])
       image_data = new_image.to_blob
 
       headers = {
