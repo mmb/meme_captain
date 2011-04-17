@@ -1,7 +1,7 @@
 Ruby gem to create meme images (images with text added at the top and bottom).
 
 Also includes Sinatra app that exposes API over HTTP which is currently
-running http://memecaptain.com/
+running "http://memecaptain.com/":http://memecaptain.com/
 
 <pre>
 <code>
