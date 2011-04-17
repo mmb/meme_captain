@@ -1,8 +1,7 @@
-This gem will create meme images like http://memegenerator.net/, but:
+Ruby gem to create meme images (images with text added at the top and bottom).
 
-* will be more reliable
-* will have a better API
-* will be able to use your own images or any image from the web
+Also includes Sinatra app that exposes API over HTTP which is currently
+running http://memecaptain.com/
 
 <pre>
 <code>
