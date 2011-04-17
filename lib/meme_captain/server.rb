@@ -62,6 +62,8 @@ module MemeCaptain
 
 <p>by Matthew M. Boedicker <a href="mailto:matthewm@boedicker.org">matthewm@boedicker.org</a></p>
 
+<p><a href="https://github.com/mmb/meme_captain">source code</a></p>
+
 </body>
 
 </html>
