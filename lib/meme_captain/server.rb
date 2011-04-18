@@ -77,11 +77,9 @@ eos
         'img_cache/processed')
       @source_cache ||= MemeCaptain::FilesystemCache.new('img_cache/source')
 
-      processed_id = params.sort.map(&:join).join
-      params_sha1 = Digest::SHA1.hexdigest(processed_id)
-
-      processed_img_data = @processed_cache.get(params_sha1) { 
-        source_id = CGI.escape(params[:u])
+      processed_id = Digest::SHA1.hexdigest(params.sort.map(&:join).join)
+      processed_img_data = @processed_cache.get(processed_id) {
+        source_id = Digest::SHA1.hexdigest(params[:u])
         source_img_data = @source_cache.get(source_id) {
           Curl::Easy.perform(params[:u]).body_str
         }
