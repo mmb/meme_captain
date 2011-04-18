@@ -1,4 +1,3 @@
-require 'cgi'
 require 'digest/sha1'
 
 require 'curb'
@@ -11,65 +10,17 @@ module MemeCaptain
   class Server < Sinatra::Base
 
     get '/' do
-      img_tag = if params[:u]
-        "<img src=\"#{request.fullpath.sub(%r{^/}, '/i')}\" />"
+      @img_tag = if params[:u]
+        "<img src=\"#{h request.fullpath.sub(%r{^/}, '/i')}\" />"
       else
         ''
       end
 
-      <<-eos
-<!DOCTYPE html>
-<html lang="en">
+      @u = params[:u]
+      @tt= params[:tt]
+      @tb = params[:tb]
 
-<head>
-<title>Meme Captain</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-</head>
-
-<body>
-
-<p><a href="/">Meme Captain</a></p>
-
-<p>Add text to images from the internet.</p>
-
-#{img_tag}
-
-<form action="" method="get">
-
-<table>
-
-<tr>
-<td><label for="u" />Source image URL: </label></td>
-<td><input type="text" id="u" name="u" size="64" value="#{params[:u]}"/></td>
-</tr>
-
-<tr>
-<td><label for="tt" />Top text: </label></td>
-<td><input type="text" id="tt" name="tt" size="64" value="#{params[:tt]}" /></td>
-</tr>
-
-<tr>
-<td><label for="tb" />Bottom text: </label></td>
-<td><input type="text" id="tb" name="tb" size="64" value="#{params[:tb]}" /></td>
-</tr>
-
-<tr>
-<td></td>
-<td><input type="submit" value="Create Image" /></td>
-</tr>
-
-</table>
-
-</form>
-
-<p>by Matthew M. Boedicker <a href="mailto:matthewm@boedicker.org">matthewm@boedicker.org</a></p>
-
-<p><a href="https://github.com/mmb/meme_captain">source code</a></p>
-
-</body>
-
-</html>
-eos
+      erb :index
     end
 
     get '/i' do
@@ -92,6 +43,11 @@ eos
         }
 
       [ 200, headers, processed_img_data ]
+    end
+
+    helpers do
+      include Rack::Utils
+      alias_method :h, :escape_html
     end
 
   end
