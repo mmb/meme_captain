@@ -8,7 +8,7 @@ module MemeCaptain
     img = Magick::ImageList.new
     if input.respond_to?(:read)
       img.from_blob(input.read)
-    elif File.readable?(input)
+    elsif File.readable?(input)
       img.read(input)
     else
       img.from_blob(input)
