@@ -16,7 +16,7 @@ module MemeCaptain
 
     options = {
       :fill => 'white',
-      :font => 'Impact-Regular',
+      :font => 'Impact',
       :gravity => Magick::CenterGravity,
       :size => "#{img.columns * 0.9}x#{img.rows / 4}",
       :stroke => 'black',
