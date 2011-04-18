@@ -32,11 +32,15 @@ module MemeCaptain
       options.each { |k,v| self.send("#{k}=", v) }
     }
 
-    img[0].composite!(line1_caption[0], Magick::NorthGravity,
-      Magick::OverCompositeOp)
+    img.each do |frame|
+      frame.composite!(line1_caption[0], Magick::NorthGravity,
+        Magick::OverCompositeOp).strip!
 
-    img[0].composite!(line2_caption[0], Magick::SouthGravity,
-      Magick::OverCompositeOp)
+      frame.composite!(line2_caption[0], Magick::SouthGravity,
+        Magick::OverCompositeOp).strip!
+    end
+    img
+
   end
 
 end

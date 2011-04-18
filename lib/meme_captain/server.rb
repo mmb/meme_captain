@@ -1,5 +1,7 @@
+require 'cgi'
 require 'digest/sha1'
 
+require 'curb'
 require 'sinatra/base'
 
 require 'meme_captain'
@@ -71,17 +73,27 @@ eos
     end
 
     get '/i' do
-      @fetcher ||= MemeCaptain::Fetcher.new('img_cache')
-      source_image_data = @fetcher.fetch(params[:u])
-      new_image = MemeCaptain.meme(source_image_data, params[:tt], params[:tb])
-      image_data = new_image.to_blob
+      @processed_cache ||= MemeCaptain::FilesystemCache.new(
+        'img_cache/processed')
+      @source_cache ||= MemeCaptain::FilesystemCache.new('img_cache/source')
+
+      processed_id = params.sort.map(&:join).join
+      params_sha1 = Digest::SHA1.hexdigest(processed_id)
+
+      processed_img_data = @processed_cache.get(params_sha1) { 
+        source_id = CGI.escape(params[:u])
+        source_img_data = @source_cache.get(source_id) {
+          Curl::Easy.perform(params[:u]).body_str
+        }
+        MemeCaptain.meme(source_img_data, params[:tt], params[:tb]).to_blob
+      }
 
       headers = {
-        'Content-Type' => new_image.mime_type,
-        'ETag' => "\"#{Digest::SHA1.hexdigest(image_data)}\"",
+        'Content-Type' => MemeCaptain.content_type(processed_img_data),
+        'ETag' => "\"#{Digest::SHA1.hexdigest(processed_img_data)}\"",
         }
 
-      [ 200, headers, image_data ]
+      [ 200, headers, processed_img_data ]
     end
 
   end
