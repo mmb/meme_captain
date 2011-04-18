@@ -16,7 +16,6 @@ module MemeCaptain
 
     options = {
       :fill => 'white',
-      # http://www.google.com/webfonts/family?family=Anton&subset=latin#download
       :font => 'Impact',
       :gravity => Magick::CenterGravity,
       :size => "#{img.columns * 0.9}x#{img.rows / 4}",
