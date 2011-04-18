@@ -4,12 +4,12 @@ module MemeCaptain
 
   module_function
 
+  # Create a meme image.
+  # Input can be an IO object or a blob of data.
   def meme(input, line1, line2, options={})
     img = Magick::ImageList.new
     if input.respond_to?(:read)
       img.from_blob(input.read)
-    elsif File.readable?(input)
-      img.read(input)
     else
       img.from_blob(input)
     end

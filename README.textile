@@ -9,13 +9,11 @@ Works with animated gifs.
 <code>
 require 'meme_captain'
 
-i = MemeCaptain.meme('luke300.jpeg', 'meme test', 'meme generator test')
-i.display
-
 require 'open-uri'
 
-open('http://some_image_from_the_web.jpg', 'rb') do |f|
+open('http://image_from_web_or_local_file.jpg', 'rb') do |f|
   i = MemeCaptain.meme(f, 'test', '1 2 3')
+  i.display
   i.write('out.jpg')
 end
 </code>
