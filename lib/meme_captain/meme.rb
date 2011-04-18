@@ -16,11 +16,12 @@ module MemeCaptain
 
     options = {
       :fill => 'white',
-      :font => 'Impact',
+      # http://www.google.com/webfonts/family?family=Anton&subset=latin#download
+      :font => 'Anton-Regular',
       :gravity => Magick::CenterGravity,
       :size => "#{img.columns * 0.9}x#{img.rows / 4}",
       :stroke => 'black',
-      :stroke_width => 1,
+      :stroke_width => 2,
       :background_color => 'none',
       }.merge(options)
 
