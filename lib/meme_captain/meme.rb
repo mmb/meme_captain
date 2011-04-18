@@ -24,11 +24,11 @@ module MemeCaptain
       :background_color => 'none',
       }.merge(options)
 
-    line1_caption = Magick::Image.read("caption:#{line1.upcase}") {
+    line1_caption = Magick::Image.read("caption:#{line1.to_s.upcase}") {
       options.each { |k,v| self.send("#{k}=", v) }
     }
 
-    line2_caption = Magick::Image.read("caption:#{line2.upcase}") {
+    line2_caption = Magick::Image.read("caption:#{line2.to_s.upcase}") {
       options.each { |k,v| self.send("#{k}=", v) }
     }
 
