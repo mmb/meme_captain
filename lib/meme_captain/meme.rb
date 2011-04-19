@@ -18,7 +18,7 @@ module MemeCaptain
       :fill => 'white',
       :font => 'Impact',
       :gravity => Magick::CenterGravity,
-      :size => "#{img.columns * 0.9}x#{img.rows / 4}",
+      :size => "#{img.columns * 1.8}x#{img.rows / 2}",
       :stroke => 'black',
       :stroke_width => 2,
       :background_color => 'none',
@@ -27,10 +27,12 @@ module MemeCaptain
     line1_caption = Magick::Image.read("caption:#{line1.to_s.upcase}") {
       options.each { |k,v| self.send("#{k}=", v) }
     }
+    line1_caption[0].scale!(0.5)
 
     line2_caption = Magick::Image.read("caption:#{line2.to_s.upcase}") {
       options.each { |k,v| self.send("#{k}=", v) }
     }
+    line2_caption[0].scale!(0.5)
 
     img.each do |frame|
       frame.composite!(line1_caption[0], Magick::NorthGravity,
