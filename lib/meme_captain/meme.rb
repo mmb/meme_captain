@@ -34,10 +34,12 @@ module MemeCaptain
 
     img.each do |frame|
       frame.composite!(line1_caption[0], Magick::NorthGravity,
-        Magick::OverCompositeOp).strip!
+        Magick::OverCompositeOp)
 
       frame.composite!(line2_caption[0], Magick::SouthGravity,
-        Magick::OverCompositeOp).strip!
+        Magick::OverCompositeOp)
+
+      frame.strip!
     end
     img
 
