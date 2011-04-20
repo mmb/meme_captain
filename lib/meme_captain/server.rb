@@ -34,7 +34,9 @@ module MemeCaptain
         source_img_data = @source_cache.get(source_id) {
           Curl::Easy.perform(params[:u]).body_str
         }
-        MemeCaptain.meme(source_img_data, params[:tt], params[:tb]).to_blob
+        MemeCaptain.meme(source_img_data, params[:tt], params[:tb]).to_blob {
+          self.quality = 100
+        }
       }
 
       headers = {
