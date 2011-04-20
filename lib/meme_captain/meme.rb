@@ -27,12 +27,14 @@ module MemeCaptain
     line1_caption = Magick::Image.read("caption:#{line1.to_s.upcase}") {
       options.each { |k,v| self.send("#{k}=", v) }
     }
-    line1_caption[0].scale!(0.5)
+    line1_caption[0].resize!(line1_caption[0].columns / 2,
+      line1_caption[0].rows / 2, Magick::LanczosFilter, 1.25)
 
     line2_caption = Magick::Image.read("caption:#{line2.to_s.upcase}") {
       options.each { |k,v| self.send("#{k}=", v) }
     }
-    line2_caption[0].scale!(0.5)
+    line2_caption[0].resize!(line2_caption[0].columns / 2,
+      line2_caption[0].rows / 2, Magick::LanczosFilter, 1.25)
 
     img.each do |frame|
       frame.composite!(line1_caption[0], Magick::NorthGravity,
