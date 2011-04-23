@@ -4,7 +4,7 @@ $:.unshift(File.join(File.dirname(__FILE__), 'lib'))
 
 Gem::Specification.new do |s|
   s.name = 'meme_captain'
-  s.version = '0.0.2'
+  s.version = '0.0.3'
   s.summary = 'create meme images'
   s.description = s.summary
   s.homepage = 'https://github.com/mmb/meme_captain'
