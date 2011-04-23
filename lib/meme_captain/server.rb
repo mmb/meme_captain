@@ -37,8 +37,12 @@ module MemeCaptain
           Curl::Easy.perform(params[:u]).body_str
         }
 
-        MemeCaptain.meme(source_img_data, params[:tt], params[:tb]).to_blob {
+        meme_img = MemeCaptain.meme(source_img_data, params[:tt], params[:tb])
+        current_format = meme_img.format
+
+        meme_img.to_blob {
           self.quality = 100
+          self.format = 'PNG'  if current_format == 'GIF'
         }
       }
 
