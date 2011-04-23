@@ -9,6 +9,8 @@ module MemeCaptain
 
   class Server < Sinatra::Base
 
+    ImageExts = %w{.jpeg .gif .png}
+
     get '/' do
       @img_tag = if params[:u]
         "<img src=\"#{h request.fullpath.sub(%r{^/}, '/i')}\" />"
@@ -29,22 +31,22 @@ module MemeCaptain
       @source_cache ||= MemeCaptain::FilesystemCache.new('img_cache/source')
 
       processed_id = Digest::SHA1.hexdigest(params.sort.map(&:join).join)
-      processed_img_data = @processed_cache.get(processed_id) {
+      processed_cache_path = @processed_cache.get_path(processed_id, ImageExts) {
         source_id = Digest::SHA1.hexdigest(params[:u])
-        source_img_data = @source_cache.get(source_id) {
+        source_img_data = @source_cache.get_data(source_id, ImageExts) {
           Curl::Easy.perform(params[:u]).body_str
         }
+
         MemeCaptain.meme(source_img_data, params[:tt], params[:tb]).to_blob {
           self.quality = 100
         }
       }
 
       headers = {
-        'Content-Type' => MemeCaptain.content_type(processed_img_data),
-        'ETag' => "\"#{Digest::SHA1.hexdigest(processed_img_data)}\"",
+        'Content-Type' => MIME::Types.type_for(processed_cache_path)[0].to_s,
         }
 
-      [ 200, headers, processed_img_data ]
+      [ 200, headers, MemeCaptain::FileBody.new(processed_cache_path) ]
     end
 
     helpers do

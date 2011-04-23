@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
 
   %w{
     curb
+    rack
     rmagick
     sinatra
     }.each { |g| s.add_dependency g }
