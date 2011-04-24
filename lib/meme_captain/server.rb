@@ -42,7 +42,10 @@ module MemeCaptain
 
         meme_img.to_blob {
           self.quality = 100
-          self.format = 'PNG'  if current_format == 'GIF'
+          # convert non-animated gifs to png
+          if current_format == 'GIF' and meme_img.size == 1
+            self.format = 'PNG'  
+          end
         }
       }
 
