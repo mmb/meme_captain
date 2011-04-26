@@ -12,7 +12,10 @@
 
 <p>Add text to images from the internet.</p>
 
-<%= @img_tag %>
+<% if @img_url %>
+<p><a href="<%= h @img_url %>"><img src="<%= h @img_url %>" /></a></p>
+<p><a href="<%= h @img_url %>"><%= h @img_url %></a></p>
+<% end %>
 
 <form action="" method="get">
 

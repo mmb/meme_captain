@@ -1,4 +1,5 @@
 require 'digest/sha1'
+require 'uri'
 
 require 'curb'
 require 'sinatra/base'
@@ -12,10 +13,10 @@ module MemeCaptain
     ImageExts = %w{.jpeg .gif .png}
 
     get '/' do
-      @img_tag = if params[:u]
-        "<img src=\"#{h request.fullpath.sub(%r{^/}, '/i')}\" />"
-      else
-        ''
+      @img_url = if params[:u]
+        uri = URI(request.url)
+        uri.path += 'i'
+        uri.to_s
       end
 
       @u = params[:u]
