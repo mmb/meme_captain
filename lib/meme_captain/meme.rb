@@ -36,13 +36,17 @@ module MemeCaptain
     line2_caption[0].resize!(line2_caption[0].columns / 2,
       line2_caption[0].rows / 2, Magick::LanczosFilter, 1.25)
 
+    text_layer = Magick::Image.new(img[0].columns, img[0].rows) {
+      self.background_color = 'none'
+    }
+    text_layer.composite!(line1_caption[0], Magick::NorthGravity,
+      Magick::OverCompositeOp)
+    text_layer.composite!(line2_caption[0], Magick::SouthGravity,
+      Magick::OverCompositeOp)
+
     img.each do |frame|
-      frame.composite!(line1_caption[0], Magick::NorthGravity,
+      frame.composite!(text_layer, -frame.page.x, -frame.page.y,
         Magick::OverCompositeOp)
-
-      frame.composite!(line2_caption[0], Magick::SouthGravity,
-        Magick::OverCompositeOp)
-
       frame.strip!
     end
     img
