@@ -18,7 +18,7 @@ module MemeCaptain
       :fill => 'white',
       :font => 'Impact',
       :gravity => Magick::CenterGravity,
-      :size => "#{img.columns * 1.8}x#{img.rows / 2}",
+      :size => "#{img.page.width * 1.8}x#{img.page.height / 2}",
       :stroke => 'black',
       :stroke_width => 2,
       :background_color => 'none',
@@ -36,7 +36,7 @@ module MemeCaptain
     line2_caption[0].resize!(line2_caption[0].columns / 2,
       line2_caption[0].rows / 2, Magick::LanczosFilter, 1.25)
 
-    text_layer = Magick::Image.new(img[0].columns, img[0].rows) {
+    text_layer = Magick::Image.new(img.page.width, img.page.height) {
       self.background_color = 'none'
     }
     text_layer.composite!(line1_caption[0], Magick::NorthGravity,
