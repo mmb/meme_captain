@@ -35,7 +35,10 @@ module MemeCaptain
       processed_cache_path = @processed_cache.get_path(processed_id, ImageExts) {
         source_id = Digest::SHA1.hexdigest(params[:u])
         source_img_data = @source_cache.get_data(source_id, ImageExts) {
-          Curl::Easy.perform(params[:u]).body_str
+          curl = Curl::Easy.perform(params[:u]) do |c|
+            c.useragent = 'Meme Captain http://memecaptain.com/'
+          end
+          curl.body_str
         }
 
         meme_img = MemeCaptain.meme(source_img_data, params[:tt], params[:tb])
