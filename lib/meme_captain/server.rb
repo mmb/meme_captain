@@ -2,6 +2,7 @@ require 'digest/sha1'
 require 'uri'
 
 require 'curb'
+require 'json'
 require 'sinatra/base'
 
 require 'meme_captain'
@@ -13,12 +14,6 @@ module MemeCaptain
     ImageExts = %w{.jpeg .gif .png}
 
     get '/' do
-      @img_url = if params[:u]
-        uri = URI(request.url)
-        uri.path += 'i'
-        uri.to_s
-      end
-
       @u = params[:u]
       @tt= params[:tt]
       @tb = params[:tb]
@@ -26,13 +21,12 @@ module MemeCaptain
       erb :index
     end
 
-    get '/i' do
-      @processed_cache ||= MemeCaptain::FilesystemCache.new(
-        'img_cache/processed')
+    def gen(params)
+      @processed_cache ||= MemeCaptain::FilesystemCache.new('public/tmp')
       @source_cache ||= MemeCaptain::FilesystemCache.new('img_cache/source')
 
       processed_id = Digest::SHA1.hexdigest(params.sort.map(&:join).join)
-      processed_cache_path = @processed_cache.get_path(processed_id, ImageExts) {
+      @processed_cache.get_path(processed_id, ImageExts) {
         source_id = Digest::SHA1.hexdigest(params[:u])
         source_img_data = @source_cache.get_data(source_id, ImageExts) {
           curl = Curl::Easy.perform(params[:u]) do |c|
@@ -52,12 +46,32 @@ module MemeCaptain
           end
         }
       }
+    end
 
-      headers = {
-        'Content-Type' => MIME::Types.type_for(processed_cache_path)[0].to_s,
-        }
+    get '/g' do
+      content_type :json
 
-      [ 200, headers, MemeCaptain::FileBody.new(processed_cache_path) ]
+      processed_cache_path = gen(params)
+
+      temp_url = URI(request.url)
+      temp_url.path = processed_cache_path.sub('public', '')
+      temp_url.query = nil
+
+      perm_url = URI(request.url)
+      perm_url.path = '/i'
+
+      {
+        'tempUrl' => temp_url.to_s,
+        'permUrl' => perm_url.to_s,
+      }.to_json
+    end
+
+    get '/i' do
+      processed_cache_path = gen(params)
+
+      content_type MIME::Types.type_for(processed_cache_path)[0].to_s
+
+      MemeCaptain::FileBody.new(processed_cache_path)
     end
 
     helpers do

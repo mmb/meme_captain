@@ -12,10 +12,7 @@
 
 <p>Add text to images from the internet.</p>
 
-<% if @img_url %>
-<p><a href="<%= h @img_url %>"><img src="<%= h @img_url %>" /></a></p>
-<p><a href="<%= h @img_url %>"><%= h @img_url %></a></p>
-<% end %>
+<div id="img"></div>
 
 <form action="" method="get">
 
@@ -45,23 +42,45 @@
 
 </form>
 
-<img src="http://memecaptain.com/bear_grylls_thumb.jpg" onClick="document.getElementById('u').value = 'http://memecaptain.com/bear_grylls.jpg'; return false;" />
+<img src="http://memecaptain.com/bear_grylls_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/bear_grylls.jpg'); return false;" />
 
-<img src="http://memecaptain.com/most_interesting_thumb.jpg" onClick="document.getElementById('u').value = 'http://memecaptain.com/most_interesting.jpg'; return false;" />
+<img src="http://memecaptain.com/most_interesting_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/most_interesting.jpg'); return false;" />
 
-<img src="http://memecaptain.com/philosoraptor_thumb.jpg" onClick="document.getElementById('u').value = 'http://memecaptain.com/philosoraptor.jpg'; return false;" />
+<img src="http://memecaptain.com/philosoraptor_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/philosoraptor.jpg'); return false;" />
 
-<img src="http://memecaptain.com/scumbag_steve_thumb.jpg" onClick="document.getElementById('u').value = 'http://memecaptain.com/scumbag_steve.jpg'; return false;" />
+<img src="http://memecaptain.com/scumbag_steve_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/scumbag_steve.jpg'); return false;" />
 
-<img src="http://memecaptain.com/town_crier_thumb.jpg" onClick="document.getElementById('u').value = 'http://memecaptain.com/town_crier.jpg'; return false;" />
+<img src="http://memecaptain.com/town_crier_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/town_crier.jpg'); return false;" />
 
-<img src="http://memecaptain.com/troll_face_thumb.jpg" onClick="document.getElementById('u').value = 'http://memecaptain.com/troll_face.jpg'; return false;" />
+<img src="http://memecaptain.com/troll_face_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/troll_face.jpg'); return false;" />
 
-<img src="http://memecaptain.com/y_u_no_thumb.jpg" onClick="document.getElementById('u').value = 'http://memecaptain.com/y_u_no.jpg'; return false;" />
+<img src="http://memecaptain.com/y_u_no_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/y_u_no.jpg'); return false;" />
 
 <p>by Matthew M. Boedicker <a href="mailto:matthewm@boedicker.org">matthewm@boedicker.org</a></p>
 
 <p><a href="https://github.com/mmb/meme_captain">source code</a></p>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
+<script>
+$(function () {
+    if (window.location.search.match(/u=/)) {
+        var imgDiv = $('#img');
+
+        imgDiv.append($('<p />').append('Creating image ...'));
+
+        $.get('/g' + window.location.search, function(data) {
+            var img = $('<img />').attr('src', data.tempUrl),
+            tempLink = $('<a />').attr('href', data.tempUrl).append(data.tempUrl),
+            permLink = $('<a />').attr('href', data.permUrl).append(data.permUrl);
+
+            imgDiv.empty().append(
+                img).append(
+                $('<p />').append('Temporary image url: ').append(tempLink)).append(
+                $('<p />').append('Permanent image url: ').append(permLink));
+        });
+    }
+});
+</script>
 
 </body>
 

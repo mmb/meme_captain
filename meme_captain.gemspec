@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
 
   %w{
     curb
+    json
     mime-types
     rack
     rmagick
