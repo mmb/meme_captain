@@ -63,7 +63,7 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
 <script>
 $(function () {
-    if (window.location.search.match(/u=/)) {
+    if (window.location.search.match(/u=[^&$]/)) {
         var imgDiv = $('#img');
 
         imgDiv.append($('<p />').append('Creating image ...'));
