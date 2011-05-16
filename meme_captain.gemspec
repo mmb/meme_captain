@@ -11,8 +11,6 @@ Gem::Specification.new do |s|
   s.authors = ['Matthew M. Boedicker']
   s.email = %w{matthewm@boedicker.org}
 
-  s.required_rubygems_version = '>= 1.3.6'
-
   %w{
     curb
     json
