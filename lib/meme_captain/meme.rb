@@ -15,6 +15,7 @@ module MemeCaptain
     end
 
     options = {
+      :density => 144,
       :fill => 'white',
       :font => 'Impact',
       :gravity => Magick::CenterGravity,
@@ -27,14 +28,12 @@ module MemeCaptain
     line1_caption = Magick::Image.read("caption:#{line1.to_s.upcase}") {
       options.each { |k,v| self.send("#{k}=", v) }
     }
-    line1_caption[0].resize!(line1_caption[0].columns / 2,
-      line1_caption[0].rows / 2, Magick::LanczosFilter, 1.25)
+    line1_caption[0].resize!(0.5)
 
     line2_caption = Magick::Image.read("caption:#{line2.to_s.upcase}") {
       options.each { |k,v| self.send("#{k}=", v) }
     }
-    line2_caption[0].resize!(line2_caption[0].columns / 2,
-      line2_caption[0].rows / 2, Magick::LanczosFilter, 1.25)
+    line2_caption[0].resize!(0.5)
 
     text_layer = Magick::Image.new(img.page.width, img.page.height) {
       self.background_color = 'none'
