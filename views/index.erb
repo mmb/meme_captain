@@ -71,12 +71,21 @@ $(function () {
         $.get('/g' + window.location.search, function(data) {
             var img = $('<img />').attr('src', data.tempUrl),
             tempLink = $('<a />').attr('href', data.tempUrl).append(data.tempUrl),
-            permLink = $('<a />').attr('href', data.permUrl).append(data.permUrl);
+            permLink = $('<a />').attr('href', data.permUrl).append(data.permUrl),
+            tweetLink = $('<a />').attr({
+                href : 'http://twitter.com/share',
+                class : 'twitter-share-button',
+                'data-count' : 'none',
+                'data-text' : ' ',
+                'data-url' : data.permUrl
+                }).append('Tweet');
 
             imgDiv.empty().append(
                 img).append(
                 $('<p />').append('Temporary image url: ').append(tempLink)).append(
-                $('<p />').append('Permanent image url: ').append(permLink));
+                $('<p />').append('Permanent image url: ').append(permLink)).append(
+                $('<p />').append(tweetLink).append($('<script />').attr('src',
+                    'http://platform.twitter.com/widgets.js')));
         });
     }
 });
