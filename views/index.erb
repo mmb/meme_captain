@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lan="en" xmlns:fb="https://www.facebook.com/2008/fbml">
 
 <head>
 <title>Meme Captain</title>
@@ -90,6 +90,29 @@ $(function () {
                 $('<p />').append('Permanent image url: ').append(permLink)).append(
                 $('<p />').append(tweetLink).append($('<script />').attr('src',
                     'http://platform.twitter.com/widgets.js')));
+
+            // Facebook like
+            imgDiv.append(
+                $('<div />').attr('id', 'fb-root')).append(
+                $('<fb:like />').attr({
+                    href : data.tempUrl,
+                    send : 'true',
+                    width : '450',
+                    show_faces : 'true',
+                    font : ''
+                    }));
+
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId : '108445492580525',
+                    status : true,
+                    cookie : true,
+                    xfbml : true
+                    });
+                };
+
+            imgDiv.append($('<script />').attr({
+                src : 'http://connect.facebook.net/en_US/all.js'}));
         });
     }
 });
