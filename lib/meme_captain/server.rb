@@ -32,6 +32,9 @@ module MemeCaptain
           curl = Curl::Easy.perform(params[:u]) do |c|
             c.useragent = 'Meme Captain http://memecaptain.com/'
           end
+          unless curl.response_code == 200
+            raise "Error loading source image url #{params[:u]}"
+          end
           curl.body_str
         }
 
@@ -49,21 +52,23 @@ module MemeCaptain
     end
 
     get '/g' do
-      content_type :json
+      begin
+        processed_cache_path = gen(params)
 
-      processed_cache_path = gen(params)
+        temp_url = URI(request.url)
+        temp_url.path = processed_cache_path.sub('public', '')
+        temp_url.query = nil
 
-      temp_url = URI(request.url)
-      temp_url.path = processed_cache_path.sub('public', '')
-      temp_url.query = nil
+        perm_url = URI(request.url)
+        perm_url.path = '/i'
 
-      perm_url = URI(request.url)
-      perm_url.path = '/i'
-
-      {
-        'tempUrl' => temp_url.to_s,
-        'permUrl' => perm_url.to_s,
-      }.to_json
+        [200, { 'Content-Type' => 'application/json' }, {
+          'tempUrl' => temp_url.to_s,
+          'permUrl' => perm_url.to_s,
+        }.to_json]
+      rescue => error
+        [500, { 'Content-Type' => 'text/plain' }, error.to_s]
+      end
     end
 
     get '/i' do

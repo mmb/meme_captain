@@ -46,6 +46,9 @@ module MemeCaptain
     # Put data in the cache and return its path.
     def put(id, data)
       mime_type = MemeCaptain.mime_type(data)
+      unless mime_type
+        raise 'Data loaded from source image url is not an image'
+      end
       file_path = id_path(id, ".#{mime_type.extensions[0]}")
 
       open(file_path, 'w') do |f|

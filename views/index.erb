@@ -114,6 +114,8 @@ $(function () {
 
             imgDiv.append($('<script />').attr({
                 src : 'http://connect.facebook.net/en_US/all.js'}));
+        }).error(function(j) {
+          imgDiv.empty().append($('<p />').text(j.responseText));
         });
     }
 });
