@@ -68,6 +68,8 @@
 <script>
 $(function () {
     if (window.location.search.match(/u=[^&$]/)) {
+        $('#tt').focus();
+
         var imgDiv = $('#img');
 
         imgDiv.append($('<p />').append('Creating image ...'));
@@ -117,6 +119,8 @@ $(function () {
         }).error(function(j) {
           imgDiv.empty().append($('<p />').text(j.responseText));
         });
+    } else {
+        $('#u').focus();
     }
 });
 </script>
