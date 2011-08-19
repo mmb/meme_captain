@@ -4,6 +4,15 @@
 <head>
 <title>Meme Captain</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+#sourceImages {
+  background-color : #eee;
+  border-top : 1px solid #ccc;
+  border-bottom : 1px solid #ccc;
+  padding : 0em 1em 0.5em 1em;
+  margin : 1em 0em 1em 0em;
+}
+</style>
 </head>
 
 <body>
@@ -40,6 +49,10 @@
 
 </form>
 
+<div id="sourceImages">
+
+<p>Locally hosted source images or search Bing for source images (click thumbnail to use):</p>
+
 <img src="http://memecaptain.com/bear_grylls_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/bear_grylls.jpg'); return false;" />
 
 <img src="http://memecaptain.com/insanity_wolf_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/insanity_wolf.jpg'); return false;" />
@@ -60,21 +73,45 @@
 
 <img src="http://memecaptain.com/business_cat_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/business_cat.jpg'); return false;" />
 
+<div id="bingImageResults"></div>
+
+<form action="" method="get">
+<label for="bingSearch" />Bing search for source images: </label>
+<input type="text" id="bingSearch" />
+</form>
+
+</div>
+
 <p>by Matthew M. Boedicker <a href="mailto:matthewm@boedicker.org">matthewm@boedicker.org</a></p>
 
 <p><a href="https://github.com/mmb/meme_captain">source code</a></p>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
 <script>
+function showBingImages(resp) {
+    var div = $('#bingImageResults');
+    div.empty();
+
+    $.each(resp.SearchResponse.Image.Results, function (i, img) {
+        div.append($('<img />').attr('src', img.Thumbnail.Url).click(
+            function () { $('#u').val(img.MediaUrl); }
+        ));
+    });
+}
+
 $(function () {
+    var bingSearch,
+        bingSearchVal,
+        imgDiv;
+
     if (window.location.search.match(/u=[^&$]/)) {
         $('#tt').focus();
 
-        var imgDiv = $('#img');
+        imgDiv = $('#img');
 
         imgDiv.append($('<p />').append('Creating image ...'));
 
-        $.get('/g' + window.location.search, function(data) {
+        $.get('/g' + window.location.search, function (data) {
             var img = $('<img />').attr('src', data.tempUrl),
             tempLink = $('<a />').attr('href', data.tempUrl).append(data.tempUrl),
             permLink = $('<a />').attr('href', data.permUrl).append(data.permUrl),
@@ -105,7 +142,7 @@ $(function () {
                     font : ''
                     }));
 
-            window.fbAsyncInit = function() {
+            window.fbAsyncInit = function () {
                 FB.init({
                     appId : '108445492580525',
                     status : true,
@@ -116,12 +153,39 @@ $(function () {
 
             imgDiv.append($('<script />').attr({
                 src : 'http://connect.facebook.net/en_US/all.js'}));
-        }).error(function(j) {
+        }).error(function (j) {
           imgDiv.empty().append($('<p />').text(j.responseText));
         });
     } else {
         $('#u').focus();
     }
+
+    bingSearch = $('#bingSearch');
+
+    bingSearch.keypress(function (event) {
+        if (event.which == 13) {
+            event.preventDefault();
+            bingSearchVal = bingSearch.val();
+            bingSearch.val('');
+            $.ajax({
+                type : 'GET',
+                url : 'http://api.bing.net/json.aspx',
+                data : {
+                    AppId : 'A120380275E87F0071F163210211F0592D0E964C',
+                    Query : bingSearchVal + ' imagesize:Medium',
+                    Sources : 'Image',
+                    Version : '2.0',
+                    Market : 'en-us',
+                    'Image.Count' : 5,
+                    'Image.Offset' : 0,
+                    JsonType : 'callback'
+                },
+                dataType : 'jsonp',
+                jsonpCallback : 'showBingImages',
+                jsonp : 'JsonCallback'
+            });
+        }
+    });
 });
 </script>
 
