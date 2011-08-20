@@ -89,14 +89,22 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
 <script>
 function showBingImages(resp) {
-    var div = $('#bingImageResults');
+    var div = $('#bingImageResults'),
+        searchResponse = resp.SearchResponse,
+        image = searchResponse.Image;
+
     div.empty();
 
-    $.each(resp.SearchResponse.Image.Results, function (i, img) {
-        div.append($('<img />').attr('src', img.Thumbnail.Url).click(
-            function () { $('#u').val(img.MediaUrl); }
-        ));
-    });
+    if (image.Total > 0) {
+        $.each(image.Results, function (i, img) {
+            div.append($('<img />').attr('src', img.Thumbnail.Url).click(
+                function () { $('#u').val(img.MediaUrl); }
+            ));
+        });
+    } else {
+        div.append($('<p />').append(
+            'No results for "' + searchResponse.Query.SearchTerms + '".'));
+    }
 }
 
 function bingImageSearch() {
