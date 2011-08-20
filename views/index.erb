@@ -76,8 +76,8 @@
 <div id="bingImageResults"></div>
 
 <form action="" method="get">
-<label for="bingSearch" />Bing search for source images: </label>
 <input type="text" id="bingSearch" />
+<input type="button" id="bingButton" value="Bing Image Search" />
 </form>
 
 </div>
@@ -97,6 +97,33 @@ function showBingImages(resp) {
             function () { $('#u').val(img.MediaUrl); }
         ));
     });
+}
+
+function bingImageSearch() {
+    var bingSearch = $('#bingSearch'),
+        bingSearchVal = bingSearch.val();
+
+    if (bingSearchVal.match(/[^\s]/)) {
+        bingSearch.val('');
+
+        $.ajax({
+            type : 'GET',
+            url : 'http://api.bing.net/json.aspx',
+            data : {
+                AppId : 'A120380275E87F0071F163210211F0592D0E964C',
+                Query : bingSearchVal + ' imagesize:Medium',
+                Sources : 'Image',
+                Version : '2.0',
+                Market : 'en-us',
+                'Image.Count' : 5,
+                'Image.Offset' : 0,
+                JsonType : 'callback'
+            },
+            dataType : 'jsonp',
+            jsonpCallback : 'showBingImages',
+            jsonp : 'JsonCallback'
+        });
+    }
 }
 
 $(function () {
@@ -160,32 +187,14 @@ $(function () {
         $('#u').focus();
     }
 
-    bingSearch = $('#bingSearch');
-
-    bingSearch.keypress(function (event) {
+    $('#bingSearch').keypress(function (event) {
         if (event.which == 13) {
             event.preventDefault();
-            bingSearchVal = bingSearch.val();
-            bingSearch.val('');
-            $.ajax({
-                type : 'GET',
-                url : 'http://api.bing.net/json.aspx',
-                data : {
-                    AppId : 'A120380275E87F0071F163210211F0592D0E964C',
-                    Query : bingSearchVal + ' imagesize:Medium',
-                    Sources : 'Image',
-                    Version : '2.0',
-                    Market : 'en-us',
-                    'Image.Count' : 5,
-                    'Image.Offset' : 0,
-                    JsonType : 'callback'
-                },
-                dataType : 'jsonp',
-                jsonpCallback : 'showBingImages',
-                jsonp : 'JsonCallback'
-            });
+            bingImageSearch();
         }
     });
+
+    $('#bingButton').click(bingImageSearch);
 });
 </script>
 
