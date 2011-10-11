@@ -13,6 +13,8 @@ module MemeCaptain
 
     ImageExts = %w{.jpeg .gif .png}
 
+    set :root, File.join(File.dirname(__FILE__), '..', '..')
+
     get '/' do
       @u = params[:u]
       @tt= params[:tt]
