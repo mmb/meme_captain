@@ -12,6 +12,11 @@
   padding : 0em 1em 0.5em 1em;
   margin : 1em 0em 1em 0em;
 }
+
+img.thumb {
+  background-image : url('thumbs.jpg');
+  height : 50px;
+}
 </style>
 </head>
 
@@ -53,31 +58,36 @@
 
 <p>Locally hosted source images or search Bing for source images (click thumbnail to use):</p>
 
-<img src="http://memecaptain.com/bear_grylls_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/bear_grylls.jpg'); return false;" />
+<%
 
-<img src="http://memecaptain.com/insanity_wolf_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/insanity_wolf.jpg'); return false;" />
+images = [
+  ['all_the_things.jpg',   67],
+  ['bear_grylls.jpg',      45],
+  ['business_cat.jpg',     50],
+  ['dwight_schrute.jpg',   73],
+  ['fry.png',              67],
+  ['good_guy_greg.jpg',    51],
+  ['insanity_wolf.jpg',    50],
+  ['internet_husband.jpg', 45],
+  ['most_interesting.jpg', 40],
+  ['philosoraptor.jpg',    50],
+  ['sap.jpg',              50],
+  ['scumbag_steve.jpg',    50],
+  ['town_crier.jpg',       75],
+  ['troll_face.jpg',       55],
+  ['tyler_durden.jpg',     50],
+  ['y_u_no.jpg',           67],
+  ['yao_ming.jpg',         42],
+]
 
-<img src="http://memecaptain.com/most_interesting_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/most_interesting.jpg'); return false;" />
-
-<img src="http://memecaptain.com/philosoraptor_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/philosoraptor.jpg'); return false;" />
-
-<img src="http://memecaptain.com/scumbag_steve_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/scumbag_steve.jpg'); return false;" />
-
-<img src="http://memecaptain.com/town_crier_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/town_crier.jpg'); return false;" />
-
-<img src="http://memecaptain.com/troll_face_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/troll_face.jpg'); return false;" />
-
-<img src="http://memecaptain.com/y_u_no_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/y_u_no.jpg'); return false;" />
-
-<img src="http://memecaptain.com/yao_ming_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/yao_ming.jpg'); return false;" />
-
-<img src="http://memecaptain.com/business_cat_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/business_cat.jpg'); return false;" />
-
-<img src="http://memecaptain.com/all_the_things_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/all_the_things.jpg'); return false;" />
-
-<img src="http://memecaptain.com/fry_thumb.png" onClick="$('#u').val('http://memecaptain.com/fry.png'); return false;" />
-
-<img src="http://memecaptain.com/sap_thumb.jpg" onClick="$('#u').val('http://memecaptain.com/sap.jpg'); return false;" />
+pos = 0
+images.each do |name, offset|
+%>
+<img src="1.gif" class="thumb" style="width : <%= offset %>px; background-position : <%= pos %>px 0px;" onClick="$('#u').val('http://memecaptain.com/<%= name %>'); return false;" />
+<%
+  pos -= offset
+end
+%>
 
 <div id="bingImageResults"></div>
 
