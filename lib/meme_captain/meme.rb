@@ -51,7 +51,7 @@ module MemeCaptain
       draw.pointsize = max_pointsize
 
       draw.stroke = 'black'
-      draw.stroke_width = 4
+      draw.stroke_width = 8
       draw.annotate(text_layer, 0, 0, 0, 0, top_text_choice)
 
       draw.stroke = 'none'
@@ -78,7 +78,7 @@ module MemeCaptain
       draw.pointsize = max_pointsize
 
       draw.stroke = 'black'
-      draw.stroke_width = 4
+      draw.stroke_width = 8
       draw.annotate(text_layer, 0, 0, 0, 0, bottom_text_choice)
 
       draw.stroke = 'none'
