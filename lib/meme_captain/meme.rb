@@ -31,19 +31,19 @@ module MemeCaptain
     draw.fill = 'white'
     draw.font = 'Impact'
 
-    top_text_upper = top_text.to_s.upcase
+    top_caption = Caption.new(top_text)
 
-    unless top_text_upper.empty?
+    if top_caption.drawable?
       max_pointsize = nil
-      top_text_choice = top_text_upper
+      wrap_choice = nil
 
       (1..3).each do |num_lines|
-        text = word_wrap(top_text_upper, num_lines)
+        wrap_try = top_caption.wrap(num_lines).upcase.annotate_quote
         pointsize = draw.calc_pointsize(
-          text_width, text_height, text, min_pointsize)
+          text_width, text_height, wrap_try, min_pointsize)
         if max_pointsize.nil? or pointsize > max_pointsize
           max_pointsize = pointsize
-          top_text_choice = text
+          wrap_choice = wrap_try
         end
       end
 
@@ -52,25 +52,25 @@ module MemeCaptain
 
       draw.stroke = 'black'
       draw.stroke_width = 8
-      draw.annotate(text_layer, 0, 0, 0, 0, top_text_choice)
+      draw.annotate text_layer, 0, 0, 0, 0, wrap_choice
 
       draw.stroke = 'none'
-      draw.annotate(text_layer, 0, 0, 0, 0, top_text_choice)
+      draw.annotate text_layer, 0, 0, 0, 0, wrap_choice
     end
 
-    bottom_text_upper = bottom_text.to_s.upcase
+    bottom_caption = Caption.new(bottom_text)
 
-    unless bottom_text_upper.empty?
+    if bottom_caption.drawable?
       max_pointsize = nil
-      bottom_text_choice = bottom_text_upper
+      wrap_choice = nil
 
       (1..3).each do |num_lines|
-        text = word_wrap(bottom_text_upper, num_lines)
+        wrap_try = bottom_caption.wrap(num_lines).upcase.annotate_quote
         pointsize = draw.calc_pointsize(
-          text_width, text_height, text, min_pointsize)
+          text_width, text_height, wrap_try, min_pointsize)
         if max_pointsize.nil? or pointsize > max_pointsize
           max_pointsize = pointsize
-          bottom_text_choice = text
+          wrap_choice = wrap_try
         end
       end
 
@@ -79,10 +79,10 @@ module MemeCaptain
 
       draw.stroke = 'black'
       draw.stroke_width = 8
-      draw.annotate(text_layer, 0, 0, 0, 0, bottom_text_choice)
+      draw.annotate text_layer, 0, 0, 0, 0, wrap_choice
 
       draw.stroke = 'none'
-      draw.annotate(text_layer, 0, 0, 0, 0, bottom_text_choice)
+      draw.annotate text_layer, 0, 0, 0, 0, wrap_choice
     end
 
     text_layer.resize!(1 / super_sample)
