@@ -14,6 +14,7 @@ module MemeCaptain
       img.from_blob(input)
     end
 
+    max_lines = 16
     super_sample = 2.0
 
     min_pointsize = 12 * super_sample
@@ -34,55 +35,67 @@ module MemeCaptain
     top_caption = Caption.new(top_text)
 
     if top_caption.drawable?
-      max_pointsize = nil
-      wrap_choice = nil
+      choices = []
 
-      (1..3).each do |num_lines|
+      (1..max_lines).each do |num_lines|
         wrap_try = top_caption.wrap(num_lines).upcase.annotate_quote
-        pointsize = draw.calc_pointsize(
-          text_width, text_height, wrap_try, min_pointsize)
-        if max_pointsize.nil? or pointsize > max_pointsize
-          max_pointsize = pointsize
-          wrap_choice = wrap_try
+
+        # if the wrap is the same as the previous one, there will be no
+        # new choices
+        if wrap_try != (choices.empty? ? nil : choices.last.text)
+          pointsize, fits = draw.calc_pointsize(
+            text_width, text_height, wrap_try, min_pointsize)
+
+          choices << CaptionChoice.new(fits, pointsize, wrap_try)
+        else
+          break
         end
       end
 
+      choice = choices.max
+
       draw.gravity = Magick::NorthGravity
-      draw.pointsize = max_pointsize
+      draw.pointsize = choice.pointsize
 
       draw.stroke = 'black'
       draw.stroke_width = 8
-      draw.annotate text_layer, 0, 0, 0, 0, wrap_choice
+      draw.annotate text_layer, 0, 0, 0, 0, choice.text
 
       draw.stroke = 'none'
-      draw.annotate text_layer, 0, 0, 0, 0, wrap_choice
+      draw.annotate text_layer, 0, 0, 0, 0, choice.text
     end
 
     bottom_caption = Caption.new(bottom_text)
 
     if bottom_caption.drawable?
-      max_pointsize = nil
-      wrap_choice = nil
+      choices = []
 
-      (1..3).each do |num_lines|
+      (1..max_lines).each do |num_lines|
         wrap_try = bottom_caption.wrap(num_lines).upcase.annotate_quote
-        pointsize = draw.calc_pointsize(
-          text_width, text_height, wrap_try, min_pointsize)
-        if max_pointsize.nil? or pointsize > max_pointsize
-          max_pointsize = pointsize
-          wrap_choice = wrap_try
+
+        # if the wrap is the same as the previous one, there will be no
+        # new choices
+        if wrap_try != (choices.empty? ? nil : choices.last.text)
+          pointsize, fits = draw.calc_pointsize(
+            text_width, text_height, wrap_try, min_pointsize)
+
+          choices << CaptionChoice.new(fits, pointsize, wrap_try)
+        else
+          break
         end
       end
 
+      choice = choices.max
+
       draw.gravity = Magick::SouthGravity
-      draw.pointsize = max_pointsize
+      draw.pointsize = choice.pointsize
 
       draw.stroke = 'black'
       draw.stroke_width = 8
-      draw.annotate text_layer, 0, 0, 0, 0, wrap_choice
+      draw.annotate text_layer, 0, 0, 0, 0, choice.text
 
       draw.stroke = 'none'
-      draw.annotate text_layer, 0, 0, 0, 0, wrap_choice
+      draw.annotate text_layer, 0, 0, 0, 0, choice.text
     end
 
     text_layer.resize!(1 / super_sample)

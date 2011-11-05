@@ -1,4 +1,5 @@
 require 'meme_captain/caption'
+require 'meme_captain/caption_choice'
 require 'meme_captain/draw'
 require 'meme_captain/file_body'
 require 'meme_captain/filesystem_cache'
