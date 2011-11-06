@@ -32,62 +32,24 @@ module MemeCaptain
     draw.fill = 'white'
     draw.font = 'Impact'
 
-    top_caption = Caption.new(top_text)
+    [
+      [Caption.new(top_text), Magick::NorthGravity],
+      [Caption.new(bottom_text), Magick::SouthGravity],
+    ].select { |x| x[0].drawable? }.each do |caption, gravity|
+      wrap_tries = (1..max_lines).map { |num_lines|
+        caption.wrap(num_lines).upcase.annotate_quote
+      }.uniq
 
-    if top_caption.drawable?
-      choices = []
+      choices = wrap_tries.map do |wrap_try|
+        pointsize, fits = draw.calc_pointsize(
+          text_width, text_height, wrap_try, min_pointsize)
 
-      (1..max_lines).each do |num_lines|
-        wrap_try = top_caption.wrap(num_lines).upcase.annotate_quote
-
-        # if the wrap is the same as the previous one, there will be no
-        # new choices
-        if wrap_try != (choices.empty? ? nil : choices.last.text)
-          pointsize, fits = draw.calc_pointsize(
-            text_width, text_height, wrap_try, min_pointsize)
-
-          choices << CaptionChoice.new(fits, pointsize, wrap_try)
-        else
-          break
-        end
+        CaptionChoice.new(fits, pointsize, wrap_try)
       end
 
       choice = choices.max
 
-      draw.gravity = Magick::NorthGravity
-      draw.pointsize = choice.pointsize
-
-      draw.stroke = 'black'
-      draw.stroke_width = 8
-      draw.annotate text_layer, 0, 0, 0, 0, choice.text
-
-      draw.stroke = 'none'
-      draw.annotate text_layer, 0, 0, 0, 0, choice.text
-    end
-
-    bottom_caption = Caption.new(bottom_text)
-
-    if bottom_caption.drawable?
-      choices = []
-
-      (1..max_lines).each do |num_lines|
-        wrap_try = bottom_caption.wrap(num_lines).upcase.annotate_quote
-
-        # if the wrap is the same as the previous one, there will be no
-        # new choices
-        if wrap_try != (choices.empty? ? nil : choices.last.text)
-          pointsize, fits = draw.calc_pointsize(
-            text_width, text_height, wrap_try, min_pointsize)
-
-          choices << CaptionChoice.new(fits, pointsize, wrap_try)
-        else
-          break
-        end
-      end
-
-      choice = choices.max
-
-      draw.gravity = Magick::SouthGravity
+      draw.gravity = gravity
       draw.pointsize = choice.pointsize
 
       draw.stroke = 'black'
