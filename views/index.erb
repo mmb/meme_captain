@@ -56,7 +56,7 @@ img.thumb {
 
 <div id="sourceImages">
 
-<p>Locally hosted source images or search Bing for source images (click thumbnail to use):</p>
+<p>Locally hosted source images or search for source images (click thumbnail to use):</p>
 
 <%
 
@@ -103,11 +103,11 @@ images.each do |name, offset|
 end
 %>
 
-<div id="bingImageResults"></div>
+<div id="imageSearchResults"></div>
 
 <form action="" method="get">
-<input type="text" id="bingSearch" />
-<input type="button" id="bingButton" value="Bing Image Search" />
+<input type="text" id="imageSearch" />
+<input type="button" id="imageSearchButton" value="Image Search" /> powered by Bing and Google
 </form>
 
 </div>
@@ -119,14 +119,12 @@ Contact: Matthew M. Boedicker <a href="mailto:matthewm@boedicker.org">matthewm@b
 
 <p><a href="https://github.com/mmb/meme_captain">source code and API</a></p>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script>
 function showBingImages(resp) {
-    var div = $('#bingImageResults'),
+    var div = $('#imageSearchResults'),
         searchResponse = resp.SearchResponse,
         image = searchResponse.Image;
-
-    div.empty();
 
     if (image.Total > 0) {
         $.each(image.Results, function (i, img) {
@@ -136,23 +134,39 @@ function showBingImages(resp) {
         });
     } else {
         div.append($('<p />').append(
-            'No results for "' + searchResponse.Query.SearchTerms + '".'));
+            'No Bing results for "' + searchResponse.Query.SearchTerms + '".'));
     }
 }
 
-function bingImageSearch() {
-    var bingSearch = $('#bingSearch'),
-        bingSearchVal = bingSearch.val();
+function showGoogleImages(resp) {
+    var div = $('#imageSearchResults'),
+        searchResults = resp.responseData.results;
 
-    if (bingSearchVal.match(/[^\s]/)) {
-        bingSearch.val('');
+    if (searchResults.length > 0) {
+        $.each(searchResults, function (i, img) {
+            div.append($('<img />').attr('src', img.tbUrl).click(
+                function () { $('#u').val(img.url); }
+            ));
+        });
+    } else {
+        div.append($('<p />').append('No Google results.'));
+    }
+}
+
+function imageSearch() {
+    var imageSearch = $('#imageSearch'),
+        imageSearchVal = imageSearch.val();
+
+    if (imageSearchVal.match(/[^\s]/)) {
+        imageSearch.val('');
+        $('#imageSearchResults').empty();
 
         $.ajax({
             type : 'GET',
             url : 'http://api.bing.net/json.aspx',
             data : {
                 AppId : 'A120380275E87F0071F163210211F0592D0E964C',
-                Query : bingSearchVal + ' imagesize:Medium',
+                Query : imageSearchVal + ' imagesize:Medium',
                 Sources : 'Image',
                 Version : '2.0',
                 Market : 'en-us',
@@ -164,12 +178,24 @@ function bingImageSearch() {
             jsonpCallback : 'showBingImages',
             jsonp : 'JsonCallback'
         });
+
+        $.ajax({
+            type : 'GET',
+            url : 'http://ajax.googleapis.com/ajax/services/search/images',
+            data : {
+                imgsz : 'large',
+                key : 'ABQIAAAA-E0uJIHoMJX6M6atCgYANRS1DzXPXMqKnKNRJm2Z_PRWxvtqGBSOvBqyXOwxGZU5jLxExg_5ym69rw',
+                q : imageSearchVal,
+                v : '1.0',
+            },
+            dataType : 'jsonp',
+            jsonpCallback : 'showGoogleImages',
+        });
     }
 }
 
 $(function () {
-    var bingSearch,
-        bingSearchVal,
+    var image,
         imgDiv;
 
     if (window.location.search.match(/u=[^&$]/)) {
@@ -228,14 +254,14 @@ $(function () {
         $('#u').focus();
     }
 
-    $('#bingSearch').keypress(function (event) {
-        if (event.which == 13) {
+    $('#imageSearch').keypress(function (event) {
+        if (event.which === 13) {
             event.preventDefault();
-            bingImageSearch();
+            imageSearch();
         }
     });
 
-    $('#bingButton').click(bingImageSearch);
+    $('#imageSearchButton').click(imageSearch);
 });
 </script>
 
