@@ -13,8 +13,7 @@
 }
 
 img.thumb {
-  background-image : url('thumbs.jpg');
-  height : 50px;
+  margin : 2px;
 }
 </style>
 </head>
@@ -56,52 +55,6 @@ img.thumb {
 <div id="sourceImages">
 
 <p>Locally hosted source images or search for source images (click thumbnail to use):</p>
-
-<%
-
-images = [
-  ['all_the_things.jpg', 67],
-  ['all_the_things2.jpg', 67],
-  ['aw_yeah.png', 50],
-  ['bear_grylls.jpg', 45],
-  ['business_cat.jpg', 50],
-  ['cool_story_bro.jpg', 72],
-  ['courage_wolf.jpg', 50],
-  ['dwight_schrute.jpg', 73],
-  ['fry.png', 67],
-  ['good_guy_greg.jpg', 51],
-  ['grandma.jpg', 68],
-  ['insanity_wolf.jpg', 50],
-  ['internet_husband.jpg', 45],
-  ['joseph_ducreux.jpg', 38],
-  ['me_gusta.png', 50],
-  ['most_interesting.jpg', 40],
-  ['ok.png', 50],
-  ['philosoraptor.jpg', 50],
-  ['rage.png', 50],
-  ['sap.jpg', 50],
-  ['scumbag_steve.jpg', 50],
-  ['seriously.png', 50],
-  ['slowpoke.jpg', 50],
-  ['success_kid.jpg', 50],
-  ['town_crier.jpg', 75],
-  ['troll_face.jpg', 55],
-  ['trolldad.png', 50],
-  ['trolldad_dancing.png', 50],
-  ['tyler_durden.jpg', 50],
-  ['xzibit.jpg', 77],
-  ['y_u_no.jpg', 67],
-  ['yao_ming.jpg', 42],
-]
-
-pos = 0
-images.each do |name, offset|
-%>
-<img src="1.gif" class="thumb" style="width : <%= offset %>px; background-position : <%= pos %>px 0px;" onClick="$('#u').val('http://memecaptain.com/<%= name %>'); return false;" />
-<%
-  pos -= offset
-end
-%>
 
 <div id="imageSearchResults"></div>
 
@@ -195,9 +148,31 @@ function imageSearch() {
     }
 }
 
+function loadSourceImages() {
+    $.get('source_images.json', function(data) {
+        var pos = 0,
+            div = $('#imageSearchResults');
+
+        $.each(data.images, function (i, img) {
+            div.before($('<img />').attr('src', '1.gif').addClass('thumb').css({
+                'background-image' : 'url(' + data.thumbSpritesUrl + ')',
+                'background-position' : pos + 'px 0px',
+                height : data.thumbHeight,
+                width : img.thumbWidth + 'px',
+            }).click(function() {
+                $('#u').val(img.url);
+            }));
+
+            pos -= img.thumbWidth;
+        });
+    });
+}
+
 $(function () {
     var image,
         imgDiv;
+
+    loadSourceImages();
 
     if (window.location.search.match(/u=[^&$]/)) {
         $('#tt').focus();

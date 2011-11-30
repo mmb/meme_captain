@@ -1,0 +1,134 @@
+{
+  "thumbHeight": 50,
+  "thumbSpritesUrl": "http://memecaptain.com/thumbs.jpg",
+  "images": [
+    {
+      "url": "http://memecaptain.com/all_the_things.jpg",
+      "thumbWidth": 67
+    },
+    {
+      "url": "http://memecaptain.com/all_the_things2.jpg",
+      "thumbWidth": 67
+    },
+    {
+      "url": "http://memecaptain.com/aw_yeah.png",
+      "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/bear_grylls.jpg",
+      "thumbWidth": 45
+    },
+    {
+      "url": "http://memecaptain.com/business_cat.jpg",
+      "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/cool_story_bro.jpg",
+      "thumbWidth": 72
+    },
+    {
+      "url": "http://memecaptain.com/courage_wolf.jpg",
+      "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/dwight_schrute.jpg",
+      "thumbWidth": 73
+    },
+    {
+      "url": "http://memecaptain.com/fry.png",
+      "thumbWidth": 67
+    },
+    {
+      "url": "http://memecaptain.com/good_guy_greg.jpg",
+      "thumbWidth": 51
+    },
+    {
+      "url": "http://memecaptain.com/grandma.jpg",
+      "thumbWidth": 68
+    },
+    {
+      "url": "http://memecaptain.com/insanity_wolf.jpg",
+      "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/internet_husband.jpg",
+      "thumbWidth": 45
+    },
+    {
+      "url": "http://memecaptain.com/joseph_ducreux.jpg",
+      "thumbWidth": 38
+    },
+    {
+      "url": "http://memecaptain.com/me_gusta.png",
+      "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/most_interesting.jpg",
+      "thumbWidth": 40
+    },
+    {
+      "url": "http://memecaptain.com/ok.png",
+      "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/philosoraptor.jpg",
+      "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/rage.png",
+      "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/sap.jpg",
+      "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/scumbag_steve.jpg",
+      "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/seriously.png",
+      "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/slowpoke.jpg",
+      "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/success_kid.jpg",
+      "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/town_crier.jpg",
+      "thumbWidth": 75
+    },
+    {
+      "url": "http://memecaptain.com/troll_face.jpg",
+      "thumbWidth": 55
+    },
+    {
+      "url": "http://memecaptain.com/trolldad.png",
+      "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/trolldad_dancing.png",
+      "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/tyler_durden.jpg",
+      "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/xzibit.jpg",
+      "thumbWidth": 77
+    },
+    {
+      "url": "http://memecaptain.com/y_u_no.jpg",
+      "thumbWidth": 67
+    },
+    {
+      "url": "http://memecaptain.com/yao_ming.jpg",
+      "thumbWidth": 42
+    }
+  ]
+}
