@@ -5,8 +5,6 @@ require 'curb'
 require 'json'
 require 'sinatra/base'
 
-require 'meme_captain'
-
 module MemeCaptain
 
   class Server < Sinatra::Base
@@ -24,8 +22,8 @@ module MemeCaptain
     end
 
     def gen(params)
-      @processed_cache ||= MemeCaptain::FilesystemCache.new('public/tmp')
-      @source_cache ||= MemeCaptain::FilesystemCache.new('img_cache/source')
+      @processed_cache ||= FilesystemCache.new('public/tmp')
+      @source_cache ||= FilesystemCache.new('img_cache/source')
 
       processed_id = Digest::SHA1.hexdigest(params.sort.map(&:join).join)
       @processed_cache.get_path(processed_id, ImageExts) {
@@ -47,7 +45,7 @@ module MemeCaptain
           self.quality = 100
           # convert non-animated gifs to png
           if current_format == 'GIF' and meme_img.size == 1
-            self.format = 'PNG'  
+            self.format = 'PNG'
           end
         }
       }
@@ -78,7 +76,7 @@ module MemeCaptain
 
       content_type MIME::Types.type_for(processed_cache_path)[0].to_s
 
-      MemeCaptain::FileBody.new(processed_cache_path)
+      FileBody.new(processed_cache_path)
     end
 
     helpers do
