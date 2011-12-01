@@ -3,6 +3,7 @@ require 'uri'
 
 require 'curb'
 require 'json'
+require 'RMagick'
 require 'sinatra/base'
 
 module MemeCaptain
@@ -10,6 +11,7 @@ module MemeCaptain
   class Server < Sinatra::Base
 
     ImageExts = %w{.jpeg .gif .png}
+    SourceImageMaxSide = 800
 
     set :root, File.join(File.dirname(__FILE__), '..', '..')
 
@@ -35,7 +37,15 @@ module MemeCaptain
           unless curl.response_code == 200
             raise "Error loading source image url #{params[:u]}"
           end
-          curl.body_str
+
+          # shrink large source images
+          img = Magick::ImageList.new.from_blob(curl.body_str)
+          if img.size == 1 and
+            (img.columns > SourceImageMaxSide or img.rows > SourceImageMaxSide)
+            img.resize_to_fit! SourceImageMaxSide
+          end
+          img.strip!
+          img.to_blob
         }
 
         meme_img = MemeCaptain.meme(source_img_data, params[:tt], params[:tb])
