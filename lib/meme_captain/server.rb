@@ -26,6 +26,8 @@ module MemeCaptain
     def gen(params)
       @processed_cache ||= FilesystemCache.new('public/tmp')
       @source_cache ||= FilesystemCache.new('img_cache/source')
+      @watermark ||= Magick::ImageList.new(
+        File.join(settings.root, 'watermark.png'))
 
       processed_id = Digest::SHA1.hexdigest(params.sort.map(&:join).join)
       @processed_cache.get_path(processed_id, ImageExts) {
@@ -44,6 +46,15 @@ module MemeCaptain
             (img.columns > SourceImageMaxSide or img.rows > SourceImageMaxSide)
             img.resize_to_fit! SourceImageMaxSide
           end
+
+          # add watermark
+          img.each do |frame|
+            frame.composite!(@watermark, Magick::SouthEastGravity,
+              -frame.page.width + frame.columns + frame.page.x,
+              -frame.page.height + frame.rows + frame.page.y,
+              Magick::OverCompositeOp)
+          end
+
           img.strip!
           img.to_blob
         }
