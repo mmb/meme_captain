@@ -56,7 +56,9 @@ module MemeCaptain
           end
 
           img.strip!
-          img.to_blob
+          img.to_blob {
+            self.quality = 100
+          }
         }
 
         meme_img = MemeCaptain.meme(source_img_data, params[:tt], params[:tb])
