@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+
+require 'mime/types'
+require 'open-uri'
+
+require 'meme_captain'
+
+input_image, top_text, bottom_text, output = ARGV.first(4)
+
+if input_image.to_s.empty?
+  $stderr.puts <<-eos
+Usage: memecaptain input_image top_text bottom_text output
+
+input_image can be a file path, URL or - for stdin.
+
+output can be a file path or - for stdout.
+eos
+  exit 1
+end
+
+input_io = if input_image == '-'
+  $stdin
+else
+  open input_image, 'rb'
+end
+
+output = $stdout  if output == '-'
+
+output_image = MemeCaptain.meme(input_io, top_text, bottom_text)
+
+input_io.close
+
+output_image.write(output ||
+  "meme.#{MIME::Types[output_image.mime_type][0].extensions[0]}")

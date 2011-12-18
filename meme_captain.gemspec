@@ -24,4 +24,5 @@ Gem::Specification.new do |s|
     }.each { |g| s.add_dependency g }
 
   s.files = `git ls-files`.split("\n")
+  s.executables = %w{memecaptain}
 end
