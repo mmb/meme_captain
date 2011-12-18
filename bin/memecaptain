@@ -61,7 +61,7 @@ unless ARGV.empty?
     "meme.#{MIME::Types[output_image.mime_type][0].extensions[0]}"
   end
 
-  output_image.write output
+  output_image.write(output) { self.quality = 100 }
 else
   $stderr.puts option_parser
   exit 1
