@@ -2,33 +2,67 @@
 
 require 'mime/types'
 require 'open-uri'
+require 'optparse'
 
 require 'meme_captain'
 
-input_image, top_text, bottom_text, output = ARGV.first(4)
+options = {}
 
-if input_image.to_s.empty?
-  $stderr.puts <<-eos
-Usage: memecaptain input_image top_text bottom_text output
+option_parser = OptionParser.new do |opts|
+  opts.banner = <<-eos
+Usage: memecaptain INPUT_IMAGE [OPTIONS]
 
-input_image can be a file path, URL or - for stdin.
+INPUT_IMAGE can be a file path, URL or - for stdin.
 
-output can be a file path or - for stdout.
 eos
+
+  opts.on('-t', '--top-text TEXT', 'top text') do |text|
+    options[:top_text] = text
+  end
+
+  opts.on('-b', '--bottom-text TEXT', 'bottom text') do |text|
+    options[:bottom_text] = text
+  end
+
+  opts.on('-o', '--output PATH', 'output path (- for stdout)') do |path|
+    options[:output] = path
+  end
+
+  opts.on('-f', '--font FONT', 'font') do |font|
+    options[:font] = font
+  end
+end
+
+option_parser.parse!
+
+unless ARGV.empty?
+  input = ARGV[0]
+
+  input_io = if input == '-'
+    $stdin
+  else
+    open input, 'rb'
+  end
+
+  meme_options = options.select do |k,v|
+    [
+      :font,
+    ].include? k
+  end
+
+  output_image = MemeCaptain.meme(
+    input_io, options[:top_text], options[:bottom_text], meme_options)
+
+  input_io.close
+
+  output = if options[:output]
+    options[:output] == '-' ? $stdout : options[:output]
+  else
+    "meme.#{MIME::Types[output_image.mime_type][0].extensions[0]}"
+  end
+
+  output_image.write output
+else
+  $stderr.puts option_parser
   exit 1
 end
-
-input_io = if input_image == '-'
-  $stdin
-else
-  open input_image, 'rb'
-end
-
-output = $stdout  if output == '-'
-
-output_image = MemeCaptain.meme(input_io, top_text, bottom_text)
-
-input_io.close
-
-output_image.write(output ||
-  "meme.#{MIME::Types[output_image.mime_type][0].extensions[0]}")
