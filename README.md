@@ -47,6 +47,10 @@ Example:
 http://memecaptain.com/g?u=http%3A%2F%2Fmemecaptain.com%2Fyao_ming.jpg&tt=sure+i%27ll+test&tb=the+api
 ```
 
+Note: tempUrl is deprecated and will now always be the same as permUrl. It is
+left for compability with older clients.
+
+
 ```json
 {
   permUrl: "http://memecaptain.com/i?u=http%3A%2F%2Fmemecaptain.com%2Fyao_ming.jpg&tt=sure+i%27ll+test&tb=the+api"
