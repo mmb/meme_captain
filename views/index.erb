@@ -182,9 +182,10 @@ $(function () {
         imgDiv.append($('<p />').append('Creating image ...'));
 
         $.get('/g' + window.location.search, function (data) {
-            var img = $('<img />').attr('src', data.tempUrl),
-            tempLink = $('<a />').attr('href', data.tempUrl).append(data.tempUrl),
-            permLink = $('<a />').attr('href', data.permUrl).append(data.permUrl),
+            var img = $('<img />').attr('src', data.permUrl),
+            imgLink = $('<a />').attr('href', data.permUrl).append(data.permUrl),
+            hackableLink = $('<a />').attr('href', data.hackableUrl).append(
+                data.hackableUrl),
             tweetLink = $('<a />').attr({
                 href : 'http://twitter.com/share',
                 'class' : 'twitter-share-button',
@@ -195,9 +196,9 @@ $(function () {
 
             imgDiv.empty().append(
                 img).append(
-                $('<p />').append('Temporary image url: ').append(tempLink)).append(
-                $('<p />').append('Permanent image url: ').append(permLink)).append(
-                $('<p />').append('Temporary url not guaranteed to work forever. Permanent url should work as long as source image exists.')).append(
+                $('<p />').append('Image url: ').append(imgLink)).append(
+                $('<p />').append('Hackable image url: ').append(
+                    hackableLink)).append(
                 $('<p />').append(tweetLink).append($('<script />').attr('src',
                     'http://platform.twitter.com/widgets.js')));
 
@@ -205,7 +206,7 @@ $(function () {
             imgDiv.append(
                 $('<div />').attr('id', 'fb-root')).append(
                 $('<fb:like />').attr({
-                    href : data.tempUrl,
+                    href : data.permUrl,
                     send : 'true',
                     width : '450',
                     show_faces : 'true',

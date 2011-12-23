@@ -15,9 +15,11 @@ Gem::Specification.new do |s|
   s.email = %w{matthewm@boedicker.org}
 
   %w{
+    bson_ext
     curb
     json
     mime-types
+    mongo
     rack
     rmagick
     sinatra

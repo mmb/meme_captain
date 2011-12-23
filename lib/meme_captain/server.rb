@@ -1,8 +1,10 @@
 require 'digest/sha1'
+require 'fileutils'
 require 'uri'
 
 require 'curb'
 require 'json'
+require 'mongo'
 require 'RMagick'
 require 'sinatra/base'
 
@@ -10,10 +12,11 @@ module MemeCaptain
 
   class Server < Sinatra::Base
 
-    ImageExts = %w{.jpeg .gif .png}
     SourceImageMaxSide = 800
 
-    set :root, File.join(File.dirname(__FILE__), '..', '..')
+    set :root, File.expand_path(File.join('..', '..'), File.dirname(__FILE__))
+
+    set :db, Mongo::Connection.new.db('memecaptain')
 
     get '/' do
       @u = params[:u]
@@ -24,15 +27,21 @@ module MemeCaptain
     end
 
     def gen(params)
-      @processed_cache ||= FilesystemCache.new('public/tmp')
-      @source_cache ||= FilesystemCache.new('img_cache/source')
-      @watermark ||= Magick::ImageList.new(
-        File.join(settings.root, 'watermark.png'))
+      meme_collection = settings.db['meme']
 
-      processed_id = Digest::SHA1.hexdigest(params.sort.map(&:join).join)
-      @processed_cache.get_path(processed_id, ImageExts) {
-        source_id = Digest::SHA1.hexdigest(params[:u])
-        source_img_data = @source_cache.get_data(source_id, ImageExts) {
+      if existing = meme_collection.find_one(
+        'source_url' => params[:u],
+        'top_text' => params[:tt],
+        'bottom_text' => params[:tb]
+        )
+        existing
+      else
+        if same_source = meme_collection.find_one(
+          'source_url' => params[:u]
+          )
+          source_fs_path = same_source['source_fs_path']
+        else
+          puts 'FETCH'
           curl = Curl::Easy.perform(params[:u]) do |c|
             c.useragent = 'Meme Captain http://memecaptain.com/'
           end
@@ -41,65 +50,146 @@ module MemeCaptain
           end
 
           # shrink large source images
-          img = Magick::ImageList.new.from_blob(curl.body_str)
-          if img.size == 1 and
-            (img.columns > SourceImageMaxSide or img.rows > SourceImageMaxSide)
-            img.resize_to_fit! SourceImageMaxSide
+          source_img = Magick::ImageList.new.from_blob(curl.body_str)
+          if source_img.size == 1 and
+            (source_img.columns > SourceImageMaxSide or
+            source_img.rows > SourceImageMaxSide)
+            source_img.resize_to_fit! SourceImageMaxSide
           end
 
-          # add watermark
-          img.each do |frame|
-            frame.composite!(@watermark, Magick::SouthEastGravity,
-              -frame.page.width + frame.columns + frame.page.x,
-              -frame.page.height + frame.rows + frame.page.y,
-              Magick::OverCompositeOp)
-          end
+          @watermark ||= Magick::ImageList.new(
+            File.join(settings.root, 'watermark.png'))
+          source_img.extend MemeCaptain::Watermark
+          source_img.watermark_mc @watermark
 
-          img.strip!
-          img.to_blob {
+          source_img.strip!
+
+          source_hash = Digest::SHA1.hexdigest(params[:u])
+
+          source_dir = File.join('source_cache', source_hash[0,3])
+          FileUtils.mkdir_p source_dir
+
+          source_ext = MemeCaptain.mime_type_ext(source_img.mime_type)
+
+          source_fs_path = File.join(source_dir,
+            "#{source_hash[3..-1]}.#{source_ext}")
+
+          source_img.write(source_fs_path) {
             self.quality = 100
           }
-        }
+        end
 
-        meme_img = MemeCaptain.meme(source_img_data, params[:tt], params[:tb])
-        current_format = meme_img.format
+        open(source_fs_path, 'rb') do |source_io|
+          meme_img = MemeCaptain.meme(source_io, params[:tt], params[:tb])
 
-        meme_img.to_blob {
-          self.quality = 100
           # convert non-animated gifs to png
-          if current_format == 'GIF' and meme_img.size == 1
-            self.format = 'PNG'
+          if meme_img.format == 'GIF' and meme_img.size == 1
+            meme_format = 'PNG'
+            meme_mime_type = 'image/png'
+          else
+            meme_format = meme_img.format
+            meme_mime_type = meme_img.mime_type
           end
-        }
-      }
+
+          meme_ext = MemeCaptain.mime_type_ext(meme_mime_type)
+
+          meme_hash = Digest::SHA1.hexdigest(params.sort.map(&:join).join)
+
+          meme_id = nil
+          (6..meme_hash.size).each do |len|
+            meme_id = "#{meme_hash[0,len]}.#{meme_ext}"
+            break  unless meme_collection.find_one('meme_id' => meme_id)
+          end
+
+          meme_fs_dir = File.join('public', 'meme', meme_id[0,3])
+          FileUtils.mkdir_p meme_fs_dir
+
+          meme_fs_path = File.join(meme_fs_dir, meme_id[3..-1])
+
+          meme_img.write(meme_fs_path) {
+            self.format = meme_format
+            self.quality = 100
+          }
+
+          now = Time.now
+
+          meme_data = {
+            'meme_id' => meme_id,
+            'fs_path' => meme_fs_path,
+            'mime_type' => meme_mime_type,
+
+            'source_url' => params[:u],
+            'source_fs_path' => source_fs_path,
+            'top_text' => params[:tt],
+            'bottom_text' => params[:tb],
+
+            'request_count' => 0,
+            'last_request' => now,
+
+            'created' => now,
+            'creator_ip' => request.ip,
+            }
+
+          meme_collection.insert meme_data
+
+          meme_data
+        end
+
+      end
     end
 
     get '/g' do
       begin
-        processed_cache_path = gen(params)
+        meme_data = gen(params)
 
-        temp_url = URI(request.url)
-        temp_url.path = processed_cache_path.sub('public', '')
-        temp_url.query = nil
+        meme_url = URI(request.url)
+        meme_url.path = "/#{meme_data['meme_id']}"
+        meme_url.query = nil
 
-        perm_url = URI(request.url)
-        perm_url.path = '/i'
+        hackable_url = URI(request.url)
+        hackable_url.path = '/i'
+
+        meme_url_s = meme_url.to_s
 
         [200, { 'Content-Type' => 'application/json' }, {
-          'tempUrl' => temp_url.to_s,
-          'permUrl' => perm_url.to_s,
+          'tempUrl' => meme_url_s,
+          'permUrl' => meme_url_s,
+          'hackableUrl' => hackable_url.to_s,
         }.to_json]
       rescue => error
         [500, { 'Content-Type' => 'text/plain' }, error.to_s]
       end
     end
 
+    def request_update(meme_id)
+      settings.db['meme'].update(
+        { 'meme_id' => meme_id },
+        {
+          '$inc' => { 'request_count' => 1 },
+          '$set' => { 'last_request' => Time.now },
+        }
+      )
+    end
+
+    def serve_meme_data(meme_data)
+      request_update meme_data['meme_id']
+
+      content_type meme_data['mime_type']
+
+      FileBody.new meme_data['fs_path']
+    end
+
     get '/i' do
-      processed_cache_path = gen(params)
+      serve_meme_data(gen(params))
+    end
 
-      content_type MIME::Types.type_for(processed_cache_path)[0].to_s
-
-      FileBody.new(processed_cache_path)
+    get %r{^/([a-f0-9]+\.(?:gif|jpg|png))$} do
+      if meme_data = settings.db['meme'].find_one(
+        'meme_id' => params[:captures][0])
+        serve_meme_data(meme_data)
+      else
+        [404, 'not found']
+      end
     end
 
     helpers do
