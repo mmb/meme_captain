@@ -41,7 +41,6 @@ module MemeCaptain
           )
           source_fs_path = same_source['source_fs_path']
         else
-          puts 'FETCH'
           curl = Curl::Easy.perform(params[:u]) do |c|
             c.useragent = 'Meme Captain http://memecaptain.com/'
           end
