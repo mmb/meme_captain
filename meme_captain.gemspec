@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
     json
     mime-types
     mongo
+    mongo_mapper
     rack
     rmagick
     sinatra
