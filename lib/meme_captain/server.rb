@@ -75,7 +75,7 @@ module MemeCaptain
 
             :request_count => 0,
 
-            :creator_ip => request.ip,
+            :creator_ip => request.ip
             )
 
           meme_data.save! :safe => true
