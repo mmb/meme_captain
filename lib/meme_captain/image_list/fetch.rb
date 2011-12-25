@@ -13,7 +13,7 @@ module MemeCaptain
           c.useragent = 'Meme Captain http://memecaptain.com/'
         end
         unless curl.response_code == 200
-          raise "Error loading source image url #{params[:u]}"
+          raise "Error loading source image url #{url}"
         end
 
         from_blob curl.body_str
