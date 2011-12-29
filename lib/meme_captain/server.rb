@@ -67,6 +67,7 @@ module MemeCaptain
             :meme_id => meme_id,
             :fs_path => meme_fs_path,
             :mime_type => meme_img.mime_type,
+            :size => File.size(meme_fs_path),
 
             :source_url => params[:u],
             :source_fs_path => source_fs_path,

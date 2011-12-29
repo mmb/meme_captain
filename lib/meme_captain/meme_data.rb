@@ -10,6 +10,7 @@ module MemeCaptain
     key :meme_id, String
     key :fs_path, String
     key :mime_type, String
+    key :size, Integer
 
     key :source_url, String
     key :source_fs_path, String
