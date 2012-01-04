@@ -88,6 +88,8 @@ module MemeCaptain
     end
 
     get '/g' do
+      raise Sinatra::NotFound  if params[:u].to_s.empty?
+
       begin
         meme_data = gen(params)
 
@@ -119,6 +121,8 @@ module MemeCaptain
     end
 
     get '/i' do
+      raise Sinatra::NotFound  if params[:u].to_s.empty?
+
       serve_img(gen(params))
     end
 
@@ -126,8 +130,14 @@ module MemeCaptain
       if meme_data = MemeData.find_by_meme_id(params[:captures][0])
         serve_img meme_data
       else
-        [404, 'not found']
+        raise Sinatra::NotFound
       end
+    end
+
+    not_found do
+      @root_url = url('/')
+
+      erb :'404'
     end
 
     helpers do
