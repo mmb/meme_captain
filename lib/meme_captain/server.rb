@@ -1,5 +1,4 @@
 require 'digest/sha1'
-require 'uri'
 
 require 'json'
 require 'sinatra/base'
@@ -17,6 +16,8 @@ module MemeCaptain
       @u = params[:u]
       @tt= params[:tt]
       @tb = params[:tb]
+
+      @root_url = url('/')
 
       erb :index
     end
@@ -93,19 +94,12 @@ module MemeCaptain
       begin
         meme_data = gen(params)
 
-        meme_url = URI(request.url)
-        meme_url.path = "/#{meme_data.meme_id}"
-        meme_url.query = nil
-
-        hackable_url = URI(request.url)
-        hackable_url.path = '/i'
-
-        meme_url_s = meme_url.to_s
+        meme_url = url("/#{meme_data.meme_id}")
 
         [200, { 'Content-Type' => 'application/json' }, {
-          'tempUrl' => meme_url_s,
-          'permUrl' => meme_url_s,
-          'hackableUrl' => hackable_url.to_s,
+          'tempUrl' => meme_url,
+          'permUrl' => meme_url,
+          'hackableUrl' => url("/i?#{request.query_string}"),
         }.to_json]
       rescue => error
         [500, { 'Content-Type' => 'text/plain' }, error.to_s]
