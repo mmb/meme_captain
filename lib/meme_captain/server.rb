@@ -23,34 +23,48 @@ module MemeCaptain
       erb :index
     end
 
-    def gen(params)
+    def normalize_params(p)
+      result = {
+        'u' => p[:u],
+         # convert to empty string if null
+        'tt' => p[:tt].to_s,
+        'tb' => p[:tb].to_s,
+      }
+
       # if the id of an existing meme is passed in as the source url, use the
       # source image of that meme for the source image
-      if params[:u][%r{^[a-f0-9]+\.(?:gif|jpg|png)$}]
-        if existing_as_source = MemeData.find_by_meme_id(params[:u])
-          params['u'] = existing_as_source.source_url
+      if result['u'][%r{^[a-f0-9]+\.(?:gif|jpg|png)$}]
+        if existing_as_source = MemeData.find_by_meme_id(result['u'])
+          result['u'] = existing_as_source.source_url
         end
       end
 
+      # hash with string keys that can be accessed by symbol
+      Hash.new { |hash,key| hash[key.to_s] if Symbol === key }.merge(result)
+    end
+
+    def gen(p)
+      norm_params = normalize_params(p)
+
       if existing = MemeData.first(
-        :source_url => params[:u],
-        :top_text => params[:tt],
-        :bottom_text => params[:tb]
+        :source_url => norm_params[:u],
+        :top_text => norm_params[:tt],
+        :bottom_text => norm_params[:tb]
         )
         existing
       else
-        if same_source = MemeData.find_by_source_url(params[:u])
+        if same_source = MemeData.find_by_source_url(norm_params[:u])
           source_fs_path = same_source.source_fs_path
         else
           source_img = ImageList::SourceImage.new
-          source_img.fetch! params[:u]
+          source_img.fetch! norm_params[:u]
           source_img.prepare! settings.source_img_max_side, settings.watermark
-
-          source_fs_path = source_img.cache(params[:u], 'source_cache')
+          source_fs_path = source_img.cache(norm_params[:u], 'source_cache')
         end
 
         open(source_fs_path, 'rb') do |source_io|
-          meme_img = MemeCaptain.meme(source_io, params[:tt], params[:tb])
+          meme_img = MemeCaptain.meme(source_io, norm_params[:tt],
+            norm_params[:tb])
           meme_img.extend ImageList::Cache
 
           # convert non-animated gifs to png
@@ -58,7 +72,7 @@ module MemeCaptain
             meme_img.format = 'PNG'
           end
 
-          params_s = params.sort.map(&:join).join
+          params_s = norm_params.sort.map(&:join).join
           meme_hash = Digest::SHA1.hexdigest(params_s)
 
           meme_id = nil
@@ -79,10 +93,10 @@ module MemeCaptain
             :mime_type => meme_img.mime_type,
             :size => File.size(meme_fs_path),
 
-            :source_url => params[:u],
+            :source_url => norm_params[:u],
             :source_fs_path => source_fs_path,
-            :top_text => params[:tt],
-            :bottom_text => params[:tb],
+            :top_text => norm_params[:tt],
+            :bottom_text => norm_params[:tb],
 
             :request_count => 0,
 
