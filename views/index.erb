@@ -189,8 +189,8 @@ $(function () {
         $.get('/g' + window.location.search, function (data) {
             var img = $('<img />').attr('src', data.permUrl),
             imgLink = $('<a />').attr('href', data.permUrl).append(data.permUrl),
-            hackableLink = $('<a />').attr('href', data.hackableUrl).append(
-                data.hackableUrl),
+            templateLink = $('<a />').attr('href', data.templateUrl).append(
+                data.templateUrl),
             tweetLink = $('<a />').attr({
                 href : 'http://twitter.com/share',
                 'class' : 'twitter-share-button',
@@ -201,9 +201,9 @@ $(function () {
 
             imgDiv.empty().append(
                 img).append(
-                $('<p />').append('Image url: ').append(imgLink)).append(
-                $('<p />').append('Hackable image url: ').append(
-                    hackableLink)).append(
+                $('<p />').append('Image: ').append(imgLink)).append(
+                $('<p />').append('Template: ').append(
+                    templateLink)).append(
                 $('<p />').append(tweetLink).append($('<script />').attr('src',
                     'http://platform.twitter.com/widgets.js')));
 

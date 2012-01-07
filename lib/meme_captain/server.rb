@@ -1,6 +1,7 @@
 require 'digest/sha1'
 
 require 'json'
+require 'rack'
 require 'sinatra/base'
 
 module MemeCaptain
@@ -23,6 +24,14 @@ module MemeCaptain
     end
 
     def gen(params)
+      # if the id of an existing meme is passed in as the source url, use the
+      # source image of that meme for the source image
+      if params[:u][%r{^[a-f0-9]+\.(?:gif|jpg|png)$}]
+        if existing_as_source = MemeData.find_by_meme_id(params[:u])
+          params['u'] = existing_as_source.source_url
+        end
+      end
+
       if existing = MemeData.first(
         :source_url => params[:u],
         :top_text => params[:tt],
@@ -96,10 +105,17 @@ module MemeCaptain
 
         meme_url = url("/#{meme_data.meme_id}")
 
+        template_query = {
+          :u => meme_data.meme_id,
+          :tt => meme_data.top_text,
+          :tb => meme_data.bottom_text
+          }.map { |k,v|
+            "#{Rack::Utils.escape(k)}=#{Rack::Utils.escape(v)}" }.join('&')
+
         [200, { 'Content-Type' => 'application/json' }, {
           'tempUrl' => meme_url,
           'permUrl' => meme_url,
-          'hackableUrl' => url("/i?#{request.query_string}"),
+          'templateUrl' => url("/?#{template_query}"),
         }.to_json]
       rescue => error
         [500, { 'Content-Type' => 'text/plain' }, error.to_s]
