@@ -119,11 +119,11 @@ module MemeCaptain
 
         meme_url = url("/#{meme_data.meme_id}")
 
-        template_query = {
-          :u => meme_data.meme_id,
-          :tt => meme_data.top_text,
-          :tb => meme_data.bottom_text
-          }.map { |k,v|
+        template_query = [
+          [:u, meme_data.meme_id],
+          [:tt, meme_data.top_text],
+          [:tb, meme_data.bottom_text],
+          ].map { |k,v|
             "#{Rack::Utils.escape(k)}=#{Rack::Utils.escape(v)}" }.join('&')
 
         [200, { 'Content-Type' => 'application/json' }, {
