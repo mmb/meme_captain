@@ -69,10 +69,11 @@ module MemeCaptain
       }.uniq
 
       choices = wrap_tries.map do |wrap_try|
-        pointsize, fits = draw.calc_pointsize(
+        pointsize, metrics = draw.calc_pointsize(
           text_width, text_height, wrap_try, min_pointsize)
 
-        CaptionChoice.new(fits, pointsize, wrap_try)
+        CaptionChoice.new(pointsize, metrics, wrap_try, text_width,
+          text_height)
       end
 
       choice = choices.max

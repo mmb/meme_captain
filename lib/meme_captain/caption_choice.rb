@@ -4,18 +4,24 @@ module MemeCaptain
   class CaptionChoice
     include Comparable
 
-    def initialize(fits, pointsize, text)
-      @fits = fits
+    def initialize(pointsize, metrics, text, bound_width, bound_height)
       @pointsize = pointsize
+      @metrics = metrics
       @text = text
+      @bound_width = bound_width
+      @bound_height = bound_height
     end
 
     def num_lines
       text.count("\n") + 1
     end
 
+    def fits
+      metrics.width <= bound_width and metrics.height <= bound_height
+    end
+
     def fits_i
-      fits ? 1: 0
+      fits ? 1 : 0
     end
 
     def <=>(other)
@@ -24,10 +30,11 @@ module MemeCaptain
         other.fits ? -other.num_lines : other.num_lines]
     end
 
-    attr_accessor :fits
     attr_accessor :pointsize
+    attr_accessor :metrics
     attr_accessor :text
-
+    attr_accessor :bound_width
+    attr_accessor :bound_height
   end
 
 end

@@ -6,20 +6,22 @@ module MemeCaptain
     # Calculate the largest pointsize for text that will be in a width x
     # height box.
     #
-    # Return [pointsize, fits] where pointsize is the largest pointsize and
-    # fits is true if that pointsize will fit in the box.
+    # Return [pointsize, metrics] where pointsize is the largest pointsize and
+    # metrics is the RMagick multiline type metrics of the best fit.
     def calc_pointsize(width, height, text, min_pointsize)
       current_pointsize = min_pointsize
 
-      fits = false
+      metrics = nil
 
       loop {
         self.pointsize = current_pointsize
+        last_metrics = metrics
         metrics = get_multiline_type_metrics(text)
+
         if metrics.width > width or metrics.height > height
           if current_pointsize > min_pointsize
             current_pointsize -= 1
-            fits = true
+            metrics = last_metrics
           end
           break
         else
@@ -27,7 +29,7 @@ module MemeCaptain
         end
       }
 
-      [current_pointsize, fits]
+      [current_pointsize, metrics]
     end
 
   end
