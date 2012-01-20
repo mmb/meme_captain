@@ -1,3 +1,36 @@
+0.0.9	2012-01-19
+
+	Design and markup improvements on the site.
+
+	Allow use of all type metrics when comparing caption choices.
+
+	Add ability to use the ids in the URLs of generated images to make
+	new images from the same source by using the id as the source image
+	URL (an example id is abcdef.jpg).
+
+	Add a 404 page to the site.
+
+	Deprecate concept of temporary URLs and permanent URLs for images
+	generated from the site.
+
+	Use MongoDB for the site datastore.
+
+	Add "memecaptain" executable for creating memes using the gem from the
+	command line.
+
+	Add a watermark to images created on the site.
+
+	Shrink large source images to a maximum of 800 pixels per side for
+	images created on the site.
+
+	Define local source images in JSON instead of in the template and load
+	them with Ajax.
+
+	Add Google Image Search to the site.
+
+	Add new source images to the site: all the things 2, cool story bro,
+	aw yeah, Boromir, Ned Stark.
+
 0.0.8
         2011-11-23
 
