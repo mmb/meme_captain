@@ -36,16 +36,16 @@ module MemeCaptain
         }.uniq
 
         text_x = (text_pos.x.is_a?(Float) ?
-          img.columns * text_pos.x : text_pos.x) * super_sample
+          img.page.width * text_pos.x : text_pos.x) * super_sample
 
         text_y = (text_pos.y.is_a?(Float) ?
-          img.rows * text_pos.y : text_pos.y) * super_sample
+          img.page.height * text_pos.y : text_pos.y) * super_sample
 
         text_width = (text_pos.width.is_a?(Float) ?
-          img.columns * text_pos.width : text_pos.width) * super_sample
+          img.page.width * text_pos.width : text_pos.width) * super_sample
 
         text_height = (text_pos.height.is_a?(Float) ?
-          img.rows * text_pos.height : text_pos.height) * super_sample
+          img.page.height * text_pos.height : text_pos.height) * super_sample
 
         min_pointsize = text_pos.min_pointsize * super_sample
 
