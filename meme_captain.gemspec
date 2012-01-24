@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
     mongo
     mongo_mapper
     rack
+    rack-rewrite
     rmagick
     sinatra
     }.each { |g| s.add_dependency g }

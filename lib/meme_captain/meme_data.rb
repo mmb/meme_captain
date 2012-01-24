@@ -14,8 +14,7 @@ module MemeCaptain
 
     key :source_url, String
     key :source_fs_path, String
-    key :top_text, String
-    key :bottom_text, String
+    key :texts, Array
 
     key :request_count, Integer
     key :last_request, Time

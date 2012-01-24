@@ -15,21 +15,50 @@ module MemeCaptain
 
     get '/' do
       @u = params[:u]
-      @tt= params[:tt]
-      @tb = params[:tb]
+
+      @t1 = params[:t1]
+      @t1x = params[:t1x]
+      @t1y = params[:t1y]
+      @t1w = params[:t1w]
+      @t1h = params[:t1h]
+
+      @t2 = params[:t2]
+      @t2x = params[:t2x]
+      @t2y = params[:t2y]
+      @t2w = params[:t2w]
+      @t2h = params[:t2h]
 
       @root_url = url('/')
 
       erb :index
     end
 
+    def convert_metric(metric, default)
+      case
+        when metric.to_s.empty?; default
+        when metric.index('.'); metric.to_f
+        else; metric.to_i
+      end
+    end
+
     def normalize_params(p)
       result = {
         'u' => p[:u],
+
          # convert to empty string if null
-        'tt' => p[:tt].to_s,
-        'tb' => p[:tb].to_s,
+        't1'  => p[:t1].to_s,
+        't2'  => p[:t2].to_s,
       }
+
+      result['t1x'] = convert_metric(p[:t1x], 0.05)
+      result['t1y'] = convert_metric(p[:t1y], 0)
+      result['t1w'] = convert_metric(p[:t1w], 0.9)
+      result['t1h'] = convert_metric(p[:t1h], 0.25)
+
+      result['t2x'] = convert_metric(p[:t2x], 0.05)
+      result['t2y'] = convert_metric(p[:t2y], 0.75)
+      result['t2w'] = convert_metric(p[:t2w], 0.9)
+      result['t2h'] = convert_metric(p[:t2h], 0.25)
 
       # if the id of an existing meme is passed in as the source url, use the
       # source image of that meme for the source image
@@ -48,8 +77,20 @@ module MemeCaptain
 
       if existing = MemeData.first(
         :source_url => norm_params[:u],
-        :top_text => norm_params[:tt],
-        :bottom_text => norm_params[:tb]
+
+        :texts => { '$all' => [{
+          :text => norm_params[:t1],
+          :x => norm_params[:t1x],
+          :y => norm_params[:t1y],
+          :w => norm_params[:t1w],
+          :h => norm_params[:t1h],
+          }, {
+          :text => norm_params[:t2],
+          :x => norm_params[:t2x],
+          :y => norm_params[:t2y],
+          :w => norm_params[:t2w],
+          :h => norm_params[:t2h],
+          }], '$size' => 2}
         )
         existing
       else
@@ -63,8 +104,13 @@ module MemeCaptain
         end
 
         open(source_fs_path, 'rb') do |source_io|
-          meme_img = MemeCaptain.meme(source_io, norm_params[:tt],
-            norm_params[:tb])
+          t1 = TextPos.new(norm_params[:t1], norm_params[:t1x],
+            norm_params[:t1y], norm_params[:t1w], norm_params[:t1h])
+
+          t2 = TextPos.new(norm_params[:t2], norm_params[:t2x],
+            norm_params[:t2y], norm_params[:t2w], norm_params[:t2h])
+
+          meme_img = MemeCaptain.meme(source_io, [t1, t2])
           meme_img.extend ImageList::Cache
 
           # convert non-animated gifs to png
@@ -95,8 +141,20 @@ module MemeCaptain
 
             :source_url => norm_params[:u],
             :source_fs_path => source_fs_path,
-            :top_text => norm_params[:tt],
-            :bottom_text => norm_params[:tb],
+
+            :texts => [{
+              :text => norm_params[:t1],
+              :x => norm_params[:t1x],
+              :y => norm_params[:t1y],
+              :w => norm_params[:t1w],
+              :h => norm_params[:t1h],
+              }, {
+              :text => norm_params[:t2],
+              :x => norm_params[:t2x],
+              :y => norm_params[:t2y],
+              :w => norm_params[:t2w],
+              :h => norm_params[:t2h],
+            }],
 
             :request_count => 0,
 
@@ -121,8 +179,6 @@ module MemeCaptain
 
         template_query = [
           [:u, meme_data.meme_id],
-          [:tt, meme_data.top_text],
-          [:tb, meme_data.bottom_text],
           ].map { |k,v|
             "#{Rack::Utils.escape(k)}=#{Rack::Utils.escape(v)}" }.join('&')
 

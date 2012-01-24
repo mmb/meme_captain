@@ -39,22 +39,60 @@ img.thumb {
 
 <tr>
 <td><label for="u">Source image URL: </label></td>
-<td><input type="text" id="u" name="u" size="64" value="<%= h @u %>"/></td>
+<td><input type="text" id="u" name="u" size="64" value="<%= h @u %>" tabindex="1" /></td>
 </tr>
 
 <tr>
-<td><label for="tt">Top text: </label></td>
-<td><input type="text" id="tt" name="tt" size="64" value="<%= h @tt %>" /></td>
+<td><label for="t1">Text 1: </label></td>
+<td>
+<input type="text" id="t1" name="t1" size="64" value="<%= h @t1 %>" tabindex="2" />
+</td>
+<td><label for="t1x">X: </label></td>
+<td>
+<input type="text" id="t1x" name="t1x" size="4" value="<%= h @t1x %>" tabindex="4" />
+</td>
+<td><label for="t1y">Y: </label></td>
+<td>
+<input type="text" id="t1y" name="t1y" size="4" value="<%= h @t1y %>" tabindex="5" />
+</td>
+<td><label for="t1w">Width: </label></td>
+<td>
+<input type="text" id="t1w" name="t1w" size="4" value="<%= h @t1w %>" tabindex="6" />
+</td>
+<td><label for="t1h">Height: </label></td>
+<td>
+<input type="text" id="t1h" name="t1h" size="4" value="<%= h @t1h %>" tabindex="7" />
+</td>
 </tr>
 
 <tr>
-<td><label for="tb">Bottom text: </label></td>
-<td><input type="text" id="tb" name="tb" size="64" value="<%= h @tb %>" /></td>
+<td><label for="t2">Text 2: </label></td>
+<td>
+<input type="text" id="t2" name="t2" size="64" value="<%= h @t2 %>" tabindex="3" />
+</td>
+<td><label for="t2x">X: </label></td>
+<td>
+<input type="text" id="t2x" name="t2x" size="4" value="<%= h @t2x %>" tabindex="8" />
+</td>
+<td><label for="t2y">Y: </label></td>
+<td>
+<input type="text" id="t2y" name="t2y" size="4" value="<%= h @t2y %>" tabindex="9" />
+</td>
+<td><label for="t2w">Width: </label></td>
+<td>
+<input type="text" id="t2w" name="t2w" size="4" value="<%= h @t2w %>" tabindex="10" />
+</td>
+<td><label for="t2h">Height: </label></td>
+<td>
+<input type="text" id="t2h" name="t2h" size="4" value="<%= h @t2h %>" tabindex="11" />
+</td>
 </tr>
 
 <tr>
 <td></td>
-<td><input type="submit" value="Create Image" /></td>
+<td>
+<input type="button" id="positionTextButton" value="Position Text" />
+<input type="submit" value="Create Image" /></td>
 </tr>
 
 </table>
@@ -82,6 +120,7 @@ Contact: Matthew M. Boedicker <a href="mailto:matthewm@boedicker.org">matthewm@b
 <p><a href="https://github.com/mmb/meme_captain">source code and API</a></p>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="js/fabric.min.js"></script>
 <script>
 function showBingImages(resp) {
     var div = $('#imageSearchResults'),
@@ -177,6 +216,77 @@ function loadSourceImages() {
     });
 }
 
+function positionText() {
+    var imageUrl = $('#u').val(),
+
+        canvas,
+        canvasHeight,
+        canvasWidth,
+
+        rect1,
+        rect2;
+
+    if (imageUrl.length > 0) {
+        $('#img').empty().append($('<canvas />').attr({
+            id : 'positionTextCanvas'
+        }));
+
+        canvas = new fabric.Canvas('positionTextCanvas');
+
+        canvas.setBackgroundImage(imageUrl, function () {
+            canvas.setWidth(canvas.backgroundImage.width);
+            canvas.setHeight(canvas.backgroundImage.height);
+
+            canvas.renderAll.bind(canvas);
+
+            canvasWidth = canvas.getWidth(),
+            canvasHeight = canvas.getHeight(),
+            textWidth = 0.9 * canvasWidth,
+            textHeight = .25 * canvasHeight;
+
+            rect1 = new fabric.Rect({
+                top  : textHeight / 2.0,
+                left : ((canvasWidth - textWidth) / 2.0) + (textWidth / 2.0),
+                width : textWidth,
+                height: textHeight,
+                fill: 'red'
+            });
+
+            rect1.name = '1';
+            rect1.set('lockRotation', true);
+
+            canvas.add(rect1);
+
+            rect2 = new fabric.Rect({
+                top : canvasHeight - (textHeight / 2.0),
+                left : ((canvasWidth - textWidth) / 2.0) + (textWidth / 2.0),
+                width : textWidth,
+                height : textHeight,
+                fill: 'red'
+            });
+
+            rect2.name = '2';
+            rect2.set('lockRotation', true);
+
+            canvas.add(rect2);
+
+            canvas.observe('object:modified', function (o) {
+                var target = o.memo.target;
+
+                $('#t' + target.name + 'x').val(
+                    Math.round(target.getLeft() - (target.getWidth() / 2)));
+                $('#t' + target.name + 'y').val(
+                    Math.round(target.getTop() - (target.getHeight() / 2)));
+                $('#t' + target.name + 'w').val(Math.round(target.getWidth()));
+                $('#t' + target.name + 'h').val(Math.round(target.getHeight()));
+            });
+
+            canvas.fire('object:modified', { target : rect1 });
+            canvas.fire('object:modified', { target : rect2 });
+        });
+    }
+}
+
 $(function () {
     var image,
         imgDiv;
@@ -248,6 +358,8 @@ $(function () {
     });
 
     $('#imageSearchButton').click(imageSearch);
+
+    $('#positionTextButton').click(positionText);
 });
 </script>
 
