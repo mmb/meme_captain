@@ -175,10 +175,8 @@ module MemeCaptain
       begin
         meme_data = gen(params)
 
-        meme_url = url("/#{meme_data.meme_id}")
-
         [200, { 'Content-Type' => 'application/json' }, {
-          'imageUrl' => meme_url,
+          'imageUrl' => url("/#{meme_data.meme_id}")
         }.to_json]
       rescue => error
         [500, { 'Content-Type' => 'text/plain' }, error.to_s]
