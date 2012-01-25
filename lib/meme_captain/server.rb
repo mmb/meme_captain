@@ -177,15 +177,8 @@ module MemeCaptain
 
         meme_url = url("/#{meme_data.meme_id}")
 
-        template_query = [
-          [:u, meme_data.meme_id],
-          ].map { |k,v|
-            "#{Rack::Utils.escape(k)}=#{Rack::Utils.escape(v)}" }.join('&')
-
         [200, { 'Content-Type' => 'application/json' }, {
-          'tempUrl' => meme_url,
-          'permUrl' => meme_url,
-          'templateUrl' => url("/?#{template_query}"),
+          'imageUrl' => meme_url,
         }.to_json]
       rescue => error
         [500, { 'Content-Type' => 'text/plain' }, error.to_s]

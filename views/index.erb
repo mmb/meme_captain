@@ -9,13 +9,6 @@ body {
   font-family : verdana, helvetica, arial, sans-serif;
 }
 
-#sourceImages {
-  background-color : #eee;
-  border : 1px solid #ccc;
-  padding : 0em 1em 0.5em 1em;
-  margin : 1em 0em 1em 0em;
-}
-
 img.thumb {
   margin : 2px;
 }
@@ -24,6 +17,26 @@ img.thumb {
   font-size : 1em;
   font-weight : normal;
 }
+
+#chooseSourceImage {
+  border-bottom : 1px solid #808080;
+  padding : 0.25em 1em 0.25em 1em;
+}
+
+#chooseText {
+  border-bottom : 1px solid #808080;
+  padding : 0.25em 1em 0.25em 1em;
+}
+
+#positionText {
+  border-bottom : 1px solid #808080;
+  padding : 0.25em 1em 0.25em 1em;
+}
+
+#createdImage {
+  border-bottom : 1px solid #808080;
+  padding : 0.25em 1em 0.25em 1em;
+}
 </style>
 </head>
 
@@ -31,86 +44,95 @@ img.thumb {
 
 <h1 id="heading"><a href="<%= h @root_url %>">Meme Captain</a> - make memes with images and text</h1>
 
-<div id="img"></div>
+<div id="chooseSourceImage">
 
-<form action="" method="get">
+<p>
+Enter an image URL, click a thumbnail or search for an image then click its
+thumbnail.
+</p>
+
+<p>
+<label for="u">Source image URL: </label>
+<input type="text" id="u" name="u" size="64" value="<%= h @u %>" />
+</p>
+
+<div id="localSourceImages"></div>
+
+<p>
+<input type="text" id="imageSearch" />
+<input type="button" id="imageSearchButton" value="Image Search" /> powered by Bing and Google
+</p>
+
+<div id="imageSearchResults"></div>
+
+</div>
+
+<div id="chooseText">
+
+<p>
+<label for="t1">Text 1: </label></td>
+<input type="text" id="t1" name="t1" size="64" value="<%= h @t1 %>" />
+</p>
+
+<p>
+<label for="t2">Text 2: </label>
+<input type="text" id="t2" name="t2" size="64" value="<%= h @t2 %>" />
+</p>
+
+</div>
+
+<div id="positionText">
+
+<p>
+<input type="button" id="positionTextButton" value="Position Text" />
+Optionally set the position and size of the text on the image.
+</p>
 
 <table>
 
 <tr>
-<td><label for="u">Source image URL: </label></td>
-<td><input type="text" id="u" name="u" size="64" value="<%= h @u %>" tabindex="1" /></td>
-</tr>
 
-<tr>
-<td><label for="t1">Text 1: </label></td>
-<td>
-<input type="text" id="t1" name="t1" size="64" value="<%= h @t1 %>" tabindex="2" />
-</td>
-<td><label for="t1x">X: </label></td>
-<td>
-<input type="text" id="t1x" name="t1x" size="4" value="<%= h @t1x %>" tabindex="4" />
-</td>
+<td><label for="t1x">Text 1 X: </label></td>
+<td><input type="text" id="t1x" name="t1x" size="4" value="<%= h @t1x %>" /></td>
+
 <td><label for="t1y">Y: </label></td>
-<td>
-<input type="text" id="t1y" name="t1y" size="4" value="<%= h @t1y %>" tabindex="5" />
-</td>
+<td><input type="text" id="t1y" name="t1y" size="4" value="<%= h @t1y %>" /></td>
+
 <td><label for="t1w">Width: </label></td>
-<td>
-<input type="text" id="t1w" name="t1w" size="4" value="<%= h @t1w %>" tabindex="6" />
-</td>
+<td><input type="text" id="t1w" name="t1w" size="4" value="<%= h @t1w %>" /></td>
+
 <td><label for="t1h">Height: </label></td>
-<td>
-<input type="text" id="t1h" name="t1h" size="4" value="<%= h @t1h %>" tabindex="7" />
-</td>
+<td><input type="text" id="t1h" name="t1h" size="4" value="<%= h @t1h %>" /></td>
+
 </tr>
 
 <tr>
-<td><label for="t2">Text 2: </label></td>
-<td>
-<input type="text" id="t2" name="t2" size="64" value="<%= h @t2 %>" tabindex="3" />
-</td>
-<td><label for="t2x">X: </label></td>
-<td>
-<input type="text" id="t2x" name="t2x" size="4" value="<%= h @t2x %>" tabindex="8" />
-</td>
+
+<td><label for="t2x">Text 2 X: </label></td>
+<td><input type="text" id="t2x" name="t2x" size="4" value="<%= h @t2x %>" /></td>
+
 <td><label for="t2y">Y: </label></td>
-<td>
-<input type="text" id="t2y" name="t2y" size="4" value="<%= h @t2y %>" tabindex="9" />
-</td>
-<td><label for="t2w">Width: </label></td>
-<td>
-<input type="text" id="t2w" name="t2w" size="4" value="<%= h @t2w %>" tabindex="10" />
-</td>
-<td><label for="t2h">Height: </label></td>
-<td>
-<input type="text" id="t2h" name="t2h" size="4" value="<%= h @t2h %>" tabindex="11" />
-</td>
-</tr>
+<td><input type="text" id="t2y" name="t2y" size="4" value="<%= h @t2y %>" /></td>
 
-<tr>
-<td></td>
-<td>
-<input type="button" id="positionTextButton" value="Position Text" />
-<input type="submit" value="Create Image" /></td>
+<td><label for="t2w">Width: </label></td>
+<td><input type="text" id="t2w" name="t2w" size="4" value="<%= h @t2w %>" /></td>
+
+<td><label for="t2h">Height: </label></td>
+<td><input type="text" id="t2h" name="t2h" size="4" value="<%= h @t2h %>" /></td>
+
 </tr>
 
 </table>
 
-</form>
-
-<div id="sourceImages">
-
-<p>Locally hosted source images or search for source images (click thumbnail to use):</p>
-
-<div id="imageSearchResults"></div>
-
-<form action="" method="get">
-<input type="text" id="imageSearch" />
-<input type="button" id="imageSearchButton" value="Image Search" /> powered by Bing and Google
-</form>
+<div id="positionTextCanvasDiv"></div>
 
 </div>
+
+<p>
+<input type="button" id="createImageButton" value="Create Image" />
+</p>
+
+<div id="createdImage"></div>
 
 <p>
 Contact: Matthew M. Boedicker <a href="mailto:matthewm@boedicker.org">matthewm@boedicker.org</a> |
@@ -122,7 +144,17 @@ Contact: Matthew M. Boedicker <a href="mailto:matthewm@boedicker.org">matthewm@b
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script src="js/fabric.min.js"></script>
 <script>
+function setSourceUrl(sourceUrl) {
+    "use strict";
+
+    $('#u').val(sourceUrl);
+    $('#t1x,#t1y,#t1w,#t1h,#t2x,#t2y,#t2w,#t2h').val('');
+    $('#positionTextCanvasDiv').empty();
+}
+
 function showBingImages(resp) {
+    "use strict";
+
     var div = $('#imageSearchResults'),
         searchResponse = resp.SearchResponse,
         image = searchResponse.Image;
@@ -130,23 +162,26 @@ function showBingImages(resp) {
     if (image.Total > 0) {
         $.each(image.Results, function (i, img) {
             div.append($('<img />').attr('src', img.Thumbnail.Url).click(
-                function () { $('#u').val(img.MediaUrl); }
+                function () { setSourceUrl(img.MediaUrl); }
             ));
         });
     } else {
         div.append($('<p />').append(
-            'No Bing results for "' + searchResponse.Query.SearchTerms + '".'));
+            'No Bing results for "' + searchResponse.Query.SearchTerms + '".'
+        ));
     }
 }
 
 function showGoogleImages(resp) {
+    "use strict";
+
     var div = $('#imageSearchResults'),
         searchResults = resp.responseData.results;
 
     if (searchResults.length > 0) {
         $.each(searchResults, function (i, img) {
             div.append($('<img />').attr('src', img.tbUrl).click(
-                function () { $('#u').val(img.url); }
+                function () { setSourceUrl(img.url); }
             ));
         });
     } else {
@@ -155,11 +190,13 @@ function showGoogleImages(resp) {
 }
 
 function imageSearch() {
-    var imageSearch = $('#imageSearch'),
-        imageSearchVal = imageSearch.val();
+    "use strict";
+
+    var imageSearchInput = $('#imageSearch'),
+        imageSearchVal = imageSearchInput.val();
 
     if (imageSearchVal.match(/[^\s]/)) {
-        imageSearch.val('');
+        imageSearchInput.val('');
         $('#imageSearchResults').empty();
 
         $.ajax({
@@ -188,28 +225,28 @@ function imageSearch() {
                 key : 'ABQIAAAA-E0uJIHoMJX6M6atCgYANRS1DzXPXMqKnKNRJm2Z_PRWxvtqGBSOvBqyXOwxGZU5jLxExg_5ym69rw',
                 q : imageSearchVal,
                 rsz : '5',
-                v : '1.0',
+                v : '1.0'
             },
             dataType : 'jsonp',
-            jsonpCallback : 'showGoogleImages',
+            jsonpCallback : 'showGoogleImages'
         });
     }
 }
 
 function loadSourceImages() {
-    $.get('source_images.json', function(data) {
+    "use strict";
+
+    $.get('source_images.json', function (data) {
         var pos = 0,
-            div = $('#imageSearchResults');
+            div = $('#localSourceImages');
 
         $.each(data.images, function (i, img) {
-            div.before($('<img />').attr('src', '1.gif').addClass('thumb').css({
+            div.append($('<img />').attr('src', '1.gif').addClass('thumb').css({
                 'background-image' : 'url(' + data.thumbSpritesUrl + ')',
                 'background-position' : pos + 'px 0px',
                 height : data.thumbHeight,
-                width : img.thumbWidth + 'px',
-            }).click(function() {
-                $('#u').val(img.url);
-            }));
+                width : img.thumbWidth + 'px'
+            }).click(function () { setSourceUrl(img.url); }));
 
             pos -= img.thumbWidth;
         });
@@ -217,6 +254,8 @@ function loadSourceImages() {
 }
 
 function positionText() {
+    "use strict";
+
     var imageUrl = $('#u').val(),
 
         canvas,
@@ -227,29 +266,34 @@ function positionText() {
         rect2;
 
     if (imageUrl.length > 0) {
-        $('#img').empty().append($('<canvas />').attr({
+        $('#positionTextCanvasDiv').empty().append($('<canvas />').attr({
             id : 'positionTextCanvas'
         }));
 
         canvas = new fabric.Canvas('positionTextCanvas');
 
         canvas.setBackgroundImage(imageUrl, function () {
+            var canvasWidth,
+                canvasHeight,
+                textWidth,
+                textHeight;
+
             canvas.setWidth(canvas.backgroundImage.width);
             canvas.setHeight(canvas.backgroundImage.height);
 
             canvas.renderAll.bind(canvas);
 
-            canvasWidth = canvas.getWidth(),
-            canvasHeight = canvas.getHeight(),
-            textWidth = 0.9 * canvasWidth,
-            textHeight = .25 * canvasHeight;
+            canvasWidth = canvas.getWidth();
+            canvasHeight = canvas.getHeight();
+            textWidth = 0.9 * canvasWidth;
+            textHeight = 0.25 * canvasHeight;
 
             rect1 = new fabric.Rect({
                 top  : textHeight / 2.0,
                 left : ((canvasWidth - textWidth) / 2.0) + (textWidth / 2.0),
                 width : textWidth,
-                height: textHeight,
-                fill: 'red'
+                height : textHeight,
+                fill : 'red'
             });
 
             rect1.name = '1';
@@ -274,9 +318,11 @@ function positionText() {
                 var target = o.memo.target;
 
                 $('#t' + target.name + 'x').val(
-                    Math.round(target.getLeft() - (target.getWidth() / 2)));
+                    Math.round(target.getLeft() - (target.getWidth() / 2))
+                );
                 $('#t' + target.name + 'y').val(
-                    Math.round(target.getTop() - (target.getHeight() / 2)));
+                    Math.round(target.getTop() - (target.getHeight() / 2))
+                );
                 $('#t' + target.name + 'w').val(Math.round(target.getWidth()));
                 $('#t' + target.name + 'h').val(Math.round(target.getHeight()));
             });
@@ -287,68 +333,86 @@ function positionText() {
     }
 }
 
-$(function () {
-    var image,
-        imgDiv;
+function createImage() {
+    "use strict";
 
-    loadSourceImages();
+    var createdImageDiv = $('#createdImage');
 
-    if (window.location.search.match(/u=[^&$]/)) {
-        $('#tt').focus();
+    $('#positionTextCanvasDiv').empty();
 
-        imgDiv = $('#img');
+    createdImageDiv.append($('<p />').append('Creating image ...'));
 
-        imgDiv.append($('<p />').append('Creating image ...'));
+    $.get('/g', {
+        u  : $('#u').val(),
+        t1 : $('#t1').val(),
+        t2 : $('#t2').val(),
 
-        $.get('/g' + window.location.search, function (data) {
-            var img = $('<img />').attr('src', data.permUrl),
-            imgLink = $('<a />').attr('href', data.permUrl).append(data.permUrl),
-            templateLink = $('<a />').attr('href', data.templateUrl).append(
-                data.templateUrl),
+        t1x : $('#t1x').val(),
+        t1y : $('#t1y').val(),
+        t1w : $('#t1w').val(),
+        t1h : $('#t1h').val(),
+
+        t2x : $('#t2x').val(),
+        t2y : $('#t2y').val(),
+        t2w : $('#t2w').val(),
+        t2h : $('#t2h').val()
+    }, function (data) {
+        var img = $('<img />').attr('src', data.imageUrl),
+            imgLink = $('<a />').attr('href', data.imageUrl).append(
+                data.imageUrl
+            ),
             tweetLink = $('<a />').attr({
                 href : 'http://twitter.com/share',
                 'class' : 'twitter-share-button',
                 'data-count' : 'none',
                 'data-text' : ' ',
-                'data-url' : data.permUrl
-                }).append('Tweet');
+                'data-url' : data.imageUrl
+            }).append('Tweet');
 
-            imgDiv.empty().append(
-                img).append(
-                $('<p />').append('Image: ').append(imgLink)).append(
-                $('<p />').append('Template: ').append(
-                    templateLink)).append(
-                $('<p />').append(tweetLink).append($('<script />').attr('src',
-                    'http://platform.twitter.com/widgets.js')));
+        createdImageDiv.empty().append(img).append(
+            $('<p />').append('Image: ').append(imgLink)
+        );
 
-            // Facebook like
-            imgDiv.append(
-                $('<div />').attr('id', 'fb-root')).append(
-                $('<fb:like />').attr({
-                    href : data.permUrl,
-                    send : 'true',
-                    width : '450',
-                    show_faces : 'true',
-                    font : ''
-                    }));
+        // tweet link
+        createdImageDiv.append($('<p />').append(tweetLink).append(
+            $('<script />').attr('src',
+                'http://platform.twitter.com/widgets.js')
+        ));
 
-            window.fbAsyncInit = function () {
-                FB.init({
-                    appId : '108445492580525',
-                    status : true,
-                    cookie : true,
-                    xfbml : true
-                    });
-                };
+        // Facebook like
+        createdImageDiv.append(
+            $('<div />').attr('id', 'fb-root')
+        ).append(
+            $('<fb:like />').attr({
+                href : data.imageUrl,
+                send : 'true',
+                width : '450',
+                show_faces : 'true',
+                font : ''
+            })
+        );
 
-            imgDiv.append($('<script />').attr({
-                src : 'http://connect.facebook.net/en_US/all.js'}));
-        }).error(function (j) {
-          imgDiv.empty().append($('<p />').text(j.responseText));
-        });
-    } else {
-        $('#u').focus();
-    }
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId : '108445492580525',
+                status : true,
+                cookie : true,
+                xfbml : true
+            });
+        };
+
+        createdImageDiv.append($('<script />').attr({
+            src : 'http://connect.facebook.net/en_US/all.js'
+        }));
+    }).error(function (j) {
+        createdImageDiv.empty().append($('<p />').text(j.responseText));
+    });
+}
+
+$(function () {
+    "use strict";
+
+    loadSourceImages();
 
     $('#imageSearch').keypress(function (event) {
         if (event.which === 13) {
@@ -360,6 +424,8 @@ $(function () {
     $('#imageSearchButton').click(imageSearch);
 
     $('#positionTextButton').click(positionText);
+
+    $('#createImageButton').click(createImage);
 });
 </script>
 

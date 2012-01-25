@@ -24,36 +24,36 @@ You can use the memecaptain.com API if you prefer it to using the gem.
 Simplest API:
 
 ```
-http://memecaptain.com/i?u=<url encoded source image url>&tt=<url encoded top text>&tb=<url encoded bottom text>
+http://memecaptain.com/i?u=<url encoded source image url>&t1=<url encoded top text>&t2=<url encoded bottom text>
 ```
 
 Example:
 
 ```
-http://memecaptain.com/i?u=http%3A%2F%2Fmemecaptain.com%2Fyao_ming.jpg&tt=sure+i%27ll+test&tb=the+api
+http://memecaptain.com/i?u=http%3A%2F%2Fmemecaptain.com%2Fyao_ming.jpg&t1=sure+i%27ll+test&t2=the+api
 ```
 
-![Sure I'll test the API](http://memecaptain.com/i?u=http%3A%2F%2Fmemecaptain.com%2Fyao_ming.jpg&tt=sure+i%27ll+test&tb=the+api)
+![Sure I'll test the API](http://memecaptain.com/i?u=http%3A%2F%2Fmemecaptain.com%2Fyao_ming.jpg&t1=sure+i%27ll+test&t2=the+api)
 
 If you want better error messages, use this which will return JSON:
 
 ```
-http://memecaptain.com/g?u=<url encoded source image url>&tt=<url encoded top text>&tb=<url encoded bottom text>
+http://memecaptain.com/g?u=<url encoded source image url>&t1=<url encoded top text>&t2=<url encoded bottom text>
 ```
 
 Example:
 
 ```
-http://memecaptain.com/g?u=http%3A%2F%2Fmemecaptain.com%2Fyao_ming.jpg&tt=sure+i%27ll+test&tb=the+api
+http://memecaptain.com/g?u=http%3A%2F%2Fmemecaptain.com%2Fyao_ming.jpg&t1=sure+i%27ll+test&t2=the+api
 ```
-
-Note: tempUrl is deprecated and will now always be the same as permUrl. It is
-left for compability with older clients.
-
 
 ```json
 {
-  permUrl: "http://memecaptain.com/i?u=http%3A%2F%2Fmemecaptain.com%2Fyao_ming.jpg&tt=sure+i%27ll+test&tb=the+api"
-  tempUrl: "http://memecaptain.com/tmp/de55f7a78c6559d4a24ef3e72e2de89992b82695.jpeg"
+  imageUrl: "http://memecaptain.com/i?u=http%3A%2F%2Fmemecaptain.com%2Fyao_ming.jpg&t1=sure+i%27ll+test&t2=the+api"
 }
 ```
+
+Optional parameters t1x, t1y, t1w, t1h, t2x, t2y, t2w, t2h can be added to
+specify the coordinates of the upper left corner, width and height of the text
+on the image. They can be integers which represent pixels or floats which
+represent percentages of the image dimensions.
