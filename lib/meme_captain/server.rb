@@ -46,8 +46,8 @@ module MemeCaptain
         'u' => p[:u],
 
          # convert to empty string if null
-        't1'  => p[:t1].to_s,
-        't2'  => p[:t2].to_s,
+        't1' => p[:t1].to_s,
+        't2' => p[:t2].to_s,
       }
 
       result['t1x'] = convert_metric(p[:t1x], 0.05)
