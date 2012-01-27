@@ -78,19 +78,17 @@ module MemeCaptain
       if existing = MemeData.first(
         :source_url => norm_params[:u],
 
-        :texts => { '$all' => [{
-          :text => norm_params[:t1],
-          :x => norm_params[:t1x],
-          :y => norm_params[:t1y],
-          :w => norm_params[:t1w],
-          :h => norm_params[:t1h],
-          }, {
-          :text => norm_params[:t2],
-          :x => norm_params[:t2x],
-          :y => norm_params[:t2y],
-          :w => norm_params[:t2w],
-          :h => norm_params[:t2h],
-          }], '$size' => 2}
+        'texts.0.text' => norm_params[:t1],
+        'texts.0.x' => norm_params[:t1x],
+        'texts.0.y' => norm_params[:t1y],
+        'texts.0.w' => norm_params[:t1w],
+        'texts.0.h' => norm_params[:t1h],
+
+        'texts.1.text' => norm_params[:t2],
+        'texts.1.x' => norm_params[:t2x],
+        'texts.1.y' => norm_params[:t2y],
+        'texts.1.w' => norm_params[:t2w],
+        'texts.1.h' => norm_params[:t2h],
         )
         existing
       else
