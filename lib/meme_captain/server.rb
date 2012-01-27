@@ -88,7 +88,7 @@ module MemeCaptain
         'texts.1.x' => norm_params[:t2x],
         'texts.1.y' => norm_params[:t2y],
         'texts.1.w' => norm_params[:t2w],
-        'texts.1.h' => norm_params[:t2h],
+        'texts.1.h' => norm_params[:t2h]
         )
         existing
       else
