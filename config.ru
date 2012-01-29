@@ -22,6 +22,8 @@ MemeCaptain::MemeData.ensure_index [
   [:texts, 1],
 ]
 
+MemeCaptain::SourceFetchFail.ensure_index :url
+
 use Rack::Rewrite do
   rewrite %r{/([gi])\?(.+)}, lambda { |match, rack_env|
     result = match[0]

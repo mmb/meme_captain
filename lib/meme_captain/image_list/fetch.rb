@@ -13,7 +13,7 @@ module MemeCaptain
           c.useragent = 'Meme Captain http://memecaptain.com/'
         end
         unless curl.response_code == 200
-          raise "Error loading source image url #{url}"
+          raise FetchError.new(curl.response_code)
         end
 
         from_blob curl.body_str

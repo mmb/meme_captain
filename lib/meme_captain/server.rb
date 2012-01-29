@@ -95,10 +95,26 @@ module MemeCaptain
         if same_source = MemeData.find_by_source_url(norm_params[:u])
           source_fs_path = same_source.source_fs_path
         else
-          source_img = ImageList::SourceImage.new
-          source_img.fetch! norm_params[:u]
-          source_img.prepare! settings.source_img_max_side, settings.watermark
-          source_fs_path = source_img.cache(norm_params[:u], 'source_cache')
+          if source_fetch_fail = SourceFetchFail.find_by_url(norm_params[:u])
+            source_fetch_fail.requested!
+            halt 500, 'Error loading source image url'
+          else
+            source_img = ImageList::SourceImage.new
+            begin
+              source_img.fetch! norm_params[:u]
+            rescue => error
+              SourceFetchFail.new(
+                :attempt_count => 1,
+                :orig_ip => request.ip,
+                :response_code => error.respond_to?(:response_code) ?
+                  error.response_code : nil,
+                :url => norm_params[:u]
+              ).save!
+              halt 500, 'Error loading source image url'
+            end
+            source_img.prepare! settings.source_img_max_side, settings.watermark
+            source_fs_path = source_img.cache(norm_params[:u], 'source_cache')
+          end
         end
 
         open(source_fs_path, 'rb') do |source_io|
@@ -177,7 +193,7 @@ module MemeCaptain
           'imageUrl' => url("/#{meme_data.meme_id}")
         }.to_json]
       rescue => error
-        [500, { 'Content-Type' => 'text/plain' }, error.to_s]
+        [500, { 'Content-Type' => 'text/plain' }, 'Error generating image']
       end
     end
 
