@@ -49,7 +49,7 @@ http://memecaptain.com/g?u=http%3A%2F%2Fmemecaptain.com%2Fyao_ming.jpg&t1=sure+i
 
 ```json
 {
-  imageUrl: "http://memecaptain.com/i?u=http%3A%2F%2Fmemecaptain.com%2Fyao_ming.jpg&t1=sure+i%27ll+test&t2=the+api"
+  imageUrl: "http://memecaptain.com/c7757f.jpg"
 }
 ```
 
