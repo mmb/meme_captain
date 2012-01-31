@@ -6,6 +6,9 @@
 <title>Meme Captain meme generator</title>
 <style type="text/css">
 body {
+  background-color : #024a68;
+  color : #dffa00;
+
   font-family : verdana, helvetica, arial, sans-serif;
 }
 
@@ -13,36 +16,65 @@ img.thumb {
   margin : 2px;
 }
 
-#heading {
-  font-size : 1em;
-  font-weight : normal;
+#logo {
+  margin-top : 0.5em;
+  margin-bottom : 0.5em;
 }
 
 #chooseSourceImage {
-  border-bottom : 1px solid #808080;
+  background-color : #ececec;
+  border-bottom : 2px solid #e4e4e4;
+  color : #000;
   padding : 0.25em 1em 0.25em 1em;
 }
 
 #chooseText {
-  border-bottom : 1px solid #808080;
+  background-color : #dcdcdc;
+  border-bottom : 2px solid #d4d4d4;
+  color : #000;
   padding : 0.25em 1em 0.25em 1em;
 }
 
 #positionText {
-  border-bottom : 1px solid #808080;
+  background-color : #ccc;
+  border-bottom : 2px solid #c4c4c4;
+  color : #000;
   padding : 0.25em 1em 1.25em 1em;
 }
 
 #createdImageContainer {
-  border-bottom : 1px solid #808080;
+  background-color : #bcbcbc;
+  border-bottom : 2px solid #b4b4b4;
+  color : #000;
   padding : 0.25em 1em 0.25em 1em;
 }
+
+input[type=text] {
+  border-top : 1px solid #6e227e;
+  border-right : 1px solid #5a016d;
+  border-bottom : 1px solid #5a016d;
+  border-left : 1px solid #6e227e;
+  padding : 4px 8px 4px 8px;
+}
+
+input[type=button] {
+  padding : 4px 8px 4px 8px;
+}
+
+a:link {
+  color : #edfc72;
+}
+
+a:visited {
+  color : #63afd0;
+}
+
 </style>
 </head>
 
 <body>
 
-<h1 id="heading"><a href="<%= h @root_url %>">Meme Captain</a> - make memes with images and text</h1>
+<a href="<%= h @root_url %>"><img id="logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAcwAAAAyCAQAAAB7PSPQAAAAAXNSR0IArs4c6QAAAAJiS0dEAACqjSMyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3AEfBCgljWLKvAAAAOVJREFUeNrt3VEKhCAUQFGN9r9lW0CBkmJPO+dzmIYxu9iHVE4lEUl++Mwc/W7OD2cF4hEmCBMQJggTECYIExAmCBOIJj/tKinNB489NjX+Xs+xK44jOc+hxjbjerFigltZQJggTECYIExAmCBMQJhA1dn6xdbdDj27IkbvjtllHF/tGoo+HzuPzYoJbmUBYYIwAWGCMAFhgjABYQJVZ/Q/OPpZKiuOY8YzZr56Hs8MK75AzYoJwgSECcIEhAnCBIQJwgSECVTl8Fsg2Olqu3P9WTFBmIAwQZiAMEGYgDABYYIwgXcuEa8kZj9/fh8AAAAASUVORK5CYII=" alt="Meme Captain" width="460" height="50" /></a>
 
 <div id="chooseSourceImage">
 
