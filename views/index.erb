@@ -39,7 +39,7 @@ img.thumb {
   background-color : #ccc;
   border-bottom : 2px solid #c4c4c4;
   color : #000;
-  padding : 0.25em 1em 1.25em 1em;
+  padding : 0.25em 1em 0.25em 1em;
 }
 
 #createdImageContainer {
@@ -69,6 +69,9 @@ a:visited {
   color : #63afd0;
 }
 
+#positionTable {
+  display : none;
+}
 </style>
 </head>
 
@@ -120,7 +123,7 @@ thumbnail.
 Optionally set the position and size of the text on the image.
 </p>
 
-<table>
+<table id="positionTable">
 
 <tr>
 
@@ -186,6 +189,7 @@ function setSourceUrl(sourceUrl) {
     $('#u').val(sourceUrl);
     $('#t1x,#t1y,#t1w,#t1h,#t2x,#t2y,#t2w,#t2h').val('');
     $('#positionTextCanvasDiv').empty();
+    $('#positionTable').hide();
 }
 
 function showBingImages(resp) {
@@ -304,6 +308,7 @@ function positionText() {
         rect2;
 
     if (imageUrl.length > 0) {
+        $('#positionTable').show();
         $('#positionTextCanvasDiv').empty().append($('<canvas />').attr({
             id : 'positionTextCanvas'
         }));
