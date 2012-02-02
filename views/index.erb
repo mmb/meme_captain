@@ -277,7 +277,9 @@ function loadSourceImages() {
             div = $('#localSourceImages');
 
         $.each(data.images, function (i, img) {
-            div.append($('<img />').attr('src', '1.gif').addClass('thumb').css({
+            div.append($('<img />').attr('src',
+                'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAAXNSR0IArs4c6QAAAAJiS0dEAACqjSMyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3AIBAQMqmgCy0wAAAAtJREFUCNdjYGAAAAADAAEg1ZTHAAAAAElFTkSuQmCC'
+                ).addClass('thumb').css({
                 'background-image' : 'url(' + data.thumbSpritesUrl + ')',
                 'background-position' : pos + 'px 0px',
                 height : data.thumbHeight,
