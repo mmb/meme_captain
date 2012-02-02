@@ -352,6 +352,31 @@ function positionText() {
 
             canvas.add(rect2);
 
+            canvas.observe('object:moving', function (o) {
+                var target = o.memo.target,
+
+                    halfWidth = target.getWidth() / 2,
+                    leftSide = Math.round(target.getLeft() - halfWidth),
+                    rightSide = Math.round(target.getLeft() + halfWidth),
+
+                    halfHeight = target.getHeight() / 2,
+                    topSide = Math.round(target.getTop() - halfHeight),
+                    bottomSide = Math.round(target.getTop() + halfHeight);
+
+                if (leftSide < 0) {
+                    target.setLeft(halfWidth);
+                }
+                if (rightSide > canvasWidth) {
+                    target.setLeft(canvasWidth - halfWidth);
+                }
+                if (topSide < 0) {
+                    target.setTop(halfHeight);
+                }
+                if (bottomSide > canvasHeight) {
+                  target.setTop(canvasHeight - halfHeight);
+                }
+            });
+
             canvas.observe('object:modified', function (o) {
                 var target = o.memo.target;
 
