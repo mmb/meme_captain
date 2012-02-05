@@ -295,17 +295,33 @@ function loadSourceImages() {
     });
 }
 
+// scale width and height so that neither is larger than maxSide
+function resizeToFit(width, height, maxSide) {
+    "use strict";
+
+    var result = {
+            width : width,
+            height : height
+        };
+
+    if (width > maxSide) {
+        result.width = maxSide;
+        result.height = height * (maxSide / width);
+    }
+
+    if (result.height > maxSide) {
+        result.width = result.width * (maxSide / result.height);
+        result.height = maxSide;
+    }
+
+    return result;
+}
+
 function positionText() {
     "use strict";
 
     var imageUrl = $('#u').val(),
-
-        canvas,
-        canvasHeight,
-        canvasWidth,
-
-        rect1,
-        rect2;
+        canvas;
 
     if (imageUrl.length > 0) {
         $('#positionTable').show();
@@ -316,24 +332,24 @@ function positionText() {
         canvas = new fabric.Canvas('positionTextCanvas');
 
         canvas.setBackgroundImage(imageUrl, function () {
-            var canvasWidth,
-                canvasHeight,
+            var canvasSize = resizeToFit(canvas.backgroundImage.width,
+                canvas.backgroundImage.height, 800),
                 textWidth,
-                textHeight;
+                textHeight,
+                rect1,
+                rect2;
 
-            canvas.setWidth(canvas.backgroundImage.width);
-            canvas.setHeight(canvas.backgroundImage.height);
+            canvas.setWidth(canvasSize.width);
+            canvas.setHeight(canvasSize.height);
 
             canvas.renderAll.bind(canvas);
 
-            canvasWidth = canvas.getWidth();
-            canvasHeight = canvas.getHeight();
-            textWidth = 0.9 * canvasWidth;
-            textHeight = 0.25 * canvasHeight;
+            textWidth = 0.9 * canvas.getWidth();
+            textHeight = 0.25 * canvas.getHeight();
 
             rect1 = new fabric.Rect({
                 top  : textHeight / 2.0,
-                left : canvasWidth / 2.0,
+                left : canvas.getWidth() / 2.0,
                 width : textWidth,
                 height : textHeight,
                 fill : 'red'
@@ -345,8 +361,8 @@ function positionText() {
             canvas.add(rect1);
 
             rect2 = new fabric.Rect({
-                top : canvasHeight - (textHeight / 2.0),
-                left : canvasWidth / 2.0,
+                top : canvas.getHeight() - (textHeight / 2.0),
+                left : canvas.getWidth() / 2.0,
                 width : textWidth,
                 height : textHeight,
                 fill: 'red'
@@ -371,14 +387,14 @@ function positionText() {
                 if (leftSide < 0) {
                     target.setLeft(halfWidth);
                 }
-                if (rightSide > canvasWidth) {
-                    target.setLeft(canvasWidth - halfWidth);
+                if (rightSide > canvas.getWidth()) {
+                    target.setLeft(canvas.getWidth() - halfWidth);
                 }
                 if (topSide < 0) {
                     target.setTop(halfHeight);
                 }
-                if (bottomSide > canvasHeight) {
-                  target.setTop(canvasHeight - halfHeight);
+                if (bottomSide > canvas.getHeight()) {
+                    target.setTop(canvas.getHeight() - halfHeight);
                 }
             });
 
