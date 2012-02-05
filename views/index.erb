@@ -244,11 +244,12 @@ function imageSearch() {
             url : 'http://api.bing.net/json.aspx',
             data : {
                 AppId : 'A120380275E87F0071F163210211F0592D0E964C',
-                Query : imageSearchVal + ' imagesize:Medium',
+                Query : imageSearchVal,
                 Sources : 'Image',
                 Version : '2.0',
                 Market : 'en-us',
                 'Image.Count' : 5,
+                'Image.Filters' : 'Size:Large',
                 'Image.Offset' : 0,
                 JsonType : 'callback'
             },
