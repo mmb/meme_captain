@@ -27,6 +27,10 @@ Gem::Specification.new do |s|
     sinatra
     }.each { |g| s.add_dependency g }
 
+  %w{
+    rspec
+    }.each { |g| s.add_development_dependency g }
+
   s.files = `git ls-files`.split("\n")
   s.executables = %w{memecaptain}
 end
