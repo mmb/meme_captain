@@ -1,3 +1,17 @@
+0.1.0	2012-02-07
+
+	Redesign web interface.
+
+	Avoid repeated failures fetching the same source image from the web
+	interface / API.
+
+	ruby interface now supports adding any number of text strings to
+	an image.
+
+	Add custom text positioning and sizing to web interface, API and
+	ruby interface. Web interface has text positioning widget using
+	fabric.js and canvas.
+
 0.0.9	2012-01-19
 
 	Design and markup improvements on the site.
