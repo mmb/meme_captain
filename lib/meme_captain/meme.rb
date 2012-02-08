@@ -89,10 +89,10 @@ module MemeCaptain
   end
 
   # Shortcut to generate a typical meme with text at the top and bottom.
-  def meme_top_bottom(input, top_text, bottom_text)
+  def meme_top_bottom(input, top_text, bottom_text, options={})
     meme(input, [
-      TextPos.new(top_text, 0.05, 0, 0.9, 0.25),
-      TextPos.new(bottom_text, 0.05, 0.75, 0.9, 0.25)
+      TextPos.new(top_text, 0.05, 0, 0.9, 0.25, options),
+      TextPos.new(bottom_text, 0.05, 0.75, 0.9, 0.25, options)
       ])
   end
 
