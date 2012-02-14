@@ -73,7 +73,10 @@ module MemeCaptain
     end
 
     def gen(p)
+      logger.debug "params:\n#{MemeCaptain.pretty_format(p)}"
       norm_params = normalize_params(p)
+      logger.debug 'normalized params:'
+      logger.debug(MemeCaptain.pretty_format(norm_params))
 
       if existing = MemeData.first(
         :source_url => norm_params[:u],
@@ -90,32 +93,43 @@ module MemeCaptain
         'texts.1.w' => norm_params[:t2w],
         'texts.1.h' => norm_params[:t2h]
         )
+        logger.debug 'found existing meme:'
+        logger.debug(MemeCaptain.pretty_format(existing))
         existing
       else
         if same_source = MemeData.find_by_source_url(norm_params[:u])
+          logger.debug 'found existing source image'
           source_fs_path = same_source.source_fs_path
         else
           if source_fetch_fail = SourceFetchFail.find_by_url(norm_params[:u])
+            logger.debug 'skipping fetch of previously failed source image:'
+            logger.debug(MemeCaptain.pretty_format(source_fetch_fail))
             source_fetch_fail.requested!
             halt 500, 'Error loading source image url'
           else
             source_img = ImageList::SourceImage.new
             begin
+              logger.debug "fetch source image: #{norm_params[:u]}"
               source_img.fetch! norm_params[:u]
             rescue => error
-              SourceFetchFail.new(
+              new_source_fetch_fail = SourceFetchFail.new(
                 :attempt_count => 1,
                 :orig_ip => request.ip,
                 :response_code => error.respond_to?(:response_code) ?
                   error.response_code : nil,
                 :url => norm_params[:u]
-              ).save!
+              )
+              logger.debug 'source image fetch failed:'
+              logger.debug(MemeCaptain.pretty_format(new_source_fetch_fail))
+              new_source_fetch_fail.save!
               halt 500, 'Error loading source image url'
             end
             source_img.prepare! settings.source_img_max_side, settings.watermark
             source_fs_path = source_img.cache(norm_params[:u], 'source_cache')
           end
         end
+
+        logger.debug "source image filesystem path: #{source_fs_path}"
 
         open(source_fs_path, 'rb') do |source_io|
           t1 = TextPos.new(norm_params[:t1], norm_params[:t1x],
@@ -142,6 +156,8 @@ module MemeCaptain
           end
 
           meme_fs_path = meme_img.cache(params_s, File.join('public', 'meme'))
+
+          logger.debug "meme filesystem path: #{meme_fs_path}"
 
           meme_img.write(meme_fs_path) {
             self.quality = 100
@@ -175,6 +191,8 @@ module MemeCaptain
             :creator_ip => request.ip
             )
 
+          logger.debug "meme data:\n#{MemeCaptain.pretty_format(meme_data)}"
+
           meme_data.save! :safe => true
 
           meme_data
@@ -193,6 +211,8 @@ module MemeCaptain
           'imageUrl' => url("/#{meme_data.meme_id}")
         }.to_json]
       rescue => error
+        logger.error "error generating image: #{error.class} #{error.message}"
+        logger.error(MemeCaptain.pretty_format(error.backtrace))
         [500, { 'Content-Type' => 'text/plain' }, 'Error generating image']
       end
     end
