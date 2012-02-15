@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
 
   %w{
     rspec
+    webmock
     }.each { |g| s.add_development_dependency g }
 
   s.files = `git ls-files`.split("\n")
