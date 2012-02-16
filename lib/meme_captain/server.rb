@@ -141,6 +141,12 @@ module MemeCaptain
           meme_img = MemeCaptain.meme(source_io, [t1, t2])
           meme_img.extend ImageList::Cache
 
+          # convert source images in formats other than jpeg, gif or png
+          # to png
+          unless %w{JPEG GIF PNG}.include?(meme_img.format)
+            meme_img.format = 'PNG'
+          end
+
           # convert non-animated gifs to png
           if meme_img.format == 'GIF' and meme_img.size == 1
             meme_img.format = 'PNG'
