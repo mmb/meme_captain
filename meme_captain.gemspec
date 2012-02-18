@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
     mongo
     mongo_mapper
     rack
+    rack-contrib
     rack-rewrite
     rmagick
     sinatra

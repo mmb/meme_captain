@@ -3,12 +3,14 @@ $:.unshift(File.join(File.dirname(__FILE__), 'lib'))
 require 'mongo'
 require 'mongo_mapper'
 require 'rack'
+require 'rack/contrib/jsonp'
 require 'rack/rewrite'
 
 require 'meme_captain'
 
 use Rack::ConditionalGet
 use Rack::Sendfile
+use Rack::JSONP
 
 use Rack::Static, :urls => %w{/tmp}, :root => 'public'
 
