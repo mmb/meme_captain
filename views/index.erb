@@ -115,6 +115,20 @@ Contact: Matthew M. Boedicker <a href="mailto:matthewm@boedicker.org">matthewm@b
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script src="js/fabric.min.js"></script>
 <script>
+var MEMECAPTAIN = (function () {
+    "use strict";
+
+    var my = {};
+
+    my.config = {
+        genUrl : '/g'
+    };
+
+    my.config.genDataType = my.config.genUrl === '/g' ? 'json' : 'jsonp';
+
+    return my;
+}());
+
 function setSourceUrl(sourceUrl) {
     "use strict";
 
@@ -359,7 +373,7 @@ function createImage() {
 
     createdImageDiv.prepend($('<p />').append('Creating image ...'));
 
-    $.get('/g', {
+    $.get(MEMECAPTAIN.config.genUrl, {
         u  : $('#u').val(),
         t1 : $('#t1').val(),
         t2 : $('#t2').val(),
@@ -421,7 +435,7 @@ function createImage() {
         createdImageDiv.append($('<script />').attr({
             src : 'http://connect.facebook.net/en_US/all.js'
         }));
-    }).error(function (j) {
+    }, MEMECAPTAIN.config.genDataType).error(function (j) {
         createdImageDiv.empty().append($('<p />').text(j.responseText));
     });
 }
