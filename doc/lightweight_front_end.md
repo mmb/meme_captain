@@ -8,10 +8,10 @@ ruby or MongoDB or do not want to deal with setting them up.
 
 Download the files at these locations and save them in your document root:
 
-http://memecaptain.com/
-http://memecaptain.com/css/screen.css
-http://memecaptain.com/js/fabric.min.js
-http://memecaptain.com/source_images.json
+* http://memecaptain.com/
+* http://memecaptain.com/css/screen.css
+* http://memecaptain.com/js/fabric.min.js
+* http://memecaptain.com/source_images.json
 
 The css in js should go in css and js directories in your document root so
 that they match the url paths.
