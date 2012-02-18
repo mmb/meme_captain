@@ -357,7 +357,7 @@ function createImage() {
 
     $('#positionTextCanvasDiv').empty();
 
-    createdImageDiv.append($('<p />').append('Creating image ...'));
+    createdImageDiv.prepend($('<p />').append('Creating image ...'));
 
     $.get('/g', {
         u  : $('#u').val(),
