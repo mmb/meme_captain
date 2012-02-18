@@ -126,6 +126,7 @@ module MemeCaptain
             end
             source_img.prepare! settings.source_img_max_side, settings.watermark
             source_fs_path = source_img.cache(norm_params[:u], 'source_cache')
+            source_img.each { |frame| frame.destroy! }
           end
         end
 
@@ -196,6 +197,8 @@ module MemeCaptain
 
             :creator_ip => request.ip
             )
+
+          meme_img.each { |frame| frame.destroy! }
 
           logger.debug "meme data:\n#{MemeCaptain.pretty_format(meme_data)}"
 

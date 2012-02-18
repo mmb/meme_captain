@@ -84,8 +84,10 @@ module MemeCaptain
         Magick::OverCompositeOp)
       frame.strip!
     end
-    img
 
+    text_layer.destroy!
+
+    img
   end
 
   # Shortcut to generate a typical meme with text at the top and bottom.
