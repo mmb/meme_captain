@@ -45,19 +45,19 @@ Get and run the script:
 ```sh
 wget https://raw.github.com/mmb/meme_captain/master/script/thumb_sprites.rb
 RUBYOPT='r rubygems'
-ruby thumb_sprites.rb -u URL_PREFIX SOURCE_IMAGE_PATH/*
+ruby thumb_sprites.rb -u URL_ROOT -s SOURCE_URL_PREFIX SOURCE_IMAGE_PATH/*
 ```
 
 SOURCE_IMAGE_PATH is the directory where the source images are stored.
-URL_PREFIX is the prefix that is added to the image filenames at that path
-to make their urls.
+URL_ROOT is the root url of the Meme Captain installation. SOURCE_URL_PREFIX
+is the part between the root url and the image filenames in the image urls.
 
-For example if the images are stored in /var/www/meme.com/source and those
-images are accessible at http://meme.com/source, use:
+For example if the images are stored in /var/www/meme.com/source and the
+url root is http://meme.com/, use:
 
 ```sh
-ruby thumb_sprites.rb -u http://meme.com/source/ /var/www/meme.com/source/*
+ruby thumb_sprites.rb -u http://meme.com/ -s source/ /var/www/meme.com/source/*
 ```
 
-Copy the generated source_images.json and thumb_xxx.jpg files to the Meme
+Copy the generated source_images.json and thumbs_xxx.jpg files to the Meme
 Captain document root.

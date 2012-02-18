@@ -9,10 +9,11 @@ require 'optparse'
 require 'RMagick'
 
 OPTIONS = {
-  :url_prefix => 'http://memecaptain.com/',
-  :thumb_height => 50,
-  :thumb_file => "thumbs_#{Time.now.to_i}.jpg",
   :json_file => 'source_images.json',
+  :source_url_prefix => '',
+  :thumb_file => "thumbs_#{Time.now.to_i}.jpg",
+  :thumb_height => 50,
+  :url_root => 'http://memecaptain.com/',
 }
 
 OptionParser.new do |opts|
@@ -22,25 +23,31 @@ OptionParser.new do |opts|
     OPTIONS[:json_file] = j
   end
 
+  opts.on('-s', '--source-url-prefix SOURCE_URL_PREFIX',
+    'source image URL prefix') do |s|
+    OPTIONS[:source_url_prefix] = s
+  end
+
   opts.on('-t', '--thumb-height THUMB_HEIGHT',
     'thumbnail height in pixels') do |t|
     OPTIONS[:thumb_height] = t
   end
 
-  opts.on('-u', '--url-prefix URL_PREFIX', 'URL prefix') do |u|
-    OPTIONS[:url_prefix] = u
+  opts.on('-u', '--url-root URL_ROOT', 'URL root') do |u|
+    OPTIONS[:url_root] = u
   end
 end.parse!
 
 DATA = {
   :thumbHeight => OPTIONS[:thumb_height],
-  :thumbSpritesUrl => "#{OPTIONS[:url_prefix]}#{OPTIONS[:thumb_file]}",
+  :thumbSpritesUrl => "#{OPTIONS[:url_root]}#{OPTIONS[:thumb_file]}",
   :images => [],
 }
 
 puts <<eos
+source URL prefix: #{OPTIONS[:source_url_prefix]}
 thumbnail height: #{OPTIONS[:thumb_height]}
-URL prefix: #{OPTIONS[:url_prefix]}
+URL root: #{OPTIONS[:url_root]}
 
 eos
 
@@ -53,7 +60,8 @@ ARGV.sort.each do |file|
   image.each do |frame|
     THUMBS.push frame
     DATA[:images] << {
-      :url => "#{OPTIONS[:url_prefix]}#{File.basename(file)}",
+      :url =>
+        "#{OPTIONS[:url_root]}#{OPTIONS[:source_url_prefix]}#{File.basename(file)}",
       :thumbWidth => frame.columns
     }
   end
