@@ -28,4 +28,36 @@ and change it to
 genUrl : 'http://memecaptain.com/g'
 ```
 
-Coming soon: how to change the default source images on your server.
+# Changing the Default Source Images
+
+The source image thumbnails that show up on the page are driven by a JSON
+description and a single image that contain CSS sprites. The JSON and image
+must be regenerated to change them.
+
+The rmagick ruby gem must be installed:
+
+```sh
+gem install rmagick
+```
+
+Get and run the script:
+
+```sh
+wget https://raw.github.com/mmb/meme_captain/master/script/thumb_sprites.rb
+RUBYOPT='r rubygems'
+ruby thumb_sprites.rb -u URL_PREFIX SOURCE_IMAGE_PATH/*
+```
+
+SOURCE_IMAGE_PATH is the directory where the source images are stored.
+URL_PREFIX is the prefix that is added to the image filenames at that path
+to make their urls.
+
+For example if the images are stored in /var/www/meme.com/source and those
+images are accessible at http://meme.com/source, use:
+
+```sh
+ruby thumb_sprites.rb -u http://meme.com/source/ /var/www/meme.com/source/*
+```
+
+Copy the generated source_images.json and thumb_xxx.jpg files to the Meme
+Captain document root.
