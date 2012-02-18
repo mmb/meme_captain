@@ -82,3 +82,7 @@ http://memecaptain.com/g?u=http%3A%2F%2Fmemecaptain.com%2Fyao_ming.jpg&t1=sure+i
 
 Optional parameters t1x, t1y, t1w, t1h, t2x, t2y, t2w, t2h can be added to
 position and size text (see example above).
+
+If you want to host a customized version of the memecaptain.com web interface
+on your own web server but use the memecaptain.com backend see
+[lightweight front end](https://github.com/mmb/meme_captain/blob/master/doc/lightweight_front_end.md).
