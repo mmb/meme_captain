@@ -13,6 +13,8 @@ module MemeCaptain
     set :watermark, Magick::ImageList.new(File.expand_path(
       File.join('..', '..', 'watermark.png'), File.dirname(__FILE__)))
 
+    set :protection, :except => :json_csrf
+
     get '/' do
       @u = params[:u]
 
