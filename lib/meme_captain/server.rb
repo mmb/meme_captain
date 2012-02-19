@@ -13,7 +13,11 @@ module MemeCaptain
     set :watermark, Magick::ImageList.new(File.expand_path(
       File.join('..', '..', 'watermark.png'), File.dirname(__FILE__)))
 
-    set :protection, :except => :json_csrf
+    # uncomment this to allow other sites to use this site's backend for
+    # generating images, used to allow third-party static only sites
+    # to generate images using memecaptain.com
+
+    # set :protection, :except => :json_csrf
 
     get '/' do
       @u = params[:u]
