@@ -254,6 +254,49 @@ module MemeCaptain
       end
     end
 
+    post '/upload' do
+      source_img = ImageList::SourceImage.new
+      source_img.from_blob(params[:upload][:tempfile].read)
+      source_img.prepare! settings.source_img_max_side, settings.watermark
+      source_fs_path = source_img.cache(
+        params[:upload][:filename], 'source_cache')
+
+      filename_hash = Digest::SHA1.hexdigest(params[:upload][:filename])
+
+      len = 6
+      source_url = "up/#{filename_hash[0,len]}"
+      while MemeData.find_by_source_url(source_url)
+        source_url = if len < filename_hash.size
+          len += 1
+          "up/#{filename_hash[0,len]}"
+        else
+          "#{source_url}0"
+        end
+      end
+
+      meme_data = MemeData.new(
+        :mime_type => source_img.mime_type,
+        :source_url => source_url,
+        :source_fs_path => source_fs_path,
+        :creator_ip => request.ip
+        )
+
+      source_img.each { |frame| frame.destroy! }
+
+      meme_data.save! :safe => true
+
+      redirect "/?u=#{Rack::Utils.escape(source_url)}"
+    end
+
+    get %r{/(up/.+)} do
+      if upload = MemeData.find_by_source_url(params[:captures][0])
+        content_type upload.mime_type
+        FileBody.new upload.source_fs_path
+      else
+        raise Sinatra::NotFound
+      end
+    end
+
     not_found do
       @root_url = url('/')
 

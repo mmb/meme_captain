@@ -14,13 +14,17 @@
 <div id="chooseSourceImage">
 
 <p>
-Enter an image URL, click a thumbnail or search for an image then click its
-thumbnail.
+Enter an image URL, upload an image, click a thumbnail or search for an image
+then click its thumbnail.
 </p>
 
 <p>
 <label for="u">Source image URL: </label>
 <input type="text" id="u" name="u" size="64" value="<%= h @u %>" />
+<form action="upload" method="post" enctype="multipart/form-data">
+<input type="file" id="upload" name="upload" />
+<input type="submit" value="Upload" />
+</form>
 </p>
 
 <div id="localSourceImages"></div>
