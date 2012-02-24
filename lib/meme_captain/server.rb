@@ -10,6 +10,7 @@ module MemeCaptain
 
     set :root, File.expand_path(File.join('..', '..'), File.dirname(__FILE__))
     set :source_img_max_side, 800
+    set :upload_prefix, 'up/'
     set :watermark, Magick::ImageList.new(File.expand_path(
       File.join('..', '..', 'watermark.png'), File.dirname(__FILE__)))
 
@@ -106,6 +107,13 @@ module MemeCaptain
         if same_source = MemeData.find_by_source_url(norm_params[:u])
           logger.debug 'found existing source image'
           source_fs_path = same_source.source_fs_path
+        elsif (norm_params[:u].index(settings.upload_prefix) == 0) and
+          (upload = Upload.find_by_upload_id(
+          norm_params[:u][settings.upload_prefix.size..-1]))
+
+          logger.debug 'source image is upload:'
+          logger.debug MemeCaptain.pretty_format(upload)
+          source_fs_path = upload.fs_path
         else
           if source_fetch_fail = SourceFetchFail.find_by_url(norm_params[:u])
             logger.debug 'skipping fetch of previously failed source image:'
@@ -257,43 +265,43 @@ module MemeCaptain
     post '/upload' do
       redirect('/')  unless params[:upload]
 
-      source_img = ImageList::SourceImage.new
-      source_img.from_blob(params[:upload][:tempfile].read)
-      source_img.prepare! settings.source_img_max_side, settings.watermark
-      source_fs_path = source_img.cache(
-        params[:upload][:filename], 'source_cache')
+      img = ImageList::SourceImage.new
+      img.from_blob(params[:upload][:tempfile].read)
+      img.prepare! settings.source_img_max_side, settings.watermark
+      fs_path = img.cache(params[:upload][:filename], 'source_cache')
 
       filename_hash = Digest::SHA1.hexdigest(params[:upload][:filename])
 
       len = 6
-      source_url = "up/#{filename_hash[0,len]}"
-      while MemeData.find_by_source_url(source_url)
-        source_url = if len < filename_hash.size
+      upload_id = filename_hash[0,len]
+      while Upload.find_by_upload_id(upload_id)
+        upload_id = if len < filename_hash.size
           len += 1
-          "up/#{filename_hash[0,len]}"
+          filename_hash[0,len]
         else
-          "#{source_url}0"
+          "#{upload_id}0"
         end
       end
 
-      meme_data = MemeData.new(
-        :mime_type => source_img.mime_type,
-        :source_url => source_url,
-        :source_fs_path => source_fs_path,
+      upload = Upload.new(
+        :upload_id => upload_id,
+        :fs_path => fs_path,
+        :mime_type => img.mime_type,
+        :size => File.size(fs_path),
+        :request_count => 0,
         :creator_ip => request.ip
         )
 
-      source_img.each { |frame| frame.destroy! }
+      img.each { |frame| frame.destroy! }
 
-      meme_data.save! :safe => true
+      upload.save! :safe => true
 
-      redirect "/?u=#{Rack::Utils.escape(source_url)}"
+      redirect "/?u=#{settings.upload_prefix}#{Rack::Utils.escape(upload_id)}"
     end
 
-    get %r{/(up/.+)} do
-      if upload = MemeData.find_by_source_url(params[:captures][0])
-        content_type upload.mime_type
-        FileBody.new upload.source_fs_path
+    get %r{/#{settings.upload_prefix}(.+)} do
+      if upload = Upload.find_by_upload_id(params[:captures][0])
+        serve_img upload
       else
         raise Sinatra::NotFound
       end

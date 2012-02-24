@@ -24,6 +24,8 @@ MemeCaptain::MemeData.ensure_index [
   [:texts, 1],
 ]
 
+MemeCaptain::Upload.ensure_index :upload_id
+
 MemeCaptain::SourceFetchFail.ensure_index :url
 
 use Rack::Rewrite do
