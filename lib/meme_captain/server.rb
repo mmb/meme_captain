@@ -255,6 +255,8 @@ module MemeCaptain
     end
 
     post '/upload' do
+      redirect('/')  unless params[:upload]
+
       source_img = ImageList::SourceImage.new
       source_img.from_blob(params[:upload][:tempfile].read)
       source_img.prepare! settings.source_img_max_side, settings.watermark
