@@ -15,7 +15,7 @@ var MEMECAPTAIN = (function () {
 function setSourceUrl(sourceUrl) {
     "use strict";
 
-    $('#u').val(sourceUrl);
+    $('#u').val(sourceUrl).addClass('attn');
     $('#t1x,#t1y,#t1w,#t1h,#t2x,#t2y,#t2w,#t2h').val('');
     $('#positionTextCanvasDiv').empty();
     $('#positionTable').hide();
@@ -340,4 +340,7 @@ $(function () {
     $('#positionTextButton').click(positionText);
 
     $('#createImageButton').click(createImage);
+
+    // highlight input fields that have been preloaded from the query string
+    $(":text[value!='']").addClass('attn');
 });
