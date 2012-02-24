@@ -17,16 +17,16 @@ Download the files at these locations and save them in your document root:
 The css in js should go in css and js directories in your document root so
 that they match the url paths.
 
-Find this line in index.html
+Find this line in js/meme_captain.js
 
 ```
-genUrl : '/g'
+genUrl = '/g',
 ```
 
 and change it to
 
 ```
-genUrl : 'http://memecaptain.com/g'
+genUrl = 'http://memecaptain.com/g',
 ```
 
 # Changing the Default Source Images
