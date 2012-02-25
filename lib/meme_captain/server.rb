@@ -274,7 +274,7 @@ module MemeCaptain
 
       len = 6
       upload_id = filename_hash[0,len]
-      while Upload.find_by_upload_id(upload_id)
+      while Upload.where(:upload_id => upload_id).count > 0
         upload_id = if len < filename_hash.size
           len += 1
           filename_hash[0,len]
