@@ -40,43 +40,18 @@ module MemeCaptain
       erb :index
     end
 
-    def convert_metric(metric, default)
-      case
-        when metric.to_s.empty?; default
-        when metric.index('.'); metric.to_f
-        else; metric.to_i
-      end
-    end
-
     def normalize_params(p)
-      result = {
-        'u' => p[:u],
-
-         # convert to empty string if null
-        't1' => p[:t1].to_s,
-        't2' => p[:t2].to_s,
-      }
-
-      result['t1x'] = convert_metric(p[:t1x], 0.05)
-      result['t1y'] = convert_metric(p[:t1y], 0)
-      result['t1w'] = convert_metric(p[:t1w], 0.9)
-      result['t1h'] = convert_metric(p[:t1h], 0.25)
-
-      result['t2x'] = convert_metric(p[:t2x], 0.05)
-      result['t2y'] = convert_metric(p[:t2y], 0.75)
-      result['t2w'] = convert_metric(p[:t2w], 0.9)
-      result['t2h'] = convert_metric(p[:t2h], 0.25)
+      result = NormParams.new(p)
 
       # if the id of an existing meme is passed in as the source url, use the
       # source image of that meme for the source image
-      if result['u'][%r{^[a-f0-9]+\.(?:gif|jpg|png)$}]
-        if existing_as_source = MemeData.find_by_meme_id(result['u'])
-          result['u'] = existing_as_source.source_url
+      if result.u[%r{^[a-f0-9]+\.(?:gif|jpg|png)$}]
+        if existing_as_source = MemeData.find_by_meme_id(result.u)
+          result.u = existing_as_source.source_url
         end
       end
 
-      # hash with string keys that can be accessed by symbol
-      Hash.new { |hash,key| hash[key.to_s] if Symbol === key }.merge(result)
+      result
     end
 
     def gen(p)
@@ -86,36 +61,36 @@ module MemeCaptain
       logger.debug(MemeCaptain.pretty_format(norm_params))
 
       if existing = MemeData.first(
-        :source_url => norm_params[:u],
+        :source_url => norm_params.u,
 
-        'texts.0.text' => norm_params[:t1],
-        'texts.0.x' => norm_params[:t1x],
-        'texts.0.y' => norm_params[:t1y],
-        'texts.0.w' => norm_params[:t1w],
-        'texts.0.h' => norm_params[:t1h],
+        'texts.0.text' => norm_params.t1,
+        'texts.0.x' => norm_params.t1x,
+        'texts.0.y' => norm_params.t1y,
+        'texts.0.w' => norm_params.t1w,
+        'texts.0.h' => norm_params.t1h,
 
-        'texts.1.text' => norm_params[:t2],
-        'texts.1.x' => norm_params[:t2x],
-        'texts.1.y' => norm_params[:t2y],
-        'texts.1.w' => norm_params[:t2w],
-        'texts.1.h' => norm_params[:t2h]
+        'texts.1.text' => norm_params.t2,
+        'texts.1.x' => norm_params.t2x,
+        'texts.1.y' => norm_params.t2y,
+        'texts.1.w' => norm_params.t2w,
+        'texts.1.h' => norm_params.t2h
         )
         logger.debug 'found existing meme:'
         logger.debug(MemeCaptain.pretty_format(existing))
         existing
       else
-        if same_source = MemeData.find_by_source_url(norm_params[:u])
+        if same_source = MemeData.find_by_source_url(norm_params.u)
           logger.debug 'found existing source image'
           source_fs_path = same_source.source_fs_path
-        elsif (norm_params[:u].index(settings.upload_prefix) == 0) and
+        elsif (norm_params.u.index(settings.upload_prefix) == 0) and
           (upload = Upload.find_by_upload_id(
-          norm_params[:u][settings.upload_prefix.size..-1]))
+          norm_params.u[settings.upload_prefix.size..-1]))
 
           logger.debug 'source image is upload:'
           logger.debug MemeCaptain.pretty_format(upload)
           source_fs_path = upload.fs_path
         else
-          if source_fetch_fail = SourceFetchFail.find_by_url(norm_params[:u])
+          if source_fetch_fail = SourceFetchFail.find_by_url(norm_params.u)
             logger.debug 'skipping fetch of previously failed source image:'
             logger.debug(MemeCaptain.pretty_format(source_fetch_fail))
             source_fetch_fail.requested!
@@ -123,15 +98,15 @@ module MemeCaptain
           else
             source_img = ImageList::SourceImage.new
             begin
-              logger.debug "fetch source image: #{norm_params[:u]}"
-              source_img.fetch! norm_params[:u]
+              logger.debug "fetch source image: #{norm_params.u}"
+              source_img.fetch! norm_params.u
             rescue => error
               new_source_fetch_fail = SourceFetchFail.new(
                 :attempt_count => 1,
                 :orig_ip => request.ip,
                 :response_code => error.respond_to?(:response_code) ?
                   error.response_code : nil,
-                :url => norm_params[:u]
+                :url => norm_params.u
               )
               logger.debug 'source image fetch failed:'
               logger.debug(MemeCaptain.pretty_format(new_source_fetch_fail))
@@ -139,7 +114,7 @@ module MemeCaptain
               halt 500, 'Error loading source image url'
             end
             source_img.prepare! settings.source_img_max_side, settings.watermark
-            source_fs_path = source_img.cache(norm_params[:u], 'source_cache')
+            source_fs_path = source_img.cache(norm_params.u, 'source_cache')
             source_img.each { |frame| frame.destroy! }
           end
         end
@@ -147,11 +122,11 @@ module MemeCaptain
         logger.debug "source image filesystem path: #{source_fs_path}"
 
         open(source_fs_path, 'rb') do |source_io|
-          t1 = TextPos.new(norm_params[:t1], norm_params[:t1x],
-            norm_params[:t1y], norm_params[:t1w], norm_params[:t1h])
+          t1 = TextPos.new(norm_params.t1, norm_params.t1x, norm_params.t1y,
+            norm_params.t1w, norm_params.t1h)
 
-          t2 = TextPos.new(norm_params[:t2], norm_params[:t2x],
-            norm_params[:t2y], norm_params[:t2w], norm_params[:t2h])
+          t2 = TextPos.new(norm_params.t2, norm_params.t2x, norm_params.t2y,
+            norm_params.t2w, norm_params.t2h)
 
           meme_img = MemeCaptain.meme(source_io, [t1, t2])
           meme_img.extend ImageList::Cache
@@ -167,8 +142,8 @@ module MemeCaptain
             meme_img.format = 'PNG'
           end
 
-          params_s = norm_params.sort.map(&:join).join
-          meme_hash = Digest::SHA1.hexdigest(params_s)
+          sig = norm_params.signature
+          meme_hash = Digest::SHA1.hexdigest(sig)
 
           meme_id = nil
           (6..meme_hash.size).each do |len|
@@ -176,7 +151,7 @@ module MemeCaptain
             break  unless MemeData.where(:meme_id => meme_id).count > 0
           end
 
-          meme_fs_path = meme_img.cache(params_s, File.join('public', 'meme'))
+          meme_fs_path = meme_img.cache(sig, File.join('public', 'meme'))
 
           logger.debug "meme filesystem path: #{meme_fs_path}"
 
@@ -190,21 +165,21 @@ module MemeCaptain
             :mime_type => meme_img.mime_type,
             :size => File.size(meme_fs_path),
 
-            :source_url => norm_params[:u],
+            :source_url => norm_params.u,
             :source_fs_path => source_fs_path,
 
             :texts => [{
-              :text => norm_params[:t1],
-              :x => norm_params[:t1x],
-              :y => norm_params[:t1y],
-              :w => norm_params[:t1w],
-              :h => norm_params[:t1h],
+              :text => norm_params.t1,
+              :x => norm_params.t1x,
+              :y => norm_params.t1y,
+              :w => norm_params.t1w,
+              :h => norm_params.t1h,
               }, {
-              :text => norm_params[:t2],
-              :x => norm_params[:t2x],
-              :y => norm_params[:t2y],
-              :w => norm_params[:t2w],
-              :h => norm_params[:t2h],
+              :text => norm_params.t2,
+              :x => norm_params.t2x,
+              :y => norm_params.t2y,
+              :w => norm_params.t2w,
+              :h => norm_params.t2h,
             }],
 
             :request_count => 0,
