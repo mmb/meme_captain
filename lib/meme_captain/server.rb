@@ -218,9 +218,7 @@ module MemeCaptain
     def serve_img(meme_data)
       meme_data.requested!
 
-      content_type meme_data.mime_type
-
-      FileBody.new meme_data.fs_path
+      send_file meme_data.fs_path, :type => meme_data.mime_type
     end
 
     get '/i' do
