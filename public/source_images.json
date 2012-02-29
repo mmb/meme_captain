@@ -1,6 +1,6 @@
 {
   "thumbHeight": 50,
-  "thumbSpritesUrl": "http://memecaptain.com/thumbs.jpg",
+  "thumbSpritesUrl": "http://memecaptain.com/thumbs_1330486916.jpg",
   "images": [
     {
       "url": "http://memecaptain.com/all_the_things.jpg",
@@ -99,6 +99,10 @@
       "thumbWidth": 50
     },
     {
+      "url": "http://memecaptain.com/ron_swanson.jpg",
+      "thumbWidth": 73
+    },
+    {
       "url": "http://memecaptain.com/sap.jpg",
       "thumbWidth": 50
     },
@@ -117,6 +121,10 @@
     {
       "url": "http://memecaptain.com/success_kid.jpg",
       "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/the_more_you_know.jpg",
+      "thumbWidth": 76
     },
     {
       "url": "http://memecaptain.com/ti_duck.jpg",
