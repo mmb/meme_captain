@@ -41,7 +41,7 @@ var MEMECAPTAIN = (function (window, $, fabric) {
         if (searchResults.length > 0) {
             $.each(searchResults, function (i, img) {
                 div.append($('<img />').attr('src', img.tbUrl).click(
-                    function () { setSourceUrl(img.url); }
+                    function () { setSourceUrl(img.unescapedUrl); }
                 ));
             });
         } else {
