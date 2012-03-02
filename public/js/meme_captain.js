@@ -231,77 +231,82 @@ var MEMECAPTAIN = (function (window, $, fabric) {
     }
 
     function createImage() {
-        var createdImageDiv = $('#createdImage');
+        var createdImageDiv,
+            uVal = $('#u').val();
 
-        $('#positionTextCanvasDiv').empty();
+        if (uVal !== '') {
+            createdImageDiv = $('#createdImage');
 
-        createdImageDiv.prepend($('<p />').append('Creating image ...'));
+            $('#positionTextCanvasDiv').empty();
 
-        $.get(genUrl, {
-            u  : $('#u').val(),
-            t1 : $('#t1').val(),
-            t2 : $('#t2').val(),
+            createdImageDiv.prepend($('<p />').append('Creating image ...'));
 
-            t1x : $('#t1x').val(),
-            t1y : $('#t1y').val(),
-            t1w : $('#t1w').val(),
-            t1h : $('#t1h').val(),
+            $.get(genUrl, {
+                u  : uVal,
+                t1 : $('#t1').val(),
+                t2 : $('#t2').val(),
 
-            t2x : $('#t2x').val(),
-            t2y : $('#t2y').val(),
-            t2w : $('#t2w').val(),
-            t2h : $('#t2h').val()
-        }, function (data) {
-            var img = $('<img />').attr('src', data.imageUrl),
-                imgLink = $('<a />').attr('href', data.imageUrl).append(
-                    data.imageUrl
-                ),
-                tweetLink = $('<a />').attr({
-                    href : 'http://twitter.com/share',
-                    'class' : 'twitter-share-button',
-                    'data-count' : 'none',
-                    'data-text' : ' ',
-                    'data-url' : data.imageUrl
-                }).append('Tweet');
+                t1x : $('#t1x').val(),
+                t1y : $('#t1y').val(),
+                t1w : $('#t1w').val(),
+                t1h : $('#t1h').val(),
 
-            createdImageDiv.empty().append(img).append(
-                $('<p />').append('Image: ').append(imgLink)
-            );
+                t2x : $('#t2x').val(),
+                t2y : $('#t2y').val(),
+                t2w : $('#t2w').val(),
+                t2h : $('#t2h').val()
+            }, function (data) {
+                var img = $('<img />').attr('src', data.imageUrl),
+                    imgLink = $('<a />').attr('href', data.imageUrl).append(
+                        data.imageUrl
+                    ),
+                    tweetLink = $('<a />').attr({
+                        href : 'http://twitter.com/share',
+                        'class' : 'twitter-share-button',
+                        'data-count' : 'none',
+                        'data-text' : ' ',
+                        'data-url' : data.imageUrl
+                    }).append('Tweet');
 
-            // tweet link
-            createdImageDiv.append($('<p />').append(tweetLink).append(
-                $('<script />').attr('src',
-                    'http://platform.twitter.com/widgets.js')
-            ));
+                createdImageDiv.empty().append(img).append(
+                    $('<p />').append('Image: ').append(imgLink)
+                );
 
-            // Facebook like
-            createdImageDiv.append(
-                $('<div />').attr('id', 'fb-root')
-            ).append(
-                $('<fb:like />').attr({
-                    href : data.imageUrl,
-                    send : 'true',
-                    width : '450',
-                    show_faces : 'true',
-                    font : ''
-                })
-            );
+                // tweet link
+                createdImageDiv.append($('<p />').append(tweetLink).append(
+                    $('<script />').attr('src',
+                        'http://platform.twitter.com/widgets.js')
+                ));
 
-            window.fbAsyncInit = function () {
-                FB.init({
-                    appId : facebookAppId,
-                    status : true,
-                    cookie : true,
-                    xfbml : true
-                });
-            };
+                // Facebook like
+                createdImageDiv.append(
+                    $('<div />').attr('id', 'fb-root')
+                ).append(
+                    $('<fb:like />').attr({
+                        href : data.imageUrl,
+                        send : 'true',
+                        width : '450',
+                        show_faces : 'true',
+                        font : ''
+                    })
+                );
 
-            createdImageDiv.append($('<script />').attr({
-                src : 'http://connect.facebook.net/en_US/all.js'
-            }));
-        }, genDataType).error(function (j) {
-            createdImageDiv.empty().append($('<p />').text(j.responseText));
-        });
+                window.fbAsyncInit = function () {
+                    FB.init({
+                        appId : facebookAppId,
+                        status : true,
+                        cookie : true,
+                        xfbml : true
+                    });
+                };
+
+                createdImageDiv.append($('<script />').attr({
+                    src : 'http://connect.facebook.net/en_US/all.js'
+                }));
+            }, genDataType).error(function (j) {
+                createdImageDiv.empty().append($('<p />').text(j.responseText));
+            });
+        }
     }
 
     my.init = function () {
