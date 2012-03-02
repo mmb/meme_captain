@@ -200,8 +200,6 @@ module MemeCaptain
     end
 
     get '/g' do
-      raise Sinatra::NotFound  if params[:u].to_s.empty?
-
       begin
         meme_data = gen(params)
 
