@@ -204,7 +204,8 @@ module MemeCaptain
         meme_data = gen(params)
 
         [200, { 'Content-Type' => 'application/json' }, {
-          'imageUrl' => url("/#{meme_data.meme_id}")
+          'imageUrl' => url("/#{meme_data.meme_id}"),
+          'templateUrl' => url("/?u=#{Rack::Utils.escape(meme_data.meme_id)}"),
         }.to_json]
       rescue => error
         logger.error "error generating image: #{error.class} #{error.message}"

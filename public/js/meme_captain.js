@@ -260,6 +260,10 @@ var MEMECAPTAIN = (function (window, $, fabric) {
                     imgLink = $('<a />').attr('href', data.imageUrl).append(
                         data.imageUrl
                     ),
+                    templateLink = $('<a />').attr(
+                        'href',
+                        data.templateUrl
+                    ).append(data.templateUrl),
                     tweetLink = $('<a />').attr({
                         href : 'http://twitter.com/share',
                         'class' : 'twitter-share-button',
@@ -270,6 +274,12 @@ var MEMECAPTAIN = (function (window, $, fabric) {
 
                 createdImageDiv.empty().append(img).append(
                     $('<p />').append('Image: ').append(imgLink)
+                );
+
+                // template link
+                createdImageDiv.append(
+                    $('<p />').append('To make more with this source image: ').
+                        append(templateLink)
                 );
 
                 // tweet link
