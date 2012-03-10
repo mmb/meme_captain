@@ -230,6 +230,25 @@ var MEMECAPTAIN = (function (window, $, fabric) {
         }
     }
 
+    // build a Twitter tweet link for a url
+    function tweetLink(url) {
+        return $('<a />').attr({
+            href : 'http://twitter.com/share',
+            'class' : 'twitter-share-button',
+            'data-count' : 'none',
+            'data-text' : ' ',
+            'data-url' : url
+        }).append('Tweet');
+    }
+
+    // build Twitter tweet script tag
+    function tweetScript() {
+        return $('<script />').attr(
+            'src',
+            'http://platform.twitter.com/widgets.js'
+        );
+    }
+
     function createImage() {
         var createdImageDiv,
             uVal = $('#u').val();
@@ -263,14 +282,7 @@ var MEMECAPTAIN = (function (window, $, fabric) {
                     templateLink = $('<a />').attr(
                         'href',
                         data.templateUrl
-                    ).append(data.templateUrl),
-                    tweetLink = $('<a />').attr({
-                        href : 'http://twitter.com/share',
-                        'class' : 'twitter-share-button',
-                        'data-count' : 'none',
-                        'data-text' : ' ',
-                        'data-url' : data.imageUrl
-                    }).append('Tweet');
+                    ).append(data.templateUrl);
 
                 createdImageDiv.empty().append(img).append(
                     $('<p />').append('Image: ').append(imgLink)
@@ -282,11 +294,9 @@ var MEMECAPTAIN = (function (window, $, fabric) {
                         append(templateLink)
                 );
 
-                // tweet link
-                createdImageDiv.append($('<p />').append(tweetLink).append(
-                    $('<script />').attr('src',
-                        'http://platform.twitter.com/widgets.js')
-                ));
+                createdImageDiv.append($('<p />').append(
+                    tweetLink(data.imageUrl)
+                ).append(tweetScript()));
 
                 // Facebook like
                 createdImageDiv.append(
