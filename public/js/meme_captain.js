@@ -249,6 +249,35 @@ var MEMECAPTAIN = (function (window, $, fabric) {
         );
     }
 
+    // build Facebook Like div for a url
+    function facebookLikeDiv(url) {
+        return $('<div />').attr('id', 'fb-root').append(
+            $('<fb:like />').attr({
+                href : url,
+                send : 'true',
+                width : '450',
+                show_faces : 'true',
+                font : ''
+            })
+        );
+    }
+
+    // Facebook asynchronous init
+    function fbAsyncInit() {
+        FB.init({
+            appId : facebookAppId,
+            status : true,
+            cookie : true,
+            xfbml : true
+        });
+    }
+
+    function facebookScript() {
+        return $('<script />').attr({
+            src : 'http://connect.facebook.net/en_US/all.js'
+        });
+    }
+
     function createImage() {
         var createdImageDiv,
             uVal = $('#u').val();
@@ -294,35 +323,15 @@ var MEMECAPTAIN = (function (window, $, fabric) {
                         append(templateLink)
                 );
 
+                // tweet link
                 createdImageDiv.append($('<p />').append(
                     tweetLink(data.imageUrl)
                 ).append(tweetScript()));
 
                 // Facebook like
-                createdImageDiv.append(
-                    $('<div />').attr('id', 'fb-root')
-                ).append(
-                    $('<fb:like />').attr({
-                        href : data.imageUrl,
-                        send : 'true',
-                        width : '450',
-                        show_faces : 'true',
-                        font : ''
-                    })
-                );
-
-                window.fbAsyncInit = function () {
-                    FB.init({
-                        appId : facebookAppId,
-                        status : true,
-                        cookie : true,
-                        xfbml : true
-                    });
-                };
-
-                createdImageDiv.append($('<script />').attr({
-                    src : 'http://connect.facebook.net/en_US/all.js'
-                }));
+                createdImageDiv.append(facebookLikeDiv(data.imageUrl));
+                window.fbAsyncInit = fbAsyncInit;
+                createdImageDiv.append(facebookScript());
             }, genDataType).error(function (j) {
                 createdImageDiv.empty().append($('<p />').text(j.responseText));
             });
