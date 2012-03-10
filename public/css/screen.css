@@ -70,6 +70,7 @@ input[type=text].attn {
 }
 
 div.share {
-  display : inline;
+  display : inline-block;
   margin-right : 1em;
+  vertical-align : middle;
 }

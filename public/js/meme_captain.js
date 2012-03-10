@@ -230,6 +230,12 @@ var MEMECAPTAIN = (function (window, $, fabric) {
         }
     }
 
+    function redditLink(url) {
+        return $('<a />').attr('href',
+            'http://www.reddit.com/submit?url=' +
+            encodeURIComponent(url)).append('reddit');
+    }
+
     // build a Twitter tweet link for a url
     function tweetLink(url) {
         return $('<a />').attr({
@@ -322,6 +328,11 @@ var MEMECAPTAIN = (function (window, $, fabric) {
                     $('<p />').append('To make more with this source image: ').
                         append(templateLink)
                 );
+
+                // reddit link
+                createdImageDiv.append($('<div />').addClass(
+                    'share'
+                ).append(redditLink(data.imageUrl)));
 
                 // tweet link
                 createdImageDiv.append($('<div />').addClass('share').append(
