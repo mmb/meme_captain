@@ -335,6 +335,10 @@ var MEMECAPTAIN = (function (window, $, fabric) {
 
         $('#createImageButton').click(createImage);
 
+        $('#upload').change(function () {
+            $('#uploadSubmit').removeAttr('disabled');
+        });
+
         // highlight input fields that have been preloaded from the query string
         $(":text[value!='']").addClass('attn');
     };
