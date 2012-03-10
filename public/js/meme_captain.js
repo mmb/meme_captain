@@ -251,7 +251,7 @@ var MEMECAPTAIN = (function (window, $, fabric) {
 
     // build Facebook Like div for a url
     function facebookLikeDiv(url) {
-        return $('<div />').attr('id', 'fb-root').append(
+        return $('<div />').attr('id', 'fb-root').addClass('share').append(
             $('<fb:like />').attr({
                 href : url,
                 send : 'true',
@@ -324,7 +324,7 @@ var MEMECAPTAIN = (function (window, $, fabric) {
                 );
 
                 // tweet link
-                createdImageDiv.append($('<p />').append(
+                createdImageDiv.append($('<div />').addClass('share').append(
                     tweetLink(data.imageUrl)
                 ).append(tweetScript()));
 
