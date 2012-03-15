@@ -1,6 +1,6 @@
 require 'meme_captain'
 
-describe MemeCaptain::Caption do
+describe MemeCaptain::TextPos do
 
   it 'should store the required fields' do
     t = MemeCaptain::TextPos.new('text', 0, 25, 50, 100)
