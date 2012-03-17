@@ -7,7 +7,8 @@ var MEMECAPTAIN = (function (window, $, fabric) {
         facebookAppId = '108445492580525',
         googleApiKey = 'ABQIAAAA-E0uJIHoMJX6M6atCgYANRS1DzXPXMqKnKNRJm2Z_PRWxvtqGBSOvBqyXOwxGZU5jLxExg_5ym69rw',
         genUrl = '/g',
-        genDataType = genUrl === '/g' ? 'json' : 'jsonp';
+        genDataType = genUrl === '/g' ? 'json' : 'jsonp',
+        imageMaxSide = 800;
 
     function setSourceUrl(sourceUrl) {
         $('#u').val(sourceUrl).addClass('attn');
@@ -16,14 +17,35 @@ var MEMECAPTAIN = (function (window, $, fabric) {
         $('#positionTable').hide();
     }
 
+    // scale width and height so that neither is larger than maxSide
+    function resizeToFit(width, height, maxSide) {
+        var result = {
+                width : width,
+                height : height
+            };
+
+        if (width > maxSide) {
+            result.width = maxSide;
+            result.height = height * (maxSide / width);
+        }
+
+        if (result.height > maxSide) {
+            result.width = result.width * (maxSide / result.height);
+            result.height = maxSide;
+        }
+
+        return result;
+    }
+
     // build an image search result thumbnail
     function searchThumbnail(thumbnailUrl, imgUrl, imgWidth, imgHeight) {
-        var title = imgWidth + ' x ' + imgHeight,
+        var scaledDimensions = resizeToFit(imgWidth, imgHeight, imageMaxSide),
+            title = scaledDimensions.width + ' x ' + scaledDimensions.height,
             thumbnailImage = $('<img />').attr({
                 src : thumbnailUrl,
                 title : title,
-                width : imgWidth / 4.0,
-                height : imgHeight / 4.0
+                width : scaledDimensions.width / 4.0,
+                height : scaledDimensions.height / 4.0
             }).addClass('thumb');
 
         return thumbnailImage.click(function () { setSourceUrl(imgUrl); });
@@ -57,31 +79,11 @@ var MEMECAPTAIN = (function (window, $, fabric) {
         if (searchResults.length > 0) {
             $.each(searchResults, function (i, img) {
                 div.append(searchThumbnail(img.tbUrl, img.unescapedUrl,
-                    img.width, img.height));
+                    parseInt(img.width, 10), parseInt(img.height, 10)));
             });
         } else {
             div.append($('<p />').append('No Google results.'));
         }
-    }
-
-    // scale width and height so that neither is larger than maxSide
-    function resizeToFit(width, height, maxSide) {
-        var result = {
-                width : width,
-                height : height
-            };
-
-        if (width > maxSide) {
-            result.width = maxSide;
-            result.height = height * (maxSide / width);
-        }
-
-        if (result.height > maxSide) {
-            result.width = result.width * (maxSide / result.height);
-            result.height = maxSide;
-        }
-
-        return result;
     }
 
     function loadSourceImages() {
@@ -161,7 +163,7 @@ var MEMECAPTAIN = (function (window, $, fabric) {
 
             canvas.setBackgroundImage(imageUrl, function () {
                 var canvasSize = resizeToFit(canvas.backgroundImage.width,
-                    canvas.backgroundImage.height, 800),
+                    canvas.backgroundImage.height, imageMaxSide),
                     textWidth,
                     textHeight,
                     rect1,
