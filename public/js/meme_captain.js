@@ -26,11 +26,13 @@ var MEMECAPTAIN = (function (window, $, fabric) {
 
         if (width > maxSide) {
             result.width = maxSide;
-            result.height = height * (maxSide / width);
+            result.height = Math.round(height * (maxSide / width));
         }
 
         if (result.height > maxSide) {
-            result.width = result.width * (maxSide / result.height);
+            result.width = Math.round(
+                result.width * (maxSide / result.height)
+            );
             result.height = maxSide;
         }
 
