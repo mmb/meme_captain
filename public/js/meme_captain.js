@@ -16,6 +16,19 @@ var MEMECAPTAIN = (function (window, $, fabric) {
         $('#positionTable').hide();
     }
 
+    // build an image search result thumbnail
+    function searchThumbnail(thumbnailUrl, imgUrl, imgWidth, imgHeight) {
+        var title = imgWidth + ' x ' + imgHeight,
+            thumbnailImage = $('<img />').attr({
+                src : thumbnailUrl,
+                title : title,
+                width : imgWidth / 4.0,
+                height : imgHeight / 4.0
+            }).addClass('thumb');
+
+        return thumbnailImage.click(function () { setSourceUrl(imgUrl); });
+    }
+
     function showBingImages(resp) {
         var div = $('#imageSearchResults'),
             searchResponse = resp.SearchResponse,
@@ -23,8 +36,11 @@ var MEMECAPTAIN = (function (window, $, fabric) {
 
         if (image.Total > 0) {
             $.each(image.Results, function (i, img) {
-                div.append($('<img />').attr('src', img.Thumbnail.Url).click(
-                    function () { setSourceUrl(img.MediaUrl); }
+                div.append(searchThumbnail(
+                    img.Thumbnail.Url,
+                    img.MediaUrl,
+                    img.Width,
+                    img.Height
                 ));
             });
         } else {
@@ -40,9 +56,8 @@ var MEMECAPTAIN = (function (window, $, fabric) {
 
         if (searchResults.length > 0) {
             $.each(searchResults, function (i, img) {
-                div.append($('<img />').attr('src', img.tbUrl).click(
-                    function () { setSourceUrl(img.unescapedUrl); }
-                ));
+                div.append(searchThumbnail(img.tbUrl, img.unescapedUrl,
+                    img.width, img.height));
             });
         } else {
             div.append($('<p />').append('No Google results.'));
