@@ -19,7 +19,7 @@ module MemeCaptain
       img.from_blob(input)
     end
 
-    super_sample = options[:super_sample] || 2.0
+    super_sample = options[:super_sample] || 1
 
     text_layer = Magick::Image.new(
       img.page.width * super_sample, img.page.height * super_sample) {
