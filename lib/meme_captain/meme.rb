@@ -50,7 +50,15 @@ module MemeCaptain
         min_pointsize = text_pos.min_pointsize * super_sample
 
         draw = Magick::Draw.new {
-          text_pos.draw_options.each { |k,v| self.send("#{k}=", v) }
+          text_pos.draw_options.each do |k,v|
+            # options that need to be scaled by super sample
+            if [
+              :stroke_width
+              ].include?(k)
+              v *= super_sample
+            end
+            self.send("#{k}=", v)
+          end
         }
 
         draw.extend Draw

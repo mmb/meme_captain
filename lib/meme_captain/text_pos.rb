@@ -28,7 +28,7 @@ module MemeCaptain
         :font         => 'Impact',
         :gravity      => Magick::CenterGravity,
         :stroke       => 'black',
-        :stroke_width => 8,
+        :stroke_width => 4,
       }.merge(options)
     end
 
