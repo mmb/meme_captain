@@ -24,7 +24,6 @@ module MemeCaptain
     text_layer = Magick::Image.new(
       img.page.width * super_sample, img.page.height * super_sample) {
       self.background_color = 'none'
-      self.density = 72.0 * super_sample
     }
 
     text_poss.each do |text_pos|
