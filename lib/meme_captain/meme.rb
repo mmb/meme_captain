@@ -19,7 +19,7 @@ module MemeCaptain
       img.from_blob(input)
     end
 
-    super_sample = options[:super_sample] || 1
+    super_sample = options[:super_sample] || 2.0
 
     text_layer = Magick::Image.new(
       img.page.width * super_sample, img.page.height * super_sample) {
@@ -84,7 +84,10 @@ module MemeCaptain
       end
     end
 
-    text_layer.resize!(1.0 / super_sample)
+    if super_sample != 1
+      text_layer.resize!(1.0 / super_sample)
+      text_layer = text_layer.unsharp_mask
+    end
 
     img.each do |frame|
       frame.composite!(text_layer, -frame.page.x, -frame.page.y,
