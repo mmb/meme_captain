@@ -1,6 +1,6 @@
 {
   "thumbHeight": 50,
-  "thumbSpritesUrl": "http://memecaptain.com/thumbs_1330486916.jpg",
+  "thumbSpritesUrl": "http://memecaptain.com/thumbs_1333591668.jpg",
   "images": [
     {
       "url": "http://memecaptain.com/all_the_things.jpg",
@@ -41,6 +41,10 @@
     {
       "url": "http://memecaptain.com/dwight_schrute.jpg",
       "thumbWidth": 73
+    },
+    {
+      "url": "http://memecaptain.com/first_world_problems.jpg",
+      "thumbWidth": 72
     },
     {
       "url": "http://memecaptain.com/fry.png",
@@ -148,6 +152,10 @@
     },
     {
       "url": "http://memecaptain.com/tyler_durden.jpg",
+      "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/wonka.jpg",
       "thumbWidth": 50
     },
     {
