@@ -4,6 +4,10 @@ body {
   font-family : verdana, helvetica, arial, sans-serif;
 }
 
+a img {
+  border : 0;
+}
+
 a:link {
   color : #edfc72;
 }
