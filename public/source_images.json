@@ -1,6 +1,6 @@
 {
   "thumbHeight": 50,
-  "thumbSpritesUrl": "http://memecaptain.com/thumbs_1334189407.jpg",
+  "thumbSpritesUrl": "http://memecaptain.com/thumbs_1334973608.jpg",
   "images": [
     {
       "url": "http://memecaptain.com/all_the_things.jpg",
@@ -9,6 +9,10 @@
     {
       "url": "http://memecaptain.com/all_the_things2.jpg",
       "thumbWidth": 67
+    },
+    {
+      "url": "http://memecaptain.com/annoying_facebook_girl.jpg",
+      "thumbWidth": 50
     },
     {
       "url": "http://memecaptain.com/aw_yeah.png",
@@ -21,6 +25,10 @@
     {
       "url": "http://memecaptain.com/bad_luck_brian.jpg",
       "thumbWidth": 42
+    },
+    {
+      "url": "http://memecaptain.com/bad_time.jpg",
+      "thumbWidth": 60
     },
     {
       "url": "http://memecaptain.com/bear_grylls.jpg",
