@@ -78,3 +78,7 @@ div.share {
   margin-right : 1em;
   vertical-align : middle;
 }
+
+.noCanvas {
+  display : none;
+}

@@ -392,7 +392,8 @@ var MEMECAPTAIN = (function (window, $, fabric) {
         $(":text[value!='']").addClass('attn');
 
         if (!window.CanvasRenderingContext2D) {
-            $('#positionText').empty().append($('<p />').append('If you were using a browser with canvas support such as Chrome, Firefox or Safari or Internet Explorer 9 you could set the position of the text on the image here.'));
+            $('.hasCanvas').hide();
+            $('.noCanvas').show();
         }
     };
 
