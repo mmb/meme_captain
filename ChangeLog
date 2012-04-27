@@ -1,3 +1,64 @@
+0.1.1	2012-04-26
+
+    	Update jQuery and fabric.js to latest versions.
+
+	Disable border on image links for IE.
+
+	Disable text positioning for browsers that don't support canvas.
+
+	Add new source images to the site: annoying Facebook girl and you're
+	gonna have a bad time.
+
+	Add new source images to the site: bad luck Brian, laundry room viking,
+	paranoid parrot, conspiracy Keanu, socially awesome awkward penguin
+	and you should feel bad.
+
+	Increase default stroke width to 8 pixels.
+
+	Add new source images to the site: condescending Wonka and first world
+	problems.
+
+	Add unsharp mask step to make text sharper.
+
+	Scale stroke width by supersample.
+
+	Make search result thumbnail size relative to image size.
+
+	Add share on Reddit link.
+
+	Add templateUrl to JSON response and template link to page.
+
+	Add favicon.ico to site.
+
+	Fix 404 error on empty u parameter.
+
+	Add new source images to the site: Ron Swanson and the more you know.
+
+	Add setup document.
+
+	Follow redirects when fetching source images.
+
+	Highlight form fields when they are populated or preloaded.
+
+	Add source image upload support to site.
+
+	Generalize and document thumb sprites script.
+
+	Add docs for setting up lightweight third-party sites.
+
+	Add JSONP support for lightweight third-party sites to use.
+
+	Use Magick::Image.destroy! to reduce memory leaking.
+
+	Handle odd image formats like BMP.
+
+	Add debug logging.
+
+	Write more rspecs.
+
+	Add new source images to the site: bad joke eel, Neil DeGrasse Tyson,
+	Obama not bad and impaired duck.
+
 0.1.0	2012-02-07
 
 	Redesign web interface.
@@ -45,8 +106,7 @@
 	Add new source images to the site: all the things 2, cool story bro,
 	aw yeah, Boromir, Ned Stark.
 
-0.0.8
-        2011-11-23
+0.0.8   2011-11-23
 
 	Start change log.
 
