@@ -1,6 +1,6 @@
 {
   "thumbHeight": 50,
-  "thumbSpritesUrl": "http://memecaptain.com/thumbs_1334973608.jpg",
+  "thumbSpritesUrl": "http://memecaptain.com/thumbs_1336623277.jpg",
   "images": [
     {
       "url": "http://memecaptain.com/all_the_things.jpg",
@@ -59,6 +59,10 @@
       "thumbWidth": 73
     },
     {
+      "url": "http://memecaptain.com/first_day_on_the_internet_kid.jpg",
+      "thumbWidth": 38
+    },
+    {
       "url": "http://memecaptain.com/first_world_problems.jpg",
       "thumbWidth": 72
     },
@@ -95,6 +99,10 @@
       "thumbWidth": 50
     },
     {
+      "url": "http://memecaptain.com/megaman_derp.jpg",
+      "thumbWidth": 80
+    },
+    {
       "url": "http://memecaptain.com/most_interesting.jpg",
       "thumbWidth": 40
     },
@@ -117,6 +125,10 @@
     {
       "url": "http://memecaptain.com/paranoid_parrot.jpg",
       "thumbWidth": 50
+    },
+    {
+      "url": "http://memecaptain.com/patrick.jpg",
+      "thumbWidth": 28
     },
     {
       "url": "http://memecaptain.com/philosoraptor.jpg",
@@ -163,12 +175,20 @@
       "thumbWidth": 50
     },
     {
+      "url": "http://memecaptain.com/too_damn_high.jpg",
+      "thumbWidth": 61
+    },
+    {
       "url": "http://memecaptain.com/town_crier.jpg",
       "thumbWidth": 75
     },
     {
       "url": "http://memecaptain.com/troll_face.jpg",
       "thumbWidth": 55
+    },
+    {
+      "url": "http://memecaptain.com/troll_hunter.jpg",
+      "thumbWidth": 89
     },
     {
       "url": "http://memecaptain.com/trolldad.png",
