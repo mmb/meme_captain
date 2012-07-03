@@ -206,7 +206,7 @@ var MEMECAPTAIN = (function (window, $, fabric) {
                 canvas.add(rect2);
 
                 canvas.observe('object:moving', function (o) {
-                    var target = o.memo.target,
+                    var target = o.target,
 
                         halfWidth = target.getWidth() / 2,
                         leftSide = Math.round(target.getLeft() - halfWidth),
@@ -231,7 +231,7 @@ var MEMECAPTAIN = (function (window, $, fabric) {
                 });
 
                 canvas.observe('object:modified', function (o) {
-                    var target = o.memo.target;
+                    var target = o.target;
 
                     $('#t' + target.name + 'x').val(
                         Math.round(target.getLeft() - (target.getWidth() / 2))
