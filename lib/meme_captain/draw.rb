@@ -18,7 +18,8 @@ module MemeCaptain
         last_metrics = metrics
         metrics = get_multiline_type_metrics(text)
 
-        if metrics.width > width or metrics.height > height
+        if metrics.width + stroke_padding > width or
+          metrics.height + stroke_padding > height
           if current_pointsize > min_pointsize
             current_pointsize -= 1
             metrics = last_metrics
@@ -30,6 +31,19 @@ module MemeCaptain
       }
 
       [current_pointsize, metrics]
+    end
+
+    # Return the number of pixels of padding to account for this object's
+    # stroke width.
+    def stroke_padding
+      @stroke_width.to_i * 2
+    end
+
+    # Override and set instance variable because there is apparently no way to
+    # get the value of a Draw's current stroke width.
+    def stroke_width=(stroke_width)
+      @stroke_width = stroke_width
+      super
     end
 
   end

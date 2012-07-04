@@ -48,19 +48,17 @@ module MemeCaptain
 
         min_pointsize = text_pos.min_pointsize * super_sample
 
-        draw = Magick::Draw.new {
-          text_pos.draw_options.each do |k,v|
-            # options that need to be scaled by super sample
-            if [
-              :stroke_width
-              ].include?(k)
-              v *= super_sample
-            end
-            self.send("#{k}=", v)
-          end
-        }
+        draw = Magick::Draw.new.extend(Draw)
 
-        draw.extend Draw
+        text_pos.draw_options.each do |k,v|
+          # options that need to be scaled by super sample
+          if [
+            :stroke_width
+            ].include?(k)
+            v *= super_sample
+          end
+          draw.send("#{k}=", v)
+        end
 
         choices = wrap_tries.map do |wrap_try|
           pointsize, metrics = draw.calc_pointsize(text_width, text_height,
