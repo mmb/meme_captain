@@ -36,7 +36,10 @@ module MemeCaptain
     # Return the number of pixels of padding to account for this object's
     # stroke width.
     def stroke_padding
-      @stroke_width.to_i * 2
+      # Each side of the text needs stroke_width / 2 pixels of padding
+      # because half of the stroke goes inside the text and half goes
+      # outside. The / 2 and * 2 (each side) cancel.
+      @stroke_width.to_i
     end
 
     # Override and set instance variable because there is apparently no way to
