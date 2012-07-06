@@ -217,6 +217,12 @@ module MemeCaptain
     def serve_img(meme_data)
       meme_data.requested!
 
+      meme_text = meme_data.texts.map do |text|
+        Rack::Utils.escape(text['text'])
+      end.join('&')
+
+      headers 'Meme-Text' => meme_text
+
       send_file meme_data.fs_path, :type => meme_data.mime_type
     end
 
