@@ -184,7 +184,8 @@ var MEMECAPTAIN = (function (window, $, fabric) {
                     left : canvas.getWidth() / 2.0,
                     width : textWidth,
                     height : textHeight,
-                    fill : 'red'
+                    fill : 'red',
+                    cornersize : 20
                 });
 
                 rect1.name = '1';
@@ -197,7 +198,8 @@ var MEMECAPTAIN = (function (window, $, fabric) {
                     left : canvas.getWidth() / 2.0,
                     width : textWidth,
                     height : textHeight,
-                    fill: 'red'
+                    fill : 'red',
+                    cornersize : 20
                 });
 
                 rect2.name = '2';
