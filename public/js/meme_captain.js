@@ -243,6 +243,22 @@ var MEMECAPTAIN = (function (window, $, fabric) {
                     $('#t' + target.name + 'h').val(Math.round(target.getHeight()));
                 });
 
+                canvas.observe('object:scaling', function (o) {
+                    var target = o.target,
+                        maxScaleX = canvas.width / target.width,
+                        maxScaleY = canvas.height / target.height;
+
+                    if (target.scaleX > maxScaleX) {
+                        target.scaleX = maxScaleX;
+                    }
+
+                    if (target.scaleY > maxScaleY) {
+                        target.scaleY = maxScaleY;
+                    }
+
+                    canvas.fire('object:moving', { target : target });
+                });
+
                 canvas.fire('object:modified', { target : rect1 });
                 canvas.fire('object:modified', { target : rect2 });
             });
