@@ -3,7 +3,6 @@ var MEMECAPTAIN = (function (window, $, fabric) {
 
     var my = {},
 
-        bingAppId = 'A120380275E87F0071F163210211F0592D0E964C',
         facebookAppId = '108445492580525',
         googleApiKey = 'ABQIAAAA-E0uJIHoMJX6M6atCgYANRS1DzXPXMqKnKNRJm2Z_PRWxvtqGBSOvBqyXOwxGZU5jLxExg_5ym69rw',
         genUrl = '/g',
@@ -53,27 +52,6 @@ var MEMECAPTAIN = (function (window, $, fabric) {
         return thumbnailImage.click(function () { setSourceUrl(imgUrl); });
     }
 
-    function showBingImages(resp) {
-        var div = $('#imageSearchResults'),
-            searchResponse = resp.SearchResponse,
-            image = searchResponse.Image;
-
-        if (image.Total > 0) {
-            $.each(image.Results, function (i, img) {
-                div.append(searchThumbnail(
-                    img.Thumbnail.Url,
-                    img.MediaUrl,
-                    img.Width,
-                    img.Height
-                ));
-            });
-        } else {
-            div.append($('<p />').append(
-                'No Bing results for "' + searchResponse.Query.SearchTerms + '".'
-            ));
-        }
-    }
-
     function showGoogleImages(resp) {
         var div = $('#imageSearchResults'),
             searchResults = resp.responseData.results;
@@ -118,31 +96,12 @@ var MEMECAPTAIN = (function (window, $, fabric) {
 
             $.ajax({
                 type : 'GET',
-                url : 'http://api.bing.net/json.aspx',
-                data : {
-                    AppId : bingAppId,
-                    Query : imageSearchVal,
-                    Sources : 'Image',
-                    Version : '2.0',
-                    Market : 'en-us',
-                    'Image.Count' : 5,
-                    'Image.Filters' : 'Size:Large',
-                    'Image.Offset' : 0,
-                    JsonType : 'callback'
-                },
-                dataType : 'jsonp',
-                jsonp : 'JsonCallback',
-                success : showBingImages
-            });
-
-            $.ajax({
-                type : 'GET',
                 url : 'http://ajax.googleapis.com/ajax/services/search/images',
                 data : {
                     imgsz : 'large',
                     key : googleApiKey,
                     q : imageSearchVal,
-                    rsz : '5',
+                    rsz : '8',
                     v : '1.0'
                 },
                 dataType : 'jsonp',
