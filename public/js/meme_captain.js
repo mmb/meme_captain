@@ -226,6 +226,12 @@ var MEMECAPTAIN = (function (window, $, fabric) {
         }
     }
 
+    function imgurLink(url) {
+        return $('<a />').attr('href',
+            'http://api.imgur.com/2/upload?url=' +
+            encodeURIComponent(url)).append('imgur');
+    }
+
     function redditLink(url) {
         return $('<a />').attr('href',
             'http://www.reddit.com/submit?url=' +
@@ -324,6 +330,11 @@ var MEMECAPTAIN = (function (window, $, fabric) {
                     $('<p />').append('To make more with this source image: ').
                         append(templateLink)
                 );
+
+                // imgur link
+                createdImageDiv.append($('<div />').addClass(
+                    'share'
+                ).append(imgurLink(data.imageUrl)));
 
                 // reddit link
                 createdImageDiv.append($('<div />').addClass(
