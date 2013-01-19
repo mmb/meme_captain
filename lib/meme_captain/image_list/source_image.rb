@@ -12,6 +12,8 @@ module MemeCaptain
 
       # Shrink image if necessary and add watermark.
       def prepare!(max_side, watermark_img)
+        auto_orient!
+
         if size == 1 and (columns > max_side or rows > max_side)
           resize_to_fit! max_side
         end

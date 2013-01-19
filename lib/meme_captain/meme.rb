@@ -19,6 +19,8 @@ module MemeCaptain
       img.from_blob(input)
     end
 
+    img.auto_orient!
+
     super_sample = options[:super_sample] || 2.0
 
     text_layer = Magick::Image.new(
