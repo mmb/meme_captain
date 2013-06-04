@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
     }.each { |g| s.add_dependency g }
 
   %w{
+    rake
     rspec
     webmock
     }.each { |g| s.add_development_dependency g }

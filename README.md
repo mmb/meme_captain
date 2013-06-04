@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/mmb/meme_captain.png)](https://travis-ci.org/mmb/meme_captain)
+[![Code Climate](https://codeclimate.com/github/mmb/meme_captain.png)](https://codeclimate.com/github/mmb/meme_captain)
+
 Ruby gem to create meme images (images with text added).
 
 Runs locally and has no web dependencies.
