@@ -1,3 +1,13 @@
+0.1.3	2012-06-06
+
+    	Default super_sample to 1.0.
+
+    	Add sample generator rake task.
+
+    	Add travis ci and code climate.
+
+    	Fix rubygems source.
+
 0.1.1	2012-04-26
 
     	Update jQuery and fabric.js to latest versions.
