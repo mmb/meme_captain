@@ -21,7 +21,7 @@ module MemeCaptain
 
     img.auto_orient!
 
-    super_sample = options[:super_sample] || 2.0
+    super_sample = options[:super_sample] || 1.0
 
     text_layer = Magick::Image.new(
       img.page.width * super_sample, img.page.height * super_sample) {
