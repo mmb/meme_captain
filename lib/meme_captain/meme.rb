@@ -77,6 +77,10 @@ module MemeCaptain
         draw.annotate text_layer, text_width, text_height, text_x, text_y,
           choice.text
 
+        text_layer.virtual_pixel_method = Magick::TransparentVirtualPixelMethod
+        text_layer = text_layer.blur_channel(text_pos.draw_options[:stroke_width] / 2.0,
+                                             text_pos.draw_options[:stroke_width] / 4.0, Magick::OpacityChannel)
+
         draw.stroke = 'none'
 
         draw.annotate text_layer, text_width, text_height, text_x, text_y,
