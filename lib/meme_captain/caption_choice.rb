@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module MemeCaptain
 
   # For comparing different caption line break and pointsize choices.
@@ -17,7 +19,7 @@ module MemeCaptain
     end
 
     def fits
-      metrics.width <= bound_width and metrics.height <= bound_height
+      metrics.width <= bound_width && metrics.height <= bound_height
     end
 
     def fits_i

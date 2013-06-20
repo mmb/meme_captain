@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'RMagick'
 
 module MemeCaptain
@@ -13,7 +15,7 @@ module MemeCaptain
     #
     # x, y, width and height can be in pixels or a float that represents a
     # percentage of the width and height of the image the text is put onto.
-    def initialize(text, x, y, width, height, options={})
+    def initialize(text, x, y, width, height, options = {})
       @text = text
       @x = x
       @y = y
@@ -24,11 +26,11 @@ module MemeCaptain
       @min_pointsize = options.delete(:min_pointsize) || 12
 
       @draw_options = {
-        :fill         => 'white',
-        :font         => 'Impact',
-        :gravity      => Magick::CenterGravity,
-        :stroke       => 'black',
-        :stroke_width => 8,
+          fill: 'white',
+          font: 'Impact',
+          gravity: Magick::CenterGravity,
+          stroke: 'black',
+          stroke_width: 8,
       }.merge(options)
     end
 

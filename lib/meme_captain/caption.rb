@@ -1,8 +1,10 @@
+# encoding: UTF-8
+
 module MemeCaptain
 
   class Caption < String
 
-    def initialize(s='')
+    def initialize(s = '')
       super s.to_s
     end
 
@@ -27,9 +29,9 @@ module MemeCaptain
         if lines.empty?
           lines << word
         else
-          if (lines[-1].size + 1 + word.size) <= chars_per_line or
-            lines.size >= num_lines
-            lines[-1] << ' '  unless lines[-1].empty?
+          if (lines[-1].size + 1 + word.size) <= chars_per_line ||
+              lines.size >= num_lines
+            lines[-1] << ' ' unless lines[-1].empty?
             lines[-1] << word
           else
             lines << word
