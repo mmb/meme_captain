@@ -13,25 +13,12 @@ Gem::Specification.new do |s|
   s.authors = ['Matthew M. Boedicker']
   s.email = %w{matthewm@boedicker.org}
 
-  %w{
-    bson_ext
-    curb
-    json
-    mime-types
-    mongo
-    mongo_mapper
-    rack
-    rack-contrib
-    rack-rewrite
-    rmagick
-    sinatra
-    }.each { |g| s.add_dependency g }
+  s.add_dependency 'mime-types'
+  s.add_dependency 'rmagick'
 
-  %w{
-    rake
-    rspec
-    webmock
-    }.each { |g| s.add_development_dependency g }
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'webmock'
 
   s.files = `git ls-files`.split("\n")
   s.executables = %w{memecaptain}
