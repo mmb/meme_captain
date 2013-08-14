@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.homepage = 'https://github.com/mmb/meme_captain'
   s.authors = ['Matthew M. Boedicker']
   s.email = %w{matthewm@boedicker.org}
+  s.license = 'MIT'
 
   s.add_dependency 'mime-types'
   s.add_dependency 'rmagick'
