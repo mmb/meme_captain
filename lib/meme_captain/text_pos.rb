@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-require 'RMagick'
+require 'rmagick'
 
 module MemeCaptain
 
