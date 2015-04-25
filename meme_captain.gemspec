@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.license = 'MIT'
 
   s.add_dependency 'mime-types'
-  s.add_dependency 'rmagick'
+  s.add_dependency 'rmagick', '~> 2.14.0'
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '~> 3.2.0'
