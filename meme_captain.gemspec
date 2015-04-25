@@ -14,12 +14,12 @@ Gem::Specification.new do |s|
   s.email = %w{matthewm@boedicker.org}
   s.license = 'MIT'
 
-  s.add_dependency 'mime-types'
+  s.add_dependency 'mime-types', '~> 2.5'
   s.add_dependency 'rmagick', '~> 2.14.0'
 
-  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rake', '~> 10.4.2'
   s.add_development_dependency 'rspec', '~> 3.2.0'
-  s.add_development_dependency 'webmock'
+  s.add_development_dependency 'webmock', '~> 1.21.0'
 
   s.files = `git ls-files`.split("\n")
   s.executables = %w{memecaptain}
