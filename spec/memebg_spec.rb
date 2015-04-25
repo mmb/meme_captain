@@ -7,8 +7,8 @@ describe MemeCaptain, '.memebg' do
     colors = %w{red blue yellow #bada55}
     m = MemeCaptain.memebg(size, colors, 20)
 
-    m.columns.should == size
-    m.rows.should == size
+    expect(m.columns).to eq(size)
+    expect(m.rows).to eq(size)
   end
 
 end

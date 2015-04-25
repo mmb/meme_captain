@@ -11,7 +11,7 @@ describe MemeCaptain::CaptionChoice do
     caption_choice2 = MemeCaptain::CaptionChoice.new(12, metrics,
       "the quick brown fox", 200, 100)
 
-    caption_choice1.should be < caption_choice2
+    expect(caption_choice1 < caption_choice2).to be(true)
   end
 
   it 'should rank choices with higher point size higher' do
@@ -23,7 +23,7 @@ describe MemeCaptain::CaptionChoice do
     caption_choice2 = MemeCaptain::CaptionChoice.new(13, metrics,
       "the quick brown fox", 200, 100)
 
-    caption_choice1.should be < caption_choice2
+    expect(caption_choice1 < caption_choice2).to be(true)
   end
 
   it 'should rank choices with less lines higher when the text fits' do
@@ -35,7 +35,7 @@ describe MemeCaptain::CaptionChoice do
     caption_choice2 = MemeCaptain::CaptionChoice.new(12, metrics,
       "the quick brown fox", 200, 100)
 
-    caption_choice1.should be < caption_choice2
+    expect(caption_choice1 < caption_choice2).to be(true)
   end
 
   it 'should rank choices with more lines higher when the text does not fit' do
@@ -47,7 +47,7 @@ describe MemeCaptain::CaptionChoice do
     caption_choice2 = MemeCaptain::CaptionChoice.new(12, metrics,
       "the quick\nbrown fox", 200, 99)
 
-    caption_choice1.should be < caption_choice2
+    expect(caption_choice1 < caption_choice2).to be(true)
   end
 
 end
