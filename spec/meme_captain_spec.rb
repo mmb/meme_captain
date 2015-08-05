@@ -18,4 +18,16 @@ describe MemeCaptain, '.meme_top_bottom' do
         font: font)
   end
 
+  context 'when one of the captions starts with an @ symbol' do
+    it 'generates the image' do
+      font = File.expand_path('../assets/Coda-Heavy.ttf', __FILE__)
+      src_image = File.expand_path('../assets/town_crier.jpg', __FILE__)
+
+      expect do
+        File.open(src_image) do |f|
+          MemeCaptain.meme_top_bottom(f, '@foo', '@bar', font: font)
+        end
+      end.to_not raise_exception
+    end
+  end
 end

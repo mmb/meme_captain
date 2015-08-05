@@ -10,7 +10,10 @@ module MemeCaptain
 
     # Return the contents of the string quoted for ImageMagick annotate.
     def annotate_quote
-      Caption.new(gsub('\\', '\\\\\\').gsub('%', '\%'))
+      Caption.new(
+        gsub('\\', '\\\\\\').
+        gsub('%', '\%').
+        gsub(/^@/, '\@'))
     end
 
     # Whether the string contains any non-whitespace.

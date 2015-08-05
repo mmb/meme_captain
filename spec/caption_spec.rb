@@ -12,6 +12,10 @@ describe MemeCaptain::Caption do
       '\%foo\%bar\%')
   end
 
+  it 'should quote an @ symbol if it is the first character' do
+    expect(MemeCaptain::Caption.new('@hi').annotate_quote).to eq('\@hi')
+  end
+
   it 'should be drawable if it contains at least one non-whitespace character' do
     expect(MemeCaptain::Caption.new('a').drawable?).to be(true)
   end
