@@ -9,7 +9,12 @@ describe MemeCaptain::Caption do
 
   it 'should quote percent signs for ImageMagick annotate' do
     expect(MemeCaptain::Caption.new('%foo%bar%').annotate_quote).to eq(
-      '\%foo\%bar\%')
+      '%%foo%%bar%%')
+  end
+
+  it 'should quote attribute percent escapes' do
+    expect(MemeCaptain::Caption.new('%m %m %b %#').annotate_quote).to eq(
+      '%%m %%m %%b %%#')
   end
 
   it 'should quote an @ symbol if it is the first character' do

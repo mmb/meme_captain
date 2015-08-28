@@ -12,7 +12,7 @@ module MemeCaptain
     def annotate_quote
       Caption.new(
         gsub('\\', '\\\\\\').
-        gsub('%', '\%').
+        gsub('%', '%%').
         gsub(/^@/, '\@'))
     end
 
