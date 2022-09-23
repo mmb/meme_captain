@@ -45,6 +45,10 @@ module MemeCaptain
       Caption.new(lines.join("\n"))
     end
 
+    def upcase
+      Caption.new(super)
+    end
+
   end
 
 end
