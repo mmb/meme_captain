@@ -51,4 +51,10 @@ describe MemeCaptain::Caption do
     expect(MemeCaptain::Caption.new('foobar').wrap(2)).to eq('foobar')
   end
 
+  it 'should return Caption instance after upcase' do
+    result = MemeCaptain::Caption.new('foobar').upcase
+    expect(result).to eq('FOOBAR')
+    expect(result.class).to eq(MemeCaptain::Caption)
+  end
+
 end
